@@ -5,6 +5,7 @@
 ## Version: 4.0
 ## X-License: MIT
 ## X-Website: https://github.com/jocampbell5/rpvox
+## X-Curse-Project-ID: 1643063
 ## SavedVariables: RPVoxDB
 
 RPVoxLines.lua

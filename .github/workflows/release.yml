@@ -25,4 +25,6 @@ jobs:
         uses: BigWigsMods/packager@master
         env:
           GITHUB_OAUTH: ${{ secrets.GITHUB_TOKEN }}
-          CF_API_KEY: ${{ secrets.CF_API_KEY }}
+          # The env var name must stay CF_API_KEY -- that is what the packager
+          # reads. Only the secret it comes from is named RPVOX.
+          CF_API_KEY: ${{ secrets.RPVOX }}
