@@ -1,0 +1,22 @@
+﻿## Interface: 20506
+## Title: RPVox
+## Notes: Gives your character a voice: roleplay lines and emotes for combat, reactions and everyday life.
+## Author: jocampbell5
+## Version: 4.0
+## X-License: MIT
+## X-Website: https://github.com/jocampbell5/rpvox
+## SavedVariables: RPVoxDB
+
+RPVoxLines.lua
+RPVoxMoods_Happy.lua
+RPVoxMoods_Serious.lua
+RPVoxMoods_Weary.lua
+RPVoxMoods_Grim.lua
+RPVoxMoods_SpellsOffense.lua
+RPVoxMoods_SpellsSupport.lua
+RPVoxMoods_MageGrim.lua
+RPVoxMoods_MageGrim2.lua
+RPVoxClasses.lua
+RPVoxClassHunter.lua
+RPVox.lua
+RPVoxUI.lua

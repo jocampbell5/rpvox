@@ -1,0 +1,7 @@
+.release/
+*.zip
+
+# local working backups, not part of the addon
+backup-*/
+*.bak
+*.bak[0-9]

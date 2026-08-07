@@ -1,0 +1,28 @@
+name: Release
+
+# Push a tag to cut a release:
+#   git tag v4.1 && git push origin v4.1
+#
+# Without any secrets this builds the addon zip and attaches it to a GitHub
+# release. Once CF_API_KEY is set and the toc carries X-Curse-Project-ID, the
+# same run uploads to CurseForge as well.
+
+on:
+  push:
+    tags:
+      - '**'
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Package and release
+        uses: BigWigsMods/packager@master
+        env:
+          GITHUB_OAUTH: ${{ secrets.GITHUB_TOKEN }}
+          CF_API_KEY: ${{ secrets.CF_API_KEY }}
