@@ -50,11 +50,15 @@ not the point.
 
 ## Install
 
-Drop the `RPVox` folder into:
+Drop the `RPVox` folder into your client's AddOns directory. On the current
+Burning Crusade anniversary client that is:
 
 ```
-World of Warcraft\_classic_\Interface\AddOns\
+World of Warcraft\_anniversary_\Interface\AddOns\
 ```
+
+Note it is `_anniversary_`, not `_classic_` — dropping it in the wrong branch is
+the usual reason an addon does not appear in the character-select list.
 
 The folder must be named exactly `RPVox`.
 
