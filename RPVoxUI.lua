@@ -483,6 +483,7 @@ local function CreateUI()
         _G[self:GetName() .. "Text"]:SetText("Chance: " .. FormatPct(value))
         if selected and not UI.updating then
             selected.chance = value
+            selected.chanceCustom = true  -- yours now; updates leave it alone
             pane.chanceBox:SetText(FormatPct(value, true))
         end
     end)
@@ -497,6 +498,7 @@ local function CreateUI()
         local n = tonumber(cleaned)
         if n then
             selected.chance = math.max(0.01, math.min(100, math.floor(n * 100 + 0.5) / 100))
+            selected.chanceCustom = true  -- yours now; updates leave it alone
         end
         UI:RefreshDetail()
     end)

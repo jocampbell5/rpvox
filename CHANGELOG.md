@@ -1,5 +1,17 @@
 # Changelog
 
+## 4.1.1 — 2026-08-07
+
+- **Fixed: updating RPVox reset your settings.** Any release that re-applied
+  stock chances overwrote every trigger's chance with the built-in value, so a
+  player who had tuned their sliders lost the lot on update. A chance you set
+  yourself is now marked as yours and is never overwritten again — the same way
+  an edited line list already was. The old migration that capped hand-made
+  triggers at 0.5% no longer touches them either.
+- **The quiet gap now defaults to 5 seconds** instead of 3 minutes. Existing
+  profiles keep whatever you have set; this only changes what a new profile
+  starts with.
+
 ## 4.1 — 2026-08-07
 
 - **Every class now has a pack.** Druid, Rogue, Warlock, Paladin and Shaman

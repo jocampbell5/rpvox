@@ -248,7 +248,7 @@ local SPELLNAME_TRIGGERS = {
 }
 
 local DEFAULT_CHANCE   = 0.5
-local DEFAULT_GLOBALCD = 180
+local DEFAULT_GLOBALCD = 5
 
 -- State -------------------------------------------------------------------
 
@@ -830,7 +830,10 @@ local function EnsureBuiltins(profile, seeding, rebalancing)
             t.words = CopyTable(stock)
         end
 
-        if rebalancing then
+        -- Re-apply stock chances on a rebalance, but never over a number the
+        -- player set themselves. Before this, every content update that bumped
+        -- CHANCE_VERSION silently reset everybody's sliders back to stock.
+        if rebalancing and not t.chanceCustom then
             t.chance = def.chance
         end
     end
@@ -840,7 +843,11 @@ local function EnsureBuiltins(profile, seeding, rebalancing)
         t.cooldown = nil
         -- anything saved from an older build (YELL, PARTY) comes back to SAY
         t.channel = SafeChannel(t.channel)
-        if rebalancing and not t.builtin and (t.chance or 0) > 0.5 then
+        -- Old one-off migration that capped hand-made triggers at 0.5%. It must
+        -- not touch a chance the player has set, or their own triggers get
+        -- quietly turned down on every update.
+        if rebalancing and not t.builtin and not t.chanceCustom
+           and (t.chance or 0) > 0.5 then
             t.chance = 0.5
         end
     end
