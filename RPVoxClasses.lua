@@ -311,7 +311,7 @@ RPVox_CLASSES.MAGE = {
             "%t. I am not built for this proximity.",
             "%t. Somebody intercept. Please.",
             "%t. The margin has become uncomfortable.",
-            "%t. This is why we keep a tank.",
+            "%t. This is why I stand behind somebody larger.",
             "%t. Structural integrity: poor.",
             "%t. I have miscalculated.",
             "Do not let it touch me again, %t.",

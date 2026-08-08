@@ -249,7 +249,7 @@ RPVox_MOOD_LINES.MAGE_GRIM = {
         "Come closer. It will not help, %t.",
         "%t. Nothing gets through. Nothing ever does.",
         "%t. I am simply unavailable.",
-        "Spend your cooldowns. Please, %t.",
+        "Spend your best work on this. Please, %t.",
         "%t. That was a wasted opening.",
         "%t. Frozen, and entirely in control.",
         "Watch me not die, %t.",

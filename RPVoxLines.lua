@@ -14,7 +14,7 @@ RPVox_LINES["MELEE"] = {
     "Come closer. I insist, %t.",
     "You bleed. How quaint, %t.",
     "%t. Crude, but it works.",
-    "%t. Hands will do.",
+    "%t. I do not need a weapon for you.",
     "Down you go, %t.",
     "Closer than I like. Fatal for you, %t.",
 }
@@ -322,7 +322,7 @@ RPVox_LINES["REACT:DEATH"] = {
     "%t. So dark. So familiar.",
     "%t. They will find me. They always find me.",
     "%t. There is no rest at the bottom of this.",
-    "%t. Every death is a rehearsal for none.",
+    "%t. Every death is practice for the next.",
     "%t. I am not finished. Merely interrupted.",
     "Note the time. I will want revenge on schedule, %t.",
     "%t. Broken again. Predictable.",
@@ -359,7 +359,7 @@ RPVox_LINES["REACT:DEATH"] = {
     "Remember the name, %t. I will find you.",
     "/em goes still, eyes open",
     "You win nothing, %t.",
-    "/em the body settles into the dirt, unhurried",
+    "/em settles into the dirt, unhurried",
     "Well struck, %t. Enjoy it briefly.",
 }
 
@@ -685,7 +685,7 @@ RPVox_LINES["REACT:COMBATSTART"] = {
     "You should not have done that, %t.",
     "/em rolls back a sleeve, unhurried",
     "Come along then, %t.",
-    "/em the air around him goes noticeably colder",
+    "/em chills the air around him noticeably",
 }
 
 RPVox_LINES["REACT:COMBATEND"] = {
