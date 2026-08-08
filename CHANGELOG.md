@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 4.0.1 — 2026-08-07
 
 - **Fixed: RPVox blocked mouse wheel camera zoom.** The addon watched the mouse
   wheel as one of its input surfaces, which consumed the event before the
