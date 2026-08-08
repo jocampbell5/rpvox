@@ -1,5 +1,15 @@
 # Changelog
 
+## 4.0.2 — 2026-08-07
+
+- **Fixed: mashing a key bought extra chance rolls.** Every press of an ability
+  rolled separately, including the dead presses players make while waiting on a
+  cooldown. Anyone who taps quickly triggered lines far more often than their
+  setting implied — at 20%, four rapid presses fired 59% of the time. There is
+  now at most one roll per 1.5 seconds, whatever is pressed, so the frequency
+  you set is the frequency you get. No roll is lost for an action you actually
+  took.
+
 ## 4.0.1 — 2026-08-07
 
 - **Fixed: RPVox blocked mouse wheel camera zoom.** The addon watched the mouse
