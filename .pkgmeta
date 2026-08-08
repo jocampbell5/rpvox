@@ -2,6 +2,12 @@ package-as: RPVox
 
 enable-nolib-creation: no
 
+# Without this the packager generates a changelog from commit messages and
+# sends that to CurseForge. Use the written one instead.
+manual-changelog:
+    filename: CHANGELOG.md
+    markup-type: markdown
+
 ignore:
   - .github
   - README.md

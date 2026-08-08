@@ -39,6 +39,13 @@ local SPELL_EVENTS = {
 -- one inside this window counts, so a cast never fires two rolls.
 local DEDUPE_WINDOW = 0.6
 
+-- At most one chance roll per this many seconds, whatever was pressed. Players
+-- mash a key while it is still on cooldown, and every one of those dead presses
+-- used to buy another roll -- so a 20% trigger fired almost every time for
+-- anyone who taps quickly. 1.5s is the global cooldown, so nobody loses a roll
+-- for an action they actually took.
+local ROLL_THROTTLE = 1.5
+
 local SEED_VERSION   = 12 -- bump to offer a fresh set of stock lines
 local CHANCE_VERSION = 1   -- bump to re-apply stock chances over saved ones
 local LINE_VERSION   = 1   -- bump to rewrite saved lines in place
@@ -249,6 +256,7 @@ local P                 -- active profile table
 local playerGUID
 local lastAnyCry = 0
 local lastSeen   = {}   -- [spellName]  = GetTime()  (cast dedupe)
+local lastRollAt = 0    -- GetTime() of the last chance roll, any trigger
 local spellIndex = {}   -- [lowercase spell name] = trigger
 local keyIndex   = {}   -- [trigger key]          = trigger
 local meleeTrigger
@@ -701,6 +709,13 @@ local function Fire(trigger)
         Debug(("skip: still quiet for %.0fs"):format(wait))
         return
     end
+
+    -- Mashing a key must not buy extra rolls. See ROLL_THROTTLE.
+    if now - lastRollAt < ROLL_THROTTLE then
+        Debug("skip: already rolled this global cooldown -- input spam")
+        return
+    end
+    lastRollAt = now
 
     local roll = math.random() * 100
     if roll >= (trigger.chance or 0) then
