@@ -46,8 +46,8 @@ local DEDUPE_WINDOW = 0.6
 -- for an action they actually took.
 local ROLL_THROTTLE = 1.5
 
-local SEED_VERSION   = 12 -- bump to offer a fresh set of stock lines
-local CHANCE_VERSION = 1   -- bump to re-apply stock chances over saved ones
+local SEED_VERSION   = 13 -- bump to offer a fresh set of stock lines
+local CHANCE_VERSION = 2   -- bump to re-apply stock chances over saved ones
 local LINE_VERSION   = 1   -- bump to rewrite saved lines in place
 
 -- Saved lines you have edited are never reseeded, so syntax changes have to be
@@ -87,7 +87,7 @@ end
 local BUILTIN = {
     -- Combat ------------------------------------------------------------
     { key = "MELEE", category = "COMBAT", name = "Melee attacks",
-      icon = "Interface\\Icons\\INV_Sword_04", chance = 0.2 },
+      icon = "Interface\\Icons\\INV_Sword_04", chance = 10 },
 
     -- Reactions ---------------------------------------------------------
     { key = "REACT:LOWHEALTH", category = "REACTION", name = "Badly wounded (below 25%)",

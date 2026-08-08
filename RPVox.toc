@@ -2,7 +2,7 @@
 ## Title: RPVox
 ## Notes: Gives your character a voice: roleplay lines and emotes for combat, reactions and everyday life.
 ## Author: jocampbell5
-## Version: 4.0.2
+## Version: 4.1
 ## X-License: MIT
 ## X-Website: https://github.com/jocampbell5/rpvox
 ## X-Curse-Project-ID: 1643063
@@ -19,5 +19,10 @@ RPVoxMoods_MageGrim.lua
 RPVoxMoods_MageGrim2.lua
 RPVoxClasses.lua
 RPVoxClassHunter.lua
+RPVoxClassDruid.lua
+RPVoxClassRogue.lua
+RPVoxClassWarlock.lua
+RPVoxClassPaladin.lua
+RPVoxClassShaman.lua
 RPVox.lua
 RPVoxUI.lua

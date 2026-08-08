@@ -1,4 +1,4 @@
-﻿-- RPVox -- class packs
+-- RPVox -- class packs
 --
 -- Each pack gives a class its own ability list and its own voice. Creating a
 -- profile from a pack seeds every trigger from `lines`, falling back to the
@@ -15,16 +15,16 @@ RPVox_CLASSES = {}
 RPVox_CLASSES.PRIEST = {
     name = "Priest",
     spells = {
-        { spell = "Shoot",              icon = "Interface\\Icons\\INV_Wand_01",                 chance = 0.05 },
-        { spell = "Smite",              icon = "Interface\\Icons\\Spell_Holy_HolySmite",        chance = 0.3 },
-        { spell = "Mind Blast",         icon = "Interface\\Icons\\Spell_Shadow_UnholyFrenzy",   chance = 0.3 },
-        { spell = "Shadow Word: Pain",  icon = "Interface\\Icons\\Spell_Shadow_ShadowWordPain", chance = 0.3 },
-        { spell = "Power Word: Shield", icon = "Interface\\Icons\\Spell_Holy_PowerWordShield",  chance = 0.3 },
-        { spell = "Renew",              icon = "Interface\\Icons\\Spell_Holy_Renew",            chance = 0.3 },
-        { spell = "Lesser Heal",        icon = "Interface\\Icons\\Spell_Holy_LesserHeal",       chance = 0.3 },
-        { spell = "Mind Flay",          icon = "Interface\\Icons\\Spell_Shadow_SiphonMana",     chance = 0.3 },
-        { spell = "Psychic Scream",     icon = "Interface\\Icons\\Spell_Shadow_PsychicScream",  chance = 0.5 },
-        { spell = "Fade",               icon = "Interface\\Icons\\Spell_Magic_LesserInvisibilty", chance = 0.5 },
+        { spell = "Shoot",              icon = "Interface\\Icons\\INV_Wand_01",                 chance = 10 },
+        { spell = "Smite",              icon = "Interface\\Icons\\Spell_Holy_HolySmite",        chance = 10 },
+        { spell = "Mind Blast",         icon = "Interface\\Icons\\Spell_Shadow_UnholyFrenzy",   chance = 10 },
+        { spell = "Shadow Word: Pain",  icon = "Interface\\Icons\\Spell_Shadow_ShadowWordPain", chance = 10 },
+        { spell = "Power Word: Shield", icon = "Interface\\Icons\\Spell_Holy_PowerWordShield",  chance = 10 },
+        { spell = "Renew",              icon = "Interface\\Icons\\Spell_Holy_Renew",            chance = 10 },
+        { spell = "Lesser Heal",        icon = "Interface\\Icons\\Spell_Holy_LesserHeal",       chance = 10 },
+        { spell = "Mind Flay",          icon = "Interface\\Icons\\Spell_Shadow_SiphonMana",     chance = 10 },
+        { spell = "Psychic Scream",     icon = "Interface\\Icons\\Spell_Shadow_PsychicScream",  chance = 10 },
+        { spell = "Fade",               icon = "Interface\\Icons\\Spell_Magic_LesserInvisibilty", chance = 10 },
     },
     lines = {
         ["SPELL:Mind Flay"] = {
@@ -89,22 +89,22 @@ RPVox_CLASSES.PRIEST = {
 RPVox_CLASSES.MAGE = {
     name = "Mage",
     spells = {
-        { spell = "Frostbolt",        icon = "Interface\\Icons\\Spell_Frost_FrostBolt02",     chance = 0.3 },
-        { spell = "Fireball",         icon = "Interface\\Icons\\Spell_Fire_FlameBolt",        chance = 0.3 },
-        { spell = "Arcane Missiles",  icon = "Interface\\Icons\\Spell_Nature_StarFall",       chance = 0.3 },
-        { spell = "Fire Blast",       icon = "Interface\\Icons\\Spell_Fire_Fireball",         chance = 0.3 },
-        { spell = "Pyroblast",        icon = "Interface\\Icons\\Spell_Fire_Fireball02",       chance = 1 },
-        { spell = "Blizzard",         icon = "Interface\\Icons\\Spell_Frost_IceStorm",        chance = 1 },
-        { spell = "Frost Nova",       icon = "Interface\\Icons\\Spell_Frost_FrostNova",       chance = 1 },
-        { spell = "Blink",            icon = "Interface\\Icons\\Spell_Arcane_Blink",          chance = 1 },
-        { spell = "Polymorph",        icon = "Interface\\Icons\\Spell_Nature_Polymorph",      chance = 3 },
-        { spell = "Counterspell",     icon = "Interface\\Icons\\Spell_Frost_IceShock",        chance = 3 },
-        { spell = "Ice Block",        icon = "Interface\\Icons\\Spell_Frost_Frost",           chance = 5 },
-        { spell = "Evocation",        icon = "Interface\\Icons\\Spell_Nature_Purge",          chance = 5 },
-        { spell = "Arcane Intellect", icon = "Interface\\Icons\\Spell_Holy_MagicalSentry",    chance = 3 },
-        { spell = "Conjure Water",    icon = "Interface\\Icons\\INV_Drink_04",                chance = 3 },
-        { spell = "Conjure Food",     icon = "Interface\\Icons\\INV_Misc_Food_39",            chance = 3 },
-        { spell = "Shoot",            icon = "Interface\\Icons\\INV_Wand_01",                 chance = 0.05 },
+        { spell = "Frostbolt",        icon = "Interface\\Icons\\Spell_Frost_FrostBolt02",     chance = 10 },
+        { spell = "Fireball",         icon = "Interface\\Icons\\Spell_Fire_FlameBolt",        chance = 10 },
+        { spell = "Arcane Missiles",  icon = "Interface\\Icons\\Spell_Nature_StarFall",       chance = 10 },
+        { spell = "Fire Blast",       icon = "Interface\\Icons\\Spell_Fire_Fireball",         chance = 10 },
+        { spell = "Pyroblast",        icon = "Interface\\Icons\\Spell_Fire_Fireball02",       chance = 10 },
+        { spell = "Blizzard",         icon = "Interface\\Icons\\Spell_Frost_IceStorm",        chance = 10 },
+        { spell = "Frost Nova",       icon = "Interface\\Icons\\Spell_Frost_FrostNova",       chance = 10 },
+        { spell = "Blink",            icon = "Interface\\Icons\\Spell_Arcane_Blink",          chance = 10 },
+        { spell = "Polymorph",        icon = "Interface\\Icons\\Spell_Nature_Polymorph",      chance = 10 },
+        { spell = "Counterspell",     icon = "Interface\\Icons\\Spell_Frost_IceShock",        chance = 10 },
+        { spell = "Ice Block",        icon = "Interface\\Icons\\Spell_Frost_Frost",           chance = 10 },
+        { spell = "Evocation",        icon = "Interface\\Icons\\Spell_Nature_Purge",          chance = 10 },
+        { spell = "Arcane Intellect", icon = "Interface\\Icons\\Spell_Holy_MagicalSentry",    chance = 10 },
+        { spell = "Conjure Water",    icon = "Interface\\Icons\\INV_Drink_04",                chance = 10 },
+        { spell = "Conjure Food",     icon = "Interface\\Icons\\INV_Misc_Food_39",            chance = 10 },
+        { spell = "Shoot",            icon = "Interface\\Icons\\INV_Wand_01",                 chance = 10 },
     },
     lines = {
         -- Abilities -----------------------------------------------------
@@ -534,18 +534,18 @@ RPVox_CLASSES.MAGE = {
 RPVox_CLASSES.WARRIOR = {
     name = "Warrior",
     spells = {
-        { spell = "Charge",             icon = "Interface\\Icons\\Ability_Warrior_Charge",        chance = 0.5 },
-        { spell = "Heroic Strike",      icon = "Interface\\Icons\\Ability_Rogue_Ambush",          chance = 0.1 },
-        { spell = "Rend",               icon = "Interface\\Icons\\Ability_Gouge",                 chance = 0.4 },
-        { spell = "Thunder Clap",       icon = "Interface\\Icons\\Spell_Nature_ThunderClap",      chance = 0.4 },
-        { spell = "Battle Shout",       icon = "Interface\\Icons\\Ability_Warrior_BattleShout",   chance = 0.5 },
-        { spell = "Demoralizing Shout", icon = "Interface\\Icons\\Ability_Warrior_WarCry",        chance = 0.5 },
-        { spell = "Intimidating Shout", icon = "Interface\\Icons\\Ability_GolemThunderClap",      chance = 0.8 },
-        { spell = "Execute",            icon = "Interface\\Icons\\INV_Sword_48",                  chance = 0.8 },
-        { spell = "Taunt",              icon = "Interface\\Icons\\Spell_Nature_Reincarnation",    chance = 0.8 },
-        { spell = "Sunder Armor",       icon = "Interface\\Icons\\Ability_Warrior_Sunder",        chance = 0.1 },
-        { spell = "Shield Slam",        icon = "Interface\\Icons\\Ability_Warrior_ShieldSlam",    chance = 0.3 },
-        { spell = "Mortal Strike",      icon = "Interface\\Icons\\Ability_Warrior_SavageBlow",    chance = 0.3 },
+        { spell = "Charge",             icon = "Interface\\Icons\\Ability_Warrior_Charge",        chance = 10 },
+        { spell = "Heroic Strike",      icon = "Interface\\Icons\\Ability_Rogue_Ambush",          chance = 10 },
+        { spell = "Rend",               icon = "Interface\\Icons\\Ability_Gouge",                 chance = 10 },
+        { spell = "Thunder Clap",       icon = "Interface\\Icons\\Spell_Nature_ThunderClap",      chance = 10 },
+        { spell = "Battle Shout",       icon = "Interface\\Icons\\Ability_Warrior_BattleShout",   chance = 10 },
+        { spell = "Demoralizing Shout", icon = "Interface\\Icons\\Ability_Warrior_WarCry",        chance = 10 },
+        { spell = "Intimidating Shout", icon = "Interface\\Icons\\Ability_GolemThunderClap",      chance = 10 },
+        { spell = "Execute",            icon = "Interface\\Icons\\INV_Sword_48",                  chance = 10 },
+        { spell = "Taunt",              icon = "Interface\\Icons\\Spell_Nature_Reincarnation",    chance = 10 },
+        { spell = "Sunder Armor",       icon = "Interface\\Icons\\Ability_Warrior_Sunder",        chance = 10 },
+        { spell = "Shield Slam",        icon = "Interface\\Icons\\Ability_Warrior_ShieldSlam",    chance = 10 },
+        { spell = "Mortal Strike",      icon = "Interface\\Icons\\Ability_Warrior_SavageBlow",    chance = 10 },
     },
     lines = {
         -- Abilities -----------------------------------------------------

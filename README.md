@@ -32,7 +32,7 @@ It never yells. `/say` and `/em` only.
 
 ## Included voices
 
-Three characters come written, several thousand lines deep:
+Every class ships with its own written character, several thousand lines deep:
 
 - **Priest** — a Forsaken shadow priest. Dry, cold, unimpressed, annoyed about
   having died. Four moods.
@@ -40,9 +40,17 @@ Three characters come written, several thousand lines deep:
 - **Hunter** — a Sin'dorei noblewoman who treats a battlefield as a badly
   organised court. Offended by dust, blood and bad manners. Soft only with her
   pet.
-
-A Warrior pack is included in a single voice. Six classes have no pack yet and
-fall back to the generic set.
+- **Druid** — a Kaldorei only half returned from the Emerald Dream, speaking
+  slightly out of step with the present and unsure which war this is.
+- **Rogue** — a guild-trained professional who regards killing as skilled trade
+  work. Rates, tools, standards, and no cruelty at all.
+- **Warlock** — a contract lawyer who deals in souls. Terms, clauses and
+  arrears, and demons who are simply difficult staff.
+- **Paladin** — a Blood Knight who takes the Light by force and resents needing
+  it. He does not pray and he will not kneel.
+- **Shaman** — an old orc who negotiates with elements that are frequently in a
+  mood, and gets better conversation from the wind than from people.
+- **Warrior** — included in a single voice.
 
 If you would rather have your own character than one of mine, clear a trigger in
 the settings window and write your own — the stock lines are a starting point,

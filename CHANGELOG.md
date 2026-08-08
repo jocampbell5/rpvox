@@ -1,5 +1,25 @@
 # Changelog
 
+## 4.1 — 2026-08-07
+
+- **Every class now has a pack.** Druid, Rogue, Warlock, Paladin and Shaman
+  join Priest, Mage, Warrior and Hunter. 2,056 new hand-written lines across
+  136 abilities, each class with its own voice:
+  - **Druid** — a Kaldorei only half returned from the Emerald Dream, speaking
+    slightly out of step with the present and unsure which war this is.
+  - **Rogue** — a guild-trained professional who regards killing as skilled
+    trade work. Rates, tools, standards, and no cruelty whatsoever.
+  - **Warlock** — a contract lawyer who deals in souls. Everything is terms,
+    clauses and arrears, and his demons are difficult staff.
+  - **Paladin** — a Blood Knight who takes the Light by force and resents
+    needing it. He does not pray and he will not kneel.
+  - **Shaman** — an old orc who negotiates with elements that are frequently
+    in a mood, and gets better conversation from the wind than from people.
+- **Combat ability chance raised to 10%.** Every class ability and melee now
+  rolls at 10% rather than the old 0.05–5% spread. The single global gap still
+  governs everything, so this changes how promptly a character speaks once the
+  gap has elapsed, not how often they speak overall.
+
 ## 4.0.2 — 2026-08-07
 
 - **Fixed: mashing a key bought extra chance rolls.** Every press of an ability
