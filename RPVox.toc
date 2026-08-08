@@ -6,6 +6,7 @@
 ## X-License: MIT
 ## X-Website: https://github.com/jocampbell5/rpvox
 ## X-Curse-Project-ID: 1643063
+## IconTexture: Interface\AddOns\RPVox\Icon.tga
 ## SavedVariables: RPVoxDB
 
 RPVoxLines.lua
