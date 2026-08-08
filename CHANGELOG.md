@@ -1,5 +1,13 @@
 # Changelog
 
+## Unreleased
+
+- **Fixed: RPVox blocked mouse wheel camera zoom.** The addon watched the mouse
+  wheel as one of its input surfaces, which consumed the event before the
+  camera zoom bindings could see it. There is no API to propagate a handled
+  wheel event, so the wheel is now left alone entirely. Clicks, keys and
+  gamepad buttons still serve as flush triggers.
+
 ## 4.0 — 2026-08-07
 
 First public release.

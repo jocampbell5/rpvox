@@ -645,8 +645,12 @@ hw:EnableKeyboard(true)
 hw:SetPropagateKeyboardInput(true)
 hw:SetScript("OnKeyDown",    function() RPVox:Flush() end)
 hw:SetScript("OnKeyUp",      function() RPVox:Flush() end)   -- releasing counts too
-hw:SetScript("OnMouseWheel", function() RPVox:Flush() end)
-hw:EnableMouseWheel(true)
+
+-- Never touch the mouse wheel. There is no SetPropagateMouseWheelInput, so any
+-- frame that handles OnMouseWheel swallows the event, and the camera zoom
+-- bindings (MOUSEWHEELUP/MOUSEWHEELDOWN) never fire. Clicks and keys are
+-- plentiful enough as flush triggers; stealing the player's zoom is not worth
+-- the extra surface.
 
 -- Controllers do not produce key events, so watch gamepad buttons too where
 -- the client supports them.
@@ -659,7 +663,7 @@ end
 if WorldFrame then
     WorldFrame:HookScript("OnMouseDown",  function() RPVox:Flush() end)
     WorldFrame:HookScript("OnMouseUp",    function() RPVox:Flush() end)
-    WorldFrame:HookScript("OnMouseWheel", function() RPVox:Flush() end)
+    -- No OnMouseWheel hook here: it eats camera zoom. See the note above.
 end
 
 -- Clicks on the UI (action bars included) never reach WorldFrame. These events
