@@ -450,9 +450,20 @@ local function SplitChannel(line)
     return line, "SAY"
 end
 
+-- The name that goes into %t, or nil if there is nobody worth naming.
+-- You do not count: healing, shielding or buffing yourself leaves you
+-- self-targeted, and a line addressed to your own character reads as nonsense.
+-- Returning nil here makes every %t line ineligible, so the untargeted
+-- fallbacks in each set are used instead.
+local function TargetName()
+    if not UnitExists("target") then return nil end
+    if UnitIsUnit("target", "player") then return nil end
+    return UnitName("target")
+end
+
 local function Expand(text)
     if not text:find("%%") then return text end
-    text = text:gsub("%%t", UnitName("target") or "")
+    text = text:gsub("%%t", TargetName() or "")
     text = text:gsub("%%s", UnitName("player") or "")
     return text
 end
@@ -468,7 +479,7 @@ end
 
 local function PickLine(trigger)
     local words = trigger.words
-    local hasTarget = UnitExists("target") and UnitName("target") ~= nil
+    local hasTarget = TargetName() ~= nil
 
     -- eligible = fits the current mood, and has a target if it needs one
     local eligible = {}

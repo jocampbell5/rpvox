@@ -15,6 +15,13 @@
     needing it. He does not pray and he will not kneel.
   - **Shaman** — an old orc who negotiates with elements that are frequently
     in a mood, and gets better conversation from the wind than from people.
+- **Fixed: your character addressed herself when self-targeted.** Healing,
+  shielding or buffing yourself leaves you as your own target, and the target
+  token was filling in your own name — so a line meant for an enemy came out
+  aimed at you. You no longer count as a target: lines that name one become
+  ineligible while you are self-targeted, and the untargeted lines in each set
+  are used instead. Every healing set has plenty of those, so self-healing
+  still speaks; it simply stops saying your name.
 - **Combat ability chance raised to 10%.** Every class ability and melee now
   rolls at 10% rather than the old 0.05–5% spread. The single global gap still
   governs everything, so this changes how promptly a character speaks once the
