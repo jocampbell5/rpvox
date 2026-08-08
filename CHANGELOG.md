@@ -22,6 +22,13 @@
   ineligible while you are self-targeted, and the untargeted lines in each set
   are used instead. Every healing set has plenty of those, so self-healing
   still speaks; it simply stops saying your name.
+- **Line clean-up pass.** Fixed lines that read as nonsense to anyone who only
+  sees the chat text and not the ability that fired — `"Hands will do."` on a
+  melee swing now reads `"I do not need a weapon for you."` Two emotes began
+  with an article, so they rendered as "Name the body settles into the dirt";
+  both now begin with a verb. Removed all game-mechanics vocabulary, most of it
+  a Fade set written entirely in raid jargon ("Dropping threat", "That should
+  hold the pull"), now rewritten in character.
 - **Combat ability chance raised to 10%.** Every class ability and melee now
   rolls at 10% rather than the old 0.05–5% spread. The single global gap still
   governs everything, so this changes how promptly a character speaks once the
