@@ -270,7 +270,7 @@ RPVox_MOOD_LINES.HAPPY = {
         "Ready for another go!",
         "Ha! Good as new. Nearly.",
         "Charming little death, that.",
-        "Where's %t? I owe them thanks.",
+        "Where's the one who called me back? I owe them thanks.",
         "Right then! Business.",
         "Splendid morning to be upright.",
         "That's better.",

@@ -252,7 +252,7 @@ RPVox_MOOD_LINES.GRIM = {
         "Nothing was resolved while I was gone.",
         "Back, and less patient.",
         "The debt is still owed.",
-        "Where is %t.",
+        "Where is the one who did it.",
         "I have come back angrier.",
         "The Shadow keeps its investments.",
         "Nothing changed. Except my intent.",
