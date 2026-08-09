@@ -515,13 +515,23 @@ local function PickLine(trigger)
     return words[index]
 end
 
+-- A channel has no emote formatting of its own, so speech and actions would
+-- arrive looking identical: "Sketch: Come here" and "Sketch: straightens his
+-- robes" read the same. Actions get wrapped the way roleplayers write them.
+-- In /say and /em mode nothing changes -- the client formats emotes itself.
+local function ForOutput(msg, channel, output)
+    if (output or "VOX") ~= "VOX" then return msg, channel end
+    if channel == "EMOTE" then return "*" .. msg .. "*", "VOX" end
+    return msg, "VOX"
+end
+
 -- Used by the Test line button so a preview matches what would really be said.
 function RPVox:PreviewLine(trigger)
     local raw = PickLine(trigger)
     if not raw then return nil end
     local _, body = SplitMood(raw)
     local msg, channel = SplitChannel(body)
-    return Expand(msg), channel
+    return ForOutput(Expand(msg), channel, P and P.output)
 end
 
 -- Idle triggers can fire while you are standing perfectly still, so give a
@@ -777,11 +787,10 @@ local function Fire(trigger)
 
     lastAnyCry = now
     local _, body = SplitMood(raw)
+    -- The line decides whether it is speech or an action; the profile decides
+    -- where it goes and how an action is marked once it gets there.
     local msg, channel = SplitChannel(body)
-    -- The line still decides say-vs-emote for its own wording; the profile
-    -- decides where it actually goes.
-    if (P.output or "VOX") == "VOX" then channel = "VOX" end
-    msg = Expand(msg)
+    msg, channel = ForOutput(Expand(msg), channel, P.output)
     Debug("FIRE:", trigger.name, "->", channel, "->", msg)
 
     -- A combat line belongs to the spell that caused it. If it cannot go out
@@ -1387,7 +1396,7 @@ SlashCmdList["RPVox"] = function(input)
         local raw = PickLine(t) or t.words[1]
         local _, body = SplitMood(raw)
         local msg, channel = SplitChannel(body)
-        RPVox:Queue(Expand(msg), channel)
+        RPVox:Queue(ForOutput(Expand(msg), channel, P.output))
         RPVox:Flush()
 
     elseif cmd == "autotest" then
