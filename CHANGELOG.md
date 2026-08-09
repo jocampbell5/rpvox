@@ -1,5 +1,16 @@
 # Changelog
 
+## 4.4.1 - 2026-08-09
+
+- **Fixed: every popup button did nothing.** New profile, Copy, Rename, Add
+  spell and New mood all read the dialog's edit box as `self.editBox`. The
+  anniversary client rebuilt StaticPopup and renamed it `self.EditBox`, so
+  every one of those handlers threw an error the moment it ran -- and because
+  WoW hides Lua errors by default, the buttons simply looked dead. Resolved
+  whichever way the client spells it, and the enter-to-accept handlers no
+  longer assume the edit box's parent is the dialog.
+- Added `/rpvox copy <name>` as a route that avoids the popup entirely.
+
 ## 4.4 — 2026-08-07
 
 - **Silent in raids, nearly silent in dungeons.** In a raid group, or inside a

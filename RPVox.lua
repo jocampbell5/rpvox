@@ -1491,6 +1491,25 @@ SlashCmdList["RPVox"] = function(input)
             RPVox.UI:Refresh()
         end
 
+    elseif cmd == "copy" then
+        -- Same job as the Copy button, without the popup in the way.
+        if rest == "" then
+            print("|cff00ff00RPVox:|r use  /rpvox copy <new name>")
+        else
+            local from = RPVox:ProfileName()
+            local ok, p, err = pcall(RPVox.CreateProfile, RPVox, rest, from)
+            if not ok then
+                print("|cffff0000RPVox copy failed:|r " .. tostring(p))
+            elseif not p then
+                print("|cffff0000RPVox:|r " .. tostring(err))
+            else
+                RPVox:UseProfile(rest)
+                if RPVox.UI and RPVox.UI.Refresh then pcall(RPVox.UI.Refresh, RPVox.UI) end
+                print(("|cff00ff00RPVox:|r copied '%s' to '%s' and switched to it.")
+                    :format(tostring(from), rest))
+            end
+        end
+
     elseif cmd == "rebuild" then
         -- Throws away every stock line in this profile and seeds it again from
         -- the current packs. The only way to be certain a profile holds exactly

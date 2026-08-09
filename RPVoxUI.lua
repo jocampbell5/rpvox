@@ -843,6 +843,31 @@ function UI:AddSpell(name, icon)
     self.frame.pane.edit:SetFocus()
 end
 
+-- Popups -------------------------------------------------------------------
+--
+-- The anniversary client rebuilt StaticPopup: the edit box is reached as
+-- self.EditBox, where it used to be self.editBox. Every popup here silently
+-- did nothing on the old name, because WoW hides Lua errors by default -- the
+-- buttons looked dead. Resolve it whichever way the client spells it.
+local function PopupEdit(popup)
+    if not popup then return nil end
+    return popup.EditBox
+        or popup.editBox
+        or (popup.GetName and popup:GetName() and _G[popup:GetName() .. "EditBox"])
+end
+
+-- The dialog rebuild also means an edit box's parent is not necessarily the
+-- popup any more, so walk up until something owns a dialog. Used by the
+-- enter-to-accept handlers.
+local function PopupOf(frame)
+    for _ = 1, 6 do
+        if not frame then return nil end
+        if frame.which then return frame end
+        frame = frame.GetParent and frame:GetParent() or nil
+    end
+    return nil
+end
+
 -- Add-by-name popup --------------------------------------------------------
 
 StaticPopupDialogs["RPVox_ADD_SPELL"] = {
@@ -852,18 +877,18 @@ StaticPopupDialogs["RPVox_ADD_SPELL"] = {
     hasEditBox = true,
     maxLetters = 60,
     OnShow = function(self)
-        self.editBox:SetText("")
-        self.editBox:SetFocus()
+        PopupEdit(self):SetText("")
+        PopupEdit(self):SetFocus()
     end,
     OnAccept = function(self)
-        local name = self.editBox:GetText():match("^%s*(.-)%s*$")
+        local name = PopupEdit(self):GetText():match("^%s*(.-)%s*$")
         if name ~= "" then
             local real, _, icon = GetSpellInfo(name)
             UI:AddSpell(real or name, icon)
         end
     end,
     EditBoxOnEnterPressed = function(self)
-        local parent = self:GetParent()
+        local parent = PopupOf(self) or self:GetParent()
         StaticPopupDialogs["RPVox_ADD_SPELL"].OnAccept(parent)
         parent:Hide()
     end,
@@ -884,9 +909,9 @@ StaticPopupDialogs["RPVox_NEW_PROFILE"] = {
     text = "Name for the new profile (starts with the stock lines):",
     button1 = ACCEPT, button2 = CANCEL,
     hasEditBox = true, maxLetters = 40,
-    OnShow = function(self) self.editBox:SetText("") self.editBox:SetFocus() end,
+    OnShow = function(self) PopupEdit(self):SetText("") PopupEdit(self):SetFocus() end,
     OnAccept = function(self)
-        local name = self.editBox:GetText():match("^%s*(.-)%s*$")
+        local name = PopupEdit(self):GetText():match("^%s*(.-)%s*$")
         local p, err = RPVox:CreateProfile(name)
         if not p then
             print("|cffff0000RPVox:|r " .. (err or "could not create."))
@@ -896,7 +921,7 @@ StaticPopupDialogs["RPVox_NEW_PROFILE"] = {
         AfterProfileChange("created '" .. name .. "' and switched to it.")
     end,
     EditBoxOnEnterPressed = function(self)
-        local parent = self:GetParent()
+        local parent = PopupOf(self) or self:GetParent()
         StaticPopupDialogs["RPVox_NEW_PROFILE"].OnAccept(parent)
         parent:Hide()
     end,
@@ -908,9 +933,9 @@ StaticPopupDialogs["RPVox_NEW_MOOD"] = {
     text = "Name your mood.\nTag lines with [name] and they only fire in it.",
     button1 = ACCEPT, button2 = CANCEL,
     hasEditBox = true, maxLetters = 24,
-    OnShow = function(self) self.editBox:SetText("") self.editBox:SetFocus() end,
+    OnShow = function(self) PopupEdit(self):SetText("") PopupEdit(self):SetFocus() end,
     OnAccept = function(self)
-        local name, err = RPVox:AddMood(nil, self.editBox:GetText())
+        local name, err = RPVox:AddMood(nil, PopupEdit(self):GetText())
         if not name then
             print("|cffff0000RPVox:|r " .. (err or "could not add that mood."))
             return
@@ -921,7 +946,7 @@ StaticPopupDialogs["RPVox_NEW_MOOD"] = {
             .. " Put |cffffff00[" .. name .. "]|r in front of a line to use it.")
     end,
     EditBoxOnEnterPressed = function(self)
-        local parent = self:GetParent()
+        local parent = PopupOf(self) or self:GetParent()
         StaticPopupDialogs["RPVox_NEW_MOOD"].OnAccept(parent)
         parent:Hide()
     end,
@@ -934,22 +959,35 @@ StaticPopupDialogs["RPVox_COPY_PROFILE"] = {
     button1 = ACCEPT, button2 = CANCEL,
     hasEditBox = true, maxLetters = 40,
     OnShow = function(self)
-        self.editBox:SetText((RPVox:ProfileName() or "") .. " copy")
-        self.editBox:SetFocus()
-        self.editBox:HighlightText()
+        PopupEdit(self):SetText((RPVox:ProfileName() or "") .. " copy")
+        PopupEdit(self):SetFocus()
+        PopupEdit(self):HighlightText()
     end,
     OnAccept = function(self)
-        local name = self.editBox:GetText():match("^%s*(.-)%s*$")
-        local p, err = RPVox:CreateProfile(name, RPVox:ProfileName())
+        -- Wrapped because WoW hides Lua errors by default: without this, any
+        -- fault in here looks exactly like the button doing nothing at all.
+        local name = PopupEdit(self):GetText():match("^%s*(.-)%s*$")
+        local ok, p, err = pcall(RPVox.CreateProfile, RPVox, name,
+                                 RPVox:ProfileName())
+        if not ok then
+            print("|cffff0000RPVox copy failed:|r " .. tostring(p))
+            return
+        end
         if not p then
             print("|cffff0000RPVox:|r " .. (err or "could not copy."))
             return
         end
-        RPVox:UseProfile(name)
-        AfterProfileChange("copied to '" .. name .. "'.")
+        local ok2, err2 = pcall(function()
+            RPVox:UseProfile(name)
+            AfterProfileChange("copied to '" .. name .. "'.")
+        end)
+        if not ok2 then
+            print("|cffff0000RPVox copied, but refreshing failed:|r "
+                .. tostring(err2))
+        end
     end,
     EditBoxOnEnterPressed = function(self)
-        local parent = self:GetParent()
+        local parent = PopupOf(self) or self:GetParent()
         StaticPopupDialogs["RPVox_COPY_PROFILE"].OnAccept(parent)
         parent:Hide()
     end,
@@ -962,12 +1000,12 @@ StaticPopupDialogs["RPVox_RENAME_PROFILE"] = {
     button1 = ACCEPT, button2 = CANCEL,
     hasEditBox = true, maxLetters = 40,
     OnShow = function(self)
-        self.editBox:SetText(RPVox:ProfileName() or "")
-        self.editBox:SetFocus()
-        self.editBox:HighlightText()
+        PopupEdit(self):SetText(RPVox:ProfileName() or "")
+        PopupEdit(self):SetFocus()
+        PopupEdit(self):HighlightText()
     end,
     OnAccept = function(self)
-        local name = self.editBox:GetText():match("^%s*(.-)%s*$")
+        local name = PopupEdit(self):GetText():match("^%s*(.-)%s*$")
         local ok, err = RPVox:RenameProfile(RPVox:ProfileName(), name)
         if not ok then
             print("|cffff0000RPVox:|r " .. (err or "could not rename."))
@@ -976,7 +1014,7 @@ StaticPopupDialogs["RPVox_RENAME_PROFILE"] = {
         AfterProfileChange("renamed to '" .. name .. "'.")
     end,
     EditBoxOnEnterPressed = function(self)
-        local parent = self:GetParent()
+        local parent = PopupOf(self) or self:GetParent()
         StaticPopupDialogs["RPVox_RENAME_PROFILE"].OnAccept(parent)
         parent:Hide()
     end,
