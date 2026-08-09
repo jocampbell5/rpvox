@@ -28,7 +28,19 @@ Built for **Burning Crusade Classic (2.5.x)**.
 Lines are targeted where it makes sense — `%t` becomes whatever you are fighting,
 and a targeted line simply will not fire when you have no target.
 
-It never yells. `/say` and `/em` only.
+## Where the lines go
+
+By default RPVox speaks **only to nearby players who also run RPVox**. The line
+travels as an addon message at say range, so the distance limit is the same one
+`/say` uses — but nothing lands in public chat, and a talkative character never
+fills the screen for people who did not ask for it. Speech and actions are
+rendered in the usual colours at the other end.
+
+The trade is that only RPVox users see anything. If you would rather everybody
+nearby could read your character, untick the box in `/rpvox` or run
+`/rpvox output say`, and lines go out as real `/say` and `/em` instead.
+
+It never yells. That is not a setting.
 
 ## Included voices
 
@@ -77,6 +89,7 @@ The folder must be named exactly `RPVox`.
 /rpvox on | off         kill switch for the active profile
 /rpvox profile <name>   switch profile, binds it to this character
 /rpvox mood <name>      set mood, or "any"
+/rpvox output vox|say   nearby RPVox users, or real /say and /em
 /rpvox status           profile, class, mood, armed triggers, line counts
 /rpvox testfire         send one line immediately
 ```

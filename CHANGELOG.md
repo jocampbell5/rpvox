@@ -1,5 +1,31 @@
 # Changelog
 
+## 4.2 — 2026-08-07
+
+- **Lines no longer go into public chat.** RPVox now sends each line to the
+  players around you who are also running RPVox, using an addon message at
+  say range. The server limits the distance exactly as it does for `/say`, so
+  only people genuinely nearby receive it — but nothing appears in public chat,
+  so a talkative character no longer fills the screen for everybody else.
+  Speech and actions are rendered locally in the usual colours.
+  The trade is that only RPVox users see anything. Untick the box in `/rpvox`,
+  or run `/rpvox output say`, to go back to real `/say` and `/em` that
+  everybody nearby can read.
+- **Every class now has its own melee lines.** Melee was falling back to the
+  generic set for all nine classes, which meant a paladin swinging a hammer
+  spoke in the voice of a Forsaken shadow priest. Nine new sets.
+- **Priest: 32 missing spells added.** The pack covered ten abilities and the
+  priest has far more. Added the full healing ladder including Greater Heal,
+  the blessings, Inner Fire, the dispels and cures, Shackle Undead, Mind
+  Control, Holy Fire, Holy Nova, Shadow Word: Death, the vampiric line,
+  Shadowform, Silence, Shadowfiend, and the Forsaken racials.
+- **Content pass.** Removed lines that read as sexual coercion when seen
+  without the context of which ability fired — chiefly two Mind Flay sets that
+  worked line by line but not read together. Same menace, moved firmly into
+  the mental and magical register.
+- Fixed lines that made no sense out of context, two emotes that rendered
+  ungrammatically, and all remaining raid jargon.
+
 ## 4.1.1 — 2026-08-07
 
 - **Fixed: updating RPVox reset your settings.** Any release that re-applied
