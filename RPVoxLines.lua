@@ -521,7 +521,7 @@ RPVox_LINES["REACT:KILLINGBLOW"] = {
     "Off you go, %t.",
     "I have seen thousands. You were one, %t.",
     "Stop. There. Now stay stopped, %t.",
-    "Your struggling was the best part, %t.",
+    "Your defiance was the best part, %t.",
     "Ended cleanly. You are welcome, %t.",
     "%t. The Shadow takes what it is owed.",
     "Peace at last. For you, %t.",

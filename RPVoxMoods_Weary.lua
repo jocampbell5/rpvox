@@ -76,7 +76,7 @@ RPVox_MOOD_LINES.WEARY = {
         "%t. This body has given all it has.",
         "%t. One more. Always one more.",
         "%t. I have been dying slowly for a very long time.",
-        "Let it happen, %t.",
+        "Finish it, then, %t.",
         "Whatever you like, %t.",
         "%t. I cannot muster the alarm.",
         "%t. It stopped mattering some time ago.",

@@ -129,7 +129,7 @@ RPVox_CLASSES.ROGUE = {
         ["SPELL:Garrote"] = {
             "%t. Quiet, now. That is the entire point.",
             "/em brings a wire around and crosses his hands",
-            "%t. Do not struggle. It is worse when they struggle.",
+            "%t. Quick is kinder. Let it be quick.",
             "%t. This is the tidy way. No mess to explain.",
             "/em holds on with the patience of a man waiting for a kettle",
             "%t. Nobody will hear. Nobody ever does.",

@@ -335,7 +335,7 @@ RPVox_MOOD_LINES.HAPPY = {
         "%t. Nicely finished!",
         "%t. Another happy ending.",
         "%t. Ha! Timber.",
-        "You were lovely. Now be quiet, %t.",
+        "You were splendid. Now you are quiet, %t.",
         "%t. That'll do beautifully.",
         "%t. Charming.",
         "%t. One down and grinning.",

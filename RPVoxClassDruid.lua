@@ -78,7 +78,7 @@ RPVox_CLASSES.DRUID = {
             "%t. Stay. The ground would like a word.",
             "/em presses two fingers to the earth and something below agrees",
             "%t. It has been waiting a long time for something to hold.",
-            "%t. Do not struggle. It only tightens.",
+            "%t. The more you pull, the tighter it gets.",
             "%t. The roots remember every footstep you took getting here.",
             "/em sinks her hand into soil that closes over it",
             "%t. Be still. Be still and it will be gentler.",

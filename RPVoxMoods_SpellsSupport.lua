@@ -135,7 +135,7 @@ H["SPELL:Renew"] = {
     "%t. There! Patched and cheerful.",
     "%t. Ha! Isn't the body clever.",
     "Do enjoy the mending, %t.",
-    "%t. Wonderful. Nice and slow.",
+    "%t. Wonderful. It will keep working.",
     "%t. Ha! Better already.",
     "%t. Splendid! Growing back.",
     "%t. That's the stuff.",
