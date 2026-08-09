@@ -30,17 +30,20 @@ and a targeted line simply will not fire when you have no target.
 
 ## Where the lines go
 
-By default RPVox speaks **only to nearby players who also run RPVox**. The line
-travels as an addon message at say range, so the distance limit is the same one
-`/say` uses — but nothing lands in public chat, and a talkative character never
-fills the screen for people who did not ask for it. Speech and actions are
-rendered in the usual colours at the other end.
+RPVox speaks **only to nearby players who also run RPVox**. The line travels as
+an addon message at say range, so the distance limit is the same one `/say`
+uses — but nothing ever lands in public chat. Lines arrive tagged `[RP]` and
+coloured cyan, so nobody mistakes them for something you typed.
 
-The trade is that only RPVox users see anything. If you would rather everybody
-nearby could read your character, untick the box in `/rpvox` or run
-`/rpvox output say`, and lines go out as real `/say` and `/em` instead.
+The trade is that only RPVox users see anything. That is the whole design;
+there is no public-chat mode.
 
-It never yells. That is not a setting.
+## Group content
+
+In a **raid group**, or inside a raid, RPVox says nothing at all until you
+leave. In a **five-man dungeon** the chance is capped at 1% however high you
+have set it. Neither is a setting — people are reading chat for pulls and
+marks, and nobody should have to remember to turn it down on the way in.
 
 ## Included voices
 
@@ -89,7 +92,8 @@ The folder must be named exactly `RPVox`.
 /rpvox on | off         kill switch for the active profile
 /rpvox profile <name>   switch profile, binds it to this character
 /rpvox mood <name>      set mood, or "any"
-/rpvox output vox|say   nearby RPVox users, or real /say and /em
+/rpvox mood add <name>  create a mood of your own
+/rpvox rebuild          reset this profile's stock lines
 /rpvox status           profile, class, mood, armed triggers, line counts
 /rpvox testfire         send one line immediately
 ```

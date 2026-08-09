@@ -1,5 +1,26 @@
 # Changelog
 
+## 4.4 — 2026-08-07
+
+- **Silent in raids, nearly silent in dungeons.** In a raid group, or inside a
+  raid, RPVox says nothing at all until you leave. In a five-man the chance is
+  capped at 1% however high you have set it. Neither is a setting: group
+  content is not the place for it, and nobody should have to remember to turn
+  it down on the way in.
+- **No more output choice.** Every line goes to nearby RPVox users, always.
+  Having two answers to "who can hear me" was worse than having one, so the
+  checkbox and `/rpvox output` are gone.
+- **Make your own moods.** A mood is just a tag in front of a line, and any
+  name works. Pick "New mood..." at the bottom of the mood list or run
+  `/rpvox mood add brooding`, then tag lines with `[brooding]`. Previously a
+  mood could not be selected until something was already tagged with it,
+  which made your own impossible to start.
+- **Instructions button** in the settings window: what the addon does, who can
+  hear it, how the two frequency controls differ, how `%t` and moods work, and
+  every command.
+- **Received lines are cyan, not purple.** Purple sat too close to whispers.
+  Nothing else in the default chat uses cyan.
+
 ## 4.3 — 2026-08-07
 
 - **Emotes are now stripped from saved profiles too.** Removing them from the

@@ -1,4 +1,4 @@
-﻿-- RPVox -- core
+-- RPVox -- core
 -- Roleplay lines fired from combat, personal reactions, and idle activity.
 --
 -- Settings live in named profiles. Each character remembers which profile it
@@ -45,6 +45,12 @@ local DEDUPE_WINDOW = 0.6
 -- anyone who taps quickly. 1.5s is the global cooldown, so nobody loses a roll
 -- for an action they actually took.
 local ROLL_THROTTLE = 1.5
+
+-- Group content is not the place for this. A raid gets nothing at all, and a
+-- five-man is capped hard however high the trigger is set, because people are
+-- reading the chat for pulls and marks. Deliberately not a setting: the point
+-- is that nobody has to remember to turn it down before going in.
+local DUNGEON_MAX_CHANCE = 1     -- per cent, absolute ceiling in a 5-man
 
 local SEED_VERSION   = 17 -- bump to offer a fresh set of stock lines
 local CHANCE_VERSION = 2   -- bump to re-apply stock chances over saved ones
@@ -410,10 +416,18 @@ local function SplitMood(line)
 end
 RPVox.SplitMood = function(_, line) return SplitMood(line) end
 
+-- Moods offered for this profile: every tag actually present in its lines,
+-- plus any the player has declared. Declaring one matters because of the
+-- chicken and egg -- a mood you have not tagged anything with yet would never
+-- appear in the list, so you could never select it to write lines for it.
 function RPVox:MoodsInProfile(profile)
     profile = profile or P
     local seen, out = {}, {}
     if not profile then return out end
+    for _, name in ipairs(profile.customMoods or {}) do
+        local m = name:lower()
+        if not seen[m] then seen[m] = true; table.insert(out, m) end
+    end
     for _, t in ipairs(profile.triggers or {}) do
         for _, w in ipairs(t.words or {}) do
             local mood = SplitMood(w)
@@ -425,6 +439,32 @@ function RPVox:MoodsInProfile(profile)
     end
     table.sort(out)
     return out
+end
+
+-- A mood name has to survive being written as "[name] " in front of a line,
+-- so it matches what SplitMood will accept back out again.
+function RPVox:AddMood(profile, name)
+    name = tostring(name or ""):lower():gsub("^%s+", ""):gsub("%s+$", "")
+    if name == "" then return nil, "Give the mood a name." end
+    if not name:match("^%a[%w_ ]*$") then
+        return nil, "Letters, numbers, spaces and underscores only, starting with a letter."
+    end
+    profile = profile or P
+    profile.customMoods = profile.customMoods or {}
+    for _, m in ipairs(profile.customMoods) do
+        if m == name then return name end
+    end
+    table.insert(profile.customMoods, name)
+    return name
+end
+
+function RPVox:RemoveMood(profile, name)
+    profile = profile or P
+    name = tostring(name or ""):lower()
+    for i, m in ipairs(profile.customMoods or {}) do
+        if m == name then table.remove(profile.customMoods, i) return true end
+    end
+    return false
 end
 
 function RPVox:SetMood(mood)
@@ -521,11 +561,11 @@ local function PickLine(trigger)
     return words[index]
 end
 
--- Carries the say-or-emote decision through to the sender, which needs it to
--- tag the payload so the receiving side can render an action as an action.
--- In /say and /em mode nothing changes: the client formats emotes itself.
-local function ForOutput(msg, channel, output)
-    if (output or "VOX") ~= "VOX" then return msg, channel end
+-- Everything RPVox says goes to other RPVox users and nothing else. There is
+-- no public-chat mode: it existed briefly, and having two answers to "who can
+-- hear me" was worse than having one. This only decides whether the receiving
+-- side renders the line as speech or as an action.
+local function ForOutput(msg, channel)
     return msg, (channel == "EMOTE") and "VOXEMOTE" or "VOXSAY"
 end
 
@@ -535,7 +575,7 @@ function RPVox:PreviewLine(trigger)
     if not raw then return nil end
     local _, body = SplitMood(raw)
     local msg, channel = SplitChannel(body)
-    return ForOutput(Expand(msg), channel, P and P.output)
+    return ForOutput(Expand(msg), channel)
 end
 
 -- Idle triggers can fire while you are standing perfectly still, so give a
@@ -617,11 +657,13 @@ end
 -- addon chose, not something the player typed, and readers should be able to
 -- tell at a glance.
 -- The whole line is coloured, not just the tag. White text reading
--- "Name says: ..." is indistinguishable from real /say at a glance, which is
--- exactly the confusion this is meant to avoid.
-local RP_TAG   = "|cffb48ee6[RP]|r "
-local RP_R, RP_G, RP_B = 0.78, 0.62, 0.95     -- soft purple, unlike any
-local EM_R, EM_G, EM_B = 0.62, 0.48, 0.80     -- default chat colour
+-- "Name says: ..." is indistinguishable from real /say at a glance.
+-- Cyan, because nothing else in the default chat uses it: say is white,
+-- yell red, whisper pink, party lavender, raid orange, guild green,
+-- emote orange, channels yellow. Purple was too near whisper.
+local RP_TAG   = "|cff3fd0ff[RP]|r "
+local RP_R, RP_G, RP_B = 0.25, 0.82, 1.00     -- cyan
+local EM_R, EM_G, EM_B = 0.20, 0.66, 0.82     -- the same hue, dimmer
 
 local rx = CreateFrame("Frame")
 rx:RegisterEvent("CHAT_MSG_ADDON")
@@ -819,6 +861,24 @@ local function Fire(trigger)
         return
     end
 
+    -- Where you are outranks what the slider says. See DUNGEON_MAX_CHANCE.
+    local chance = trigger.chance or 0
+    if IsInRaid and IsInRaid() then
+        Debug("skip: in a raid group -- RPVox stays quiet")
+        return
+    end
+    local inInstance, kind = IsInInstance()
+    if inInstance then
+        if kind == "raid" then
+            Debug("skip: inside a raid -- RPVox stays quiet")
+            return
+        elseif kind == "party" and chance > DUNGEON_MAX_CHANCE then
+            Debug(("dungeon: chance capped %.2f -> %.2f")
+                :format(chance, DUNGEON_MAX_CHANCE))
+            chance = DUNGEON_MAX_CHANCE
+        end
+    end
+
     -- Mashing a key must not buy extra rolls. See ROLL_THROTTLE.
     if now - lastRollAt < ROLL_THROTTLE then
         Debug("skip: already rolled this global cooldown -- input spam")
@@ -827,9 +887,9 @@ local function Fire(trigger)
     lastRollAt = now
 
     local roll = math.random() * 100
-    if roll >= (trigger.chance or 0) then
+    if roll >= chance then
         Debug(("skip: %s rolled %.2f, needed under %.2f")
-            :format(trigger.name, roll, trigger.chance or 0))
+            :format(trigger.name, roll, chance))
         return
     end
 
@@ -844,7 +904,7 @@ local function Fire(trigger)
     -- The line decides whether it is speech or an action; the profile decides
     -- where it goes and how an action is marked once it gets there.
     local msg, channel = SplitChannel(body)
-    msg, channel = ForOutput(Expand(msg), channel, P.output)
+    msg, channel = ForOutput(Expand(msg), channel)
     Debug("FIRE:", trigger.name, "->", channel, "->", msg)
 
     -- A combat line belongs to the spell that caused it. If it cannot go out
@@ -1408,6 +1468,21 @@ SlashCmdList["RPVox"] = function(input)
         elseif rest:lower() == "any" then
             RPVox:SetMood(nil)
             print("|cff00ff00RPVox:|r mood cleared -- every line is eligible.")
+        elseif rest:lower():match("^add%s+") then
+            local name, err = RPVox:AddMood(P, rest:match("^%a+%s+(.*)$"))
+            if name then
+                print("|cff00ff00RPVox:|r mood '" .. name .. "' added. Tag lines"
+                    .. " with |cffffff00[" .. name .. "]|r to use it.")
+            else
+                print("|cffff0000RPVox:|r " .. tostring(err))
+            end
+        elseif rest:lower():match("^remove%s+") then
+            local name = rest:match("^%a+%s+(.*)$")
+            print("|cff00ff00RPVox:|r "
+                .. (RPVox:RemoveMood(P, name)
+                    and ("mood '" .. tostring(name):lower() .. "' removed from the list."
+                         .. " Lines still tagged with it are untouched.")
+                    or ("no mood called '" .. tostring(name) .. "'.")))
         else
             RPVox:SetMood(rest)
             print("|cff00ff00RPVox:|r mood set to '" .. rest:lower() .. "'.")
@@ -1452,22 +1527,6 @@ SlashCmdList["RPVox"] = function(input)
         print("  Stand next to the other player and have them run it too.")
         print("  Whatever arrives will print here as 'got a ping'.")
 
-    elseif cmd == "output" then
-        local want = (rest or ""):lower()
-        if want == "vox" or want == "channel" then
-            P.output = "VOX"
-            print("|cff00ff00RPVox:|r speaking to nearby players who run RPVox."
-                .. " Nothing goes to public chat.")
-        elseif want == "say" or want == "public" then
-            P.output = "PUBLIC"
-            print("|cff00ff00RPVox:|r speaking in /say and /em.")
-        else
-            print("|cff00ff00RPVox:|r output is "
-                .. ((P.output or "VOX") == "VOX"
-                    and "nearby RPVox users" or "/say and /em")
-                .. ".  Use: /rpvox output vox | say")
-        end
-
     elseif cmd == "status" then
         print("|cff00ff00RPVox status|r")
         print("  profile:    " .. tostring(RPVoxDB.activeProfile)
@@ -1480,10 +1539,15 @@ SlashCmdList["RPVox"] = function(input)
         print("  lines:      " .. total .. " across " .. #P.triggers .. " triggers")
         print("  enabled:    " .. tostring(P and P.enabled))
         print("  global gap: " .. tostring(P and P.globalCooldown) .. "s")
-        if (P and P.output or "VOX") == "VOX" then
-            print("  output:     nearby players running RPVox (say range)")
-        else
-            print("  output:     /say and /em")
+        print("  output:     nearby players running RPVox (say range)")
+        local inInstance, kind = IsInInstance()
+        if IsInRaid and IsInRaid() then
+            print("  |cffff8800context:    in a raid group -- silenced|r")
+        elseif inInstance and kind == "raid" then
+            print("  |cffff8800context:    inside a raid -- silenced|r")
+        elseif inInstance and kind == "party" then
+            print(("  |cffff8800context:    in a dungeon -- capped at %g%%|r")
+                :format(DUNGEON_MAX_CHANCE))
         end
         local n = 0
         for _, t in ipairs(P.triggers) do
@@ -1508,7 +1572,7 @@ SlashCmdList["RPVox"] = function(input)
         local raw = PickLine(t) or t.words[1]
         local _, body = SplitMood(raw)
         local msg, channel = SplitChannel(body)
-        RPVox:Queue(ForOutput(Expand(msg), channel, P.output))
+        RPVox:Queue(ForOutput(Expand(msg), channel))
         RPVox:Flush()
 
     elseif cmd == "autotest" then

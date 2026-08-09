@@ -267,31 +267,18 @@ local function CreateUI()
     end)
     f.master = master
 
-    -- Where the lines go ------------------------------------------------------
-    -- Ticked (the default): lines go only to nearby players running RPVox and
-    -- never touch public chat. Unticked: real /say and /em, which everybody
-    -- nearby can read whether they have the addon or not.
-    local voxBox = CreateFrame("CheckButton", "$parentVox", f, "UICheckButtonTemplate")
-    voxBox:SetPoint("TOPLEFT", master, "BOTTOMLEFT", 0, -2)
-    voxBox:SetSize(24, 24)
-    voxBox.text = voxBox:CreateFontString(nil, "OVERLAY", "GameFontNormal")
-    voxBox.text:SetPoint("LEFT", voxBox, "RIGHT", 2, 0)
-    voxBox.text:SetText("Nearby RPVox users only (keeps public chat clear)")
-    voxBox:SetScript("OnClick", function(self)
-        local p = RPVox:Profile()
-        if self:GetChecked() then
-            p.output = "VOX"
-        else
-            p.output = "PUBLIC"
-        end
-    end)
-    f.voxBox = voxBox
+    -- Where the lines go is not a choice any more: always other RPVox users,
+    -- never public chat. This just says so, so nobody has to wonder.
+    local outNote = f:CreateFontString(nil, "OVERLAY", "GameFontDisableSmall")
+    outNote:SetPoint("TOPLEFT", master, "BOTTOMLEFT", 26, -4)
+    outNote:SetJustifyH("LEFT")
+    outNote:SetText("Heard only by nearby players who also run RPVox.")
 
     -- Chattiness ------------------------------------------------------------
     -- One timer for the whole profile: after any line, everything stays quiet
     -- until it expires. Dragging left talks more, right talks less.
     local ggap = CreateFrame("Slider", "RPVoxGlobalSlider", f, "OptionsSliderTemplate")
-    ggap:SetPoint("TOPLEFT", voxBox, "BOTTOMLEFT", 4, -16)
+    ggap:SetPoint("TOPLEFT", outNote, "BOTTOMLEFT", -22, -16)
     ggap:SetWidth(126)
     ggap:SetMinMaxValues(0, 600)
     ggap:SetValueStep(5)
@@ -313,6 +300,111 @@ local function CreateUI()
         end
     end)
     f.globalSlider = ggap
+
+    -- Instructions ----------------------------------------------------------
+    -- An overlay rather than a real tab: it covers the window while it is up
+    -- and gets out of the way entirely when it is not.
+    local help = CreateFrame("Frame", nil, f)
+    help:SetPoint("TOPLEFT", 10, -60)
+    help:SetPoint("BOTTOMRIGHT", -10, 34)
+    help:SetFrameLevel(f:GetFrameLevel() + 10)
+    help:Hide()
+    help.bg = help:CreateTexture(nil, "BACKGROUND")
+    help.bg:SetAllPoints()
+    help.bg:SetColorTexture(0, 0, 0, 0.88)
+
+    local hscroll = CreateFrame("ScrollFrame", "RPVoxHelpScroll", help,
+                                "UIPanelScrollFrameTemplate")
+    hscroll:SetPoint("TOPLEFT", 10, -10)
+    hscroll:SetPoint("BOTTOMRIGHT", -30, 10)
+    local hbody = CreateFrame("Frame", nil, hscroll)
+    hbody:SetSize(560, 10)
+    hscroll:SetScrollChild(hbody)
+
+    local htext = hbody:CreateFontString(nil, "OVERLAY", "GameFontHighlightLeft")
+    htext:SetPoint("TOPLEFT")
+    htext:SetWidth(560)
+    htext:SetJustifyH("LEFT")
+    htext:SetSpacing(3)
+    htext:SetText(table.concat({
+        "|cff3fd0ffWHAT RPVOX DOES|r",
+        "It says things for you. When you cast a spell, take a bad hit, die,",
+        "come back, land a killing blow, eat, fish, mine, mount up or find",
+        "somewhere new, it may speak a line in your character's voice.",
+        "",
+        "|cff3fd0ffWHO CAN HEAR IT|r",
+        "Only players standing near you who also run RPVox. The range is the",
+        "same as /say. Nothing is ever sent to public chat, so you cannot spam",
+        "strangers with it -- but they cannot read your character either.",
+        "Lines arrive tagged |cff3fd0ff[RP]|r and coloured, so nobody confuses",
+        "them with something you typed yourself.",
+        "",
+        "|cff3fd0ffHOW OFTEN|r",
+        "Two things control it. |cffffff00Chance|r is per trigger: the odds any",
+        "one cast speaks. |cffffff00One line every...|r is for the whole profile:",
+        "after anything is said, everything stays quiet for that long.",
+        "Start low. A character who comments on every fireball stops being a",
+        "character and becomes noise.",
+        "",
+        "In a |cffffff00dungeon|r the chance is capped at 1% no matter what you",
+        "set. In a |cffffff00raid group|r RPVox says nothing at all until you",
+        "leave. Neither is optional -- group content is not the place for it.",
+        "",
+        "|cff3fd0ffPROFILES|r",
+        "One per character. Each holds its own class, mood, lines and settings.",
+        "|cffffff00New|r builds one from a class pack, already full of lines for",
+        "that class. Your character remembers which profile it uses.",
+        "",
+        "|cff3fd0ffWRITING LINES|r",
+        "Pick a trigger on the left, type in the box on the right, one line per",
+        "row. The moment you type, that trigger is yours and updates will never",
+        "overwrite it.",
+        "",
+        "  |cffffff00%t|r  becomes whoever you are targeting. A line containing",
+        "      %t will not fire when you have no target, so keep a few lines",
+        "      without it in every set.",
+        "  |cffffff00%s|r  becomes your own name.",
+        "",
+        "|cff3fd0ffMOODS|r",
+        "A mood is a version of your character. Put a tag in front of a line:",
+        "",
+        "    |cffffff00[grim] Nothing stops now.|r",
+        "",
+        "That line only fires while the mood is set to grim. Untagged lines",
+        "always fire. Set the mood to |cffffff00Any|r and everything is eligible.",
+        "",
+        "Make your own with |cffffff00New mood...|r at the bottom of the mood",
+        "list, or |cffffff00/rpvox mood add brooding|r. Then tag lines with",
+        "[brooding] and select it. Any name works -- it is just a label.",
+        "",
+        "|cff3fd0ffCOMMANDS|r",
+        "  /rpvox                  open this window",
+        "  /rpvox on | off         silence this profile, or wake it",
+        "  /rpvox mood <name>      switch mood, or 'any'",
+        "  /rpvox mood add <name>  create a mood",
+        "  /rpvox rebuild          reset this profile's stock lines",
+        "  /rpvox status           what is loaded and armed",
+        "  /rpvox testfire         say something right now",
+        "  /rpvox debug            explain why lines do or do not fire",
+        "  /rpvox nettest          check other players are receiving you",
+    }, "\n"))
+    hbody:SetHeight(math.max(10, htext:GetStringHeight() + 20))
+    f.helpPanel = help
+
+    local hbtn = CreateFrame("Button", nil, f, "UIPanelButtonTemplate")
+    hbtn:SetSize(96, 20)
+    hbtn:SetPoint("TOPRIGHT", -14, -34)
+    hbtn:SetText("Instructions")
+    hbtn:SetScript("OnClick", function()
+        if help:IsShown() then
+            help:Hide()
+            hbtn:SetText("Instructions")
+        else
+            help:Show()
+            hbtn:SetText("Close")
+        end
+    end)
+    f.helpButton = hbtn
 
     -- Mood picker -----------------------------------------------------------
     -- Lines tagged [grim], [weary] and so on only fire in that mood.
@@ -347,6 +439,17 @@ local function CreateUI()
             end
             UIDropDownMenu_AddButton(info, level)
         end
+
+        -- A mood you have not tagged anything with yet cannot appear above,
+        -- so there has to be a way to bring one into being.
+        local add = UIDropDownMenu_CreateInfo()
+        add.text         = "|cff00ff00New mood...|r"
+        add.notCheckable = true
+        add.func         = function()
+            CloseDropDownMenus()
+            StaticPopup_Show("RPVox_NEW_MOOD")
+        end
+        UIDropDownMenu_AddButton(add, level)
     end)
     f.moodDD = mdd
 
@@ -696,7 +799,6 @@ function UI:Refresh()
     if not profile then return end
 
     self.frame.master:SetChecked(profile.enabled)
-    self.frame.voxBox:SetChecked((profile.output or "VOX") == "VOX")
 
     UIDropDownMenu_SetText(self.frame.profileDD, RPVox:ProfileName() or "?")
     UIDropDownMenu_SetText(self.frame.moodDD, RPVox:GetMood() or "Any")
@@ -796,6 +898,31 @@ StaticPopupDialogs["RPVox_NEW_PROFILE"] = {
     EditBoxOnEnterPressed = function(self)
         local parent = self:GetParent()
         StaticPopupDialogs["RPVox_NEW_PROFILE"].OnAccept(parent)
+        parent:Hide()
+    end,
+    EditBoxOnEscapePressed = function(self) self:GetParent():Hide() end,
+    timeout = 0, whileDead = true, hideOnEscape = true,
+}
+
+StaticPopupDialogs["RPVox_NEW_MOOD"] = {
+    text = "Name your mood.\nTag lines with [name] and they only fire in it.",
+    button1 = ACCEPT, button2 = CANCEL,
+    hasEditBox = true, maxLetters = 24,
+    OnShow = function(self) self.editBox:SetText("") self.editBox:SetFocus() end,
+    OnAccept = function(self)
+        local name, err = RPVox:AddMood(nil, self.editBox:GetText())
+        if not name then
+            print("|cffff0000RPVox:|r " .. (err or "could not add that mood."))
+            return
+        end
+        RPVox:SetMood(name)
+        UI:Refresh()
+        print("|cff00ff00RPVox:|r mood '" .. name .. "' created and selected."
+            .. " Put |cffffff00[" .. name .. "]|r in front of a line to use it.")
+    end,
+    EditBoxOnEnterPressed = function(self)
+        local parent = self:GetParent()
+        StaticPopupDialogs["RPVox_NEW_MOOD"].OnAccept(parent)
         parent:Hide()
     end,
     EditBoxOnEscapePressed = function(self) self:GetParent():Hide() end,
