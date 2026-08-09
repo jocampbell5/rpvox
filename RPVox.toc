@@ -25,5 +25,9 @@ RPVoxClassRogue.lua
 RPVoxClassWarlock.lua
 RPVoxClassPaladin.lua
 RPVoxClassShaman.lua
+RPVoxClassMageLyrics.lua
+RPVoxClassPriestLyrics.lua
+RPVoxClassHunterValleyGirl.lua
+RPVoxClassWarriorBarbarian.lua
 RPVox.lua
 RPVoxUI.lua
