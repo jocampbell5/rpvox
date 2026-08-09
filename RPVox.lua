@@ -48,7 +48,7 @@ local ROLL_THROTTLE = 1.5
 
 local SEED_VERSION   = 17 -- bump to offer a fresh set of stock lines
 local CHANCE_VERSION = 2   -- bump to re-apply stock chances over saved ones
-local LINE_VERSION   = 1   -- bump to rewrite saved lines in place
+local LINE_VERSION   = 2   -- bump to rewrite saved lines in place
 
 -- Saved lines you have edited are never reseeded, so syntax changes have to be
 -- applied to them directly. Runs once per bump of LINE_VERSION.
@@ -61,19 +61,25 @@ local LINE_REPAIRS = {
         "Back on my feet and unimpressed.",
 }
 
+-- Is this saved line an emote? Both the "/em ..." form and the older "*..."
+-- marker count. Emotes were removed from every pack in 4.2.1, but a profile
+-- seeded before that still had hundreds sitting in saved variables, where no
+-- amount of reseeding would reach the ones you had edited.
+local function IsEmote(line)
+    return line:sub(1, 1) == "*"
+        or line:match("^/em%s") ~= nil
+        or line:match("^/emote%s") ~= nil
+end
+
 local function RepairLines(profile)
     for _, t in ipairs(profile.triggers or {}) do
         local out = {}
         for _, w in ipairs(t.words or {}) do
             local fixed = LINE_REPAIRS[w] or w
 
-            -- old emote marker -> the /em form
-            if fixed:sub(1, 1) == "*" then
-                fixed = "/em " .. fixed:sub(2):gsub("^%s+", "")
-            end
-
-            -- %h never worked; drop any line still carrying it
-            if not fixed:find("%%h") then
+            -- %h never worked; drop any line still carrying it.
+            -- Emotes are gone from the addon entirely.
+            if not fixed:find("%%h") and not IsEmote(fixed) then
                 table.insert(out, fixed)
             end
         end
@@ -610,7 +616,12 @@ end
 -- Receiving. Tagged so it is never mistaken for real /say: this is a line an
 -- addon chose, not something the player typed, and readers should be able to
 -- tell at a glance.
-local RP_TAG = "|cff9d7cd8[RP]|r "
+-- The whole line is coloured, not just the tag. White text reading
+-- "Name says: ..." is indistinguishable from real /say at a glance, which is
+-- exactly the confusion this is meant to avoid.
+local RP_TAG   = "|cffb48ee6[RP]|r "
+local RP_R, RP_G, RP_B = 0.78, 0.62, 0.95     -- soft purple, unlike any
+local EM_R, EM_G, EM_B = 0.62, 0.48, 0.80     -- default chat colour
 
 local rx = CreateFrame("Frame")
 rx:RegisterEvent("CHAT_MSG_ADDON")
@@ -633,10 +644,11 @@ rx:SetScript("OnEvent", function(_, _, prefix, payload, dist, sender)
     if kind == "E" then
         -- Stock lines carry no emotes any more, but a player can still write
         -- one in the line editor, so the path stays.
-        DEFAULT_CHAT_FRAME:AddMessage(RP_TAG .. name .. " " .. text, 1.0, 0.5, 0.25)
+        DEFAULT_CHAT_FRAME:AddMessage(RP_TAG .. name .. " " .. text,
+                                      EM_R, EM_G, EM_B)
     else
         DEFAULT_CHAT_FRAME:AddMessage(RP_TAG .. name .. " says: " .. text,
-                                      1.0, 1.0, 1.0)
+                                      RP_R, RP_G, RP_B)
     end
 end)
 
@@ -884,7 +896,10 @@ local function EnsureBuiltins(profile, seeding, rebalancing)
     profile.triggers = profile.triggers or {}
 
     local have = {}
-    for _, t in ipairs(profile.triggers) do have[t.key] = t end
+    for _, t in ipairs(profile.triggers) do
+        have[t.key] = t
+        t.seen = nil    -- cleared here, set below for anything still defined
+    end
 
     for _, def in ipairs(DefsFor(profile)) do
         local stock = StockLines(profile, def.key)
@@ -907,6 +922,7 @@ local function EnsureBuiltins(profile, seeding, rebalancing)
         t.craftLine = def.craftLine
         t.spellName = def.spellName
         t.builtin   = true
+        t.seen      = true
         if t.chance  == nil then t.chance  = def.chance end
         if t.channel == nil then t.channel = "SAY"      end
         if t.words   == nil then t.words   = {}         end
@@ -926,6 +942,25 @@ local function EnsureBuiltins(profile, seeding, rebalancing)
         end
     end
 
+    -- Drop stock triggers the addon no longer defines for this class. Without
+    -- this a profile keeps every trigger it was ever seeded with -- spells from
+    -- old builds, triggers that moved to another class -- and they sit there
+    -- for ever, full of lines nothing will ever refresh. Triggers you made
+    -- yourself are not builtin and are always kept.
+    local kept, dropped = {}, 0
+    for _, t in ipairs(profile.triggers) do
+        if t.builtin and not t.seen then
+            dropped = dropped + 1
+        else
+            t.seen = nil
+            table.insert(kept, t)
+        end
+    end
+    if dropped > 0 then
+        profile.triggers = kept
+        Debug("removed", dropped, "triggers this class no longer has")
+    end
+
     for _, t in ipairs(profile.triggers) do
         if not t.category then t.category = "COMBAT" end
         t.cooldown = nil
@@ -939,6 +974,12 @@ local function EnsureBuiltins(profile, seeding, rebalancing)
             t.chance = 0.5
         end
     end
+end
+
+-- Exposed so /rpvox rebuild can force a clean reseed of one profile.
+function RPVox:Reseed(profile)
+    EnsureBuiltins(profile, true, false)
+    RepairLines(profile)
 end
 
 local function NewProfileTable()
@@ -1374,6 +1415,24 @@ SlashCmdList["RPVox"] = function(input)
         if RPVox.UI and RPVox.UI.frame and RPVox.UI.frame:IsShown() then
             RPVox.UI:Refresh()
         end
+
+    elseif cmd == "rebuild" then
+        -- Throws away every stock line in this profile and seeds it again from
+        -- the current packs. The only way to be certain a profile holds exactly
+        -- what the addon defines today and nothing inherited from old builds.
+        local before = 0
+        for _, t in ipairs(P.triggers or {}) do before = before + #(t.words or {}) end
+        local mine = {}
+        for _, t in ipairs(P.triggers or {}) do
+            if not t.builtin then table.insert(mine, t) end
+        end
+        P.triggers = mine
+        RPVox:Reseed(P)
+        local after = 0
+        for _, t in ipairs(P.triggers) do after = after + #(t.words or {}) end
+        print(("|cff00ff00RPVox:|r rebuilt '%s' -- %d lines across %d triggers"
+            .. " (was %d). Custom triggers kept.")
+            :format(tostring(RPVoxDB.activeProfile), after, #P.triggers, before))
 
     elseif cmd == "nettest" then
         -- Answers one question: does an addon message actually leave this

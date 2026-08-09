@@ -1,5 +1,24 @@
 # Changelog
 
+## 4.3 — 2026-08-07
+
+- **Emotes are now stripped from saved profiles too.** Removing them from the
+  packs in 4.2.1 was not enough: a profile seeded before that still had
+  hundreds sitting in saved variables, and any list you had edited yourself was
+  never reseeded at all. They are removed on load now, edited or not.
+- **Stale triggers are cleared out.** A profile kept every trigger it had ever
+  been seeded with — spells from older builds, triggers that no longer belong
+  to your class — each one still full of lines nothing would ever refresh.
+  Anything the addon no longer defines for your class is dropped. Triggers you
+  created yourself are always kept.
+- **New: `/rpvox rebuild`.** Throws away every stock line in the current
+  profile and seeds it again from scratch, then reports the before and after
+  counts. The only way to be certain a profile holds exactly what the addon
+  defines today.
+- **Received lines are now coloured.** White text reading "Name says: ..." was
+  indistinguishable from real `/say`. The whole line is purple and tagged
+  `[RP]`, so it is obvious at a glance that it came from RPVox.
+
 ## 4.2.1 — 2026-08-07
 
 - **Received lines now carry an `[RP]` tag** so they are never mistaken for
