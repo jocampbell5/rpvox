@@ -1,4 +1,4 @@
--- RPVox -- core
+﻿-- RPVox -- core
 -- Roleplay lines fired from combat, personal reactions, and idle activity.
 --
 -- Settings live in named profiles. Each character remembers which profile it
@@ -46,7 +46,7 @@ local DEDUPE_WINDOW = 0.6
 -- for an action they actually took.
 local ROLL_THROTTLE = 1.5
 
-local SEED_VERSION   = 16 -- bump to offer a fresh set of stock lines
+local SEED_VERSION   = 17 -- bump to offer a fresh set of stock lines
 local CHANCE_VERSION = 2   -- bump to re-apply stock chances over saved ones
 local LINE_VERSION   = 1   -- bump to rewrite saved lines in place
 
@@ -600,8 +600,11 @@ local function RawSend(msg, channel)
     return pcall(SendChatMessage, msg, channel)
 end
 
--- Receiving. Rendered locally so speech and actions look like the real thing:
--- white "Name says: ..." for speech, orange "Name does ..." for an action.
+-- Receiving. Tagged so it is never mistaken for real /say: this is a line an
+-- addon chose, not something the player typed, and readers should be able to
+-- tell at a glance.
+local RP_TAG = "|cff9d7cd8[RP]|r "
+
 local rx = CreateFrame("Frame")
 rx:RegisterEvent("CHAT_MSG_ADDON")
 rx:SetScript("OnEvent", function(_, _, prefix, payload, _, sender)
@@ -611,9 +614,12 @@ rx:SetScript("OnEvent", function(_, _, prefix, payload, _, sender)
     local name = (Ambiguate and Ambiguate(sender, "none"))
               or sender:match("^[^-]+") or sender
     if kind == "E" then
-        DEFAULT_CHAT_FRAME:AddMessage(name .. " " .. text, 1.0, 0.5, 0.25)
+        -- Stock lines carry no emotes any more, but a player can still write
+        -- one in the line editor, so the path stays.
+        DEFAULT_CHAT_FRAME:AddMessage(RP_TAG .. name .. " " .. text, 1.0, 0.5, 0.25)
     else
-        DEFAULT_CHAT_FRAME:AddMessage(name .. " says: " .. text, 1.0, 1.0, 1.0)
+        DEFAULT_CHAT_FRAME:AddMessage(RP_TAG .. name .. " says: " .. text,
+                                      1.0, 1.0, 1.0)
     end
 end)
 

@@ -13,7 +13,6 @@ local EXTRA = {
         "%t. Another degree gone.",
         "You are cooling from the inside, %t.",
         "There is no warmth coming to help you, %t.",
-        "/em watches frost crawl up the target with mild interest",
         "%t. Slow. Slower. Stopped.",
         "%t. The cold takes the fingers first. Then the argument.",
         "Nothing you wear will hold this out, %t.",
@@ -34,7 +33,6 @@ local EXTRA = {
     ["SPELL:Fireball"] = {
         "Burn quietly, %t.",
         "%t. There is nothing left after fire. That is the appeal.",
-        "/em looses the flame and does not watch where it lands",
         "You are a very brief candle, %t.",
         "%t. Heat does not negotiate with flesh.",
         "%t. That will not stop burning on my account.",
@@ -56,7 +54,6 @@ local EXTRA = {
     ["SPELL:Arcane Missiles"] = {
         "%t. Sequence complete.",
         "%t. Nothing intervenes in a proof.",
-        "/em maintains the channel with absolute stillness",
         "You cannot argue with delivery, %t.",
         "%t. Each one was decided before I began.",
         "%t. The arcane is not a weapon. It is a certainty.",
@@ -78,7 +75,6 @@ local EXTRA = {
     ["SPELL:Fire Blast"] = {
         "%t. Instantly, and without comment.",
         "%t. That required nothing of me.",
-        "/em ignites the air between them without warning",
         "You had no time. That was deliberate, %t.",
         "%t. A reflex, not a decision.",
         "%t. Cheap. Effective. Repeatable.",
@@ -99,7 +95,6 @@ local EXTRA = {
     },
     ["SPELL:Pyroblast"] = {
         "%t. That took six seconds and ends everything.",
-        "/em brings the working down like a verdict",
         "I wanted you to see it coming, %t.",
         "%t. Preparation always wins.",
         "%t. There is nothing after that.",
@@ -121,7 +116,6 @@ local EXTRA = {
     },
     ["SPELL:Blizzard"] = {
         "%t. The whole area. All at once.",
-        "/em turns the sky against everything standing there",
         "%t. Nowhere in that circle is survivable.",
         "You brought numbers. I brought weather, %t.",
         "%t. The cold does not count heads.",
@@ -143,7 +137,6 @@ local EXTRA = {
     },
     ["SPELL:Frost Nova"] = {
         "%t. Held.",
-        "/em locks the ground and steps back unhurriedly",
         "You will remain exactly there, %t.",
         "That is the end of your approach, %t.",
         "%t. Now the distance is mine again.",
@@ -165,7 +158,6 @@ local EXTRA = {
     },
     ["SPELL:Blink"] = {
         "%t. Out of reach. Permanently.",
-        "/em steps through space and reappears further away",
         "You are chasing a conclusion, not a man, %t.",
         "%t. Distance is a resource. I control it.",
         "%t. Reach for me again. See how it goes.",
@@ -187,7 +179,6 @@ local EXTRA = {
     },
     ["SPELL:Polymorph"] = {
         "%t. Set aside.",
-        "/em reduces the target to something with hooves",
         "You are stored for later, %t.",
         "Nothing you were is required at the moment, %t.",
         "%t. Be quiet. Be simple.",
@@ -209,7 +200,6 @@ local EXTRA = {
     },
     ["SPELL:Counterspell"] = {
         "%t. Denied.",
-        "/em severs the working mid-syllable",
         "You do not get to finish that, %t.",
         "Nothing you begin will conclude, %t.",
         "%t. That was derivative anyway.",
@@ -231,7 +221,6 @@ local EXTRA = {
     },
     ["SPELL:Ice Block"] = {
         "%t. Unavailable.",
-        "/em disappears inside a shell of flawless ice",
         "%t. Nothing reaches me. Nothing ever has.",
         "Spend everything you have. I will wait, %t.",
         "That was your window. Watch it close, %t.",
@@ -253,7 +242,6 @@ local EXTRA = {
     },
     ["SPELL:Evocation"] = {
         "Do not interrupt, %t.",
-        "/em draws the ambient arcane inward, motionless",
         "%t. This is the pause before the ending.",
         "I am gathering what finishes you, %t.",
         "You have seconds. Spend them running, %t.",
@@ -275,7 +263,6 @@ local EXTRA = {
     },
     ["SPELL:Arcane Intellect"] = {
         "Think faster. It will not be enough, %t.",
-        "/em sharpens someone else's mind with cold efficiency",
         "You are marginally less useless now, %t.",
         "%t. Use it well. I will not repeat the favour.",
         "%t. A better mind, on loan and at interest.",
@@ -293,7 +280,6 @@ local EXTRA = {
     },
     ["SPELL:Conjure Water"] = {
         "%t. From nothing. Consider that.",
-        "/em pulls water from empty air, unimpressed",
         "I create matter. You consume it, %t.",
         "%t. That is the difference between us, illustrated.",
         "Take it. It costs me nothing at all, %t.",
@@ -307,7 +293,6 @@ local EXTRA = {
     },
     ["SPELL:Conjure Food"] = {
         "%t. Matter, on demand.",
-        "/em conjures a meal with open contempt for the necessity",
         "You eat because I permit it, %t.",
         "Nothing here is real. It will still sustain you, %t.",
         "%t. This is the least of what I can do.",
@@ -321,7 +306,6 @@ local EXTRA = {
     },
     ["SPELL:Shoot"] = {
         "%t. Even empty, I am the greater threat.",
-        "/em fires the wand with unhurried precision",
         "%t. Small wounds, accumulated properly.",
         "I do not require power to finish you, %t.",
         "You will die by increments, %t.",
@@ -346,7 +330,6 @@ local EXTRA = {
 
     ["IDLE:QUESTACCEPT"] = {
         "I will do it because it is efficient, not because you asked, %t.",
-        "/em accepts the task without any change of expression",
         "Consider it arranged.",
         "You want results. You have come to the correct practitioner.",
         "Very well. It will be done properly.",
@@ -363,7 +346,6 @@ local EXTRA = {
     },
     ["IDLE:QUEST"] = {
         "Finished. Precisely as specified.",
-        "/em hands the work over without ceremony",
         "Pay me and do not ask how.",
         "It was never in doubt.",
         "That is concluded. Permanently.",

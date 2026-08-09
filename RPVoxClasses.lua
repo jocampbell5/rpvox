@@ -81,8 +81,6 @@ RPVox_CLASSES.PRIEST = {
             "%t. Pain is such an honest teacher.",
             "%t. Let the rot do its work.",
             "%t. This takes time. It always does.",
-            "/em points two fingers and lets the rot take hold",
-            "/em whispers something in a language that predates Lordaeron",
             "%t. Such a fragile thing, flesh.",
             "%t. Oh, does it hurt? How wonderful.",
             "You still fear death, %t. Amusing.",
@@ -92,7 +90,6 @@ RPVox_CLASSES.PRIEST = {
         },
         ["SPELL:Psychic Scream"] = {
             "RUN, %t.",
-            "/em screams with a voice that is not entirely his own",
             "Run, %t. Everyone does.",
             "Hear what I hear. Now flee from it, %t.",
             "%t. The whispers, all at once. Enjoy.",
@@ -109,8 +106,6 @@ RPVox_CLASSES.PRIEST = {
             "%t. Forget me. Most do.",
             "%t. Between one shadow and the next.",
             "%t. Attention is a burden. I set it down.",
-            "/em seems briefly difficult to look at",
-            "/em steps into a shadow that was not there a moment ago",
         },
     },
 }
@@ -143,15 +138,12 @@ RPVox_CLASSES.MAGE = {
         -- Abilities -----------------------------------------------------
         ["MELEE"] = {
             "%t. I am hitting you with a stick. Note how far this has fallen.",
-            "/em swings a staff with the technique of a man who does not swing staves",
             "%t. This is a failure of planning, not of power.",
             "%t. Every second of this is an argument for more mana.",
             "%t. Crude. Extremely crude.",
-            "/em jabs with the end of a staff and looks appalled",
             "%t. I have three degrees and I am doing this.",
             "%t. Do not tell anyone about this part.",
             "%t. Physical contact. Revolting.",
-            "/em resorts to the blunt end and resents it deeply",
         },
 
         ["SPELL:Frostbolt"] = {
@@ -159,7 +151,6 @@ RPVox_CLASSES.MAGE = {
             "%t. Slow down. I insist.",
             "%t. Elementary application.",
             "Note the deceleration, %t.",
-            "/em traces a sigil and the air frosts over",
             "%t. Freezing point reached.",
             "%t. Predictable trajectory. Predictable result.",
             "You are moving too quickly to think, %t.",
@@ -171,7 +162,6 @@ RPVox_CLASSES.MAGE = {
         ["SPELL:Fireball"] = {
             "%t. Combustion. Reliable.",
             "%t. Heat is the simplest argument.",
-            "/em rolls flame between two fingers before releasing it",
             "Observe the conversion of mana into consequence, %t.",
             "Burn, %t.",
             "%t. The classical solution.",
@@ -185,7 +175,6 @@ RPVox_CLASSES.MAGE = {
         ["SPELL:Arcane Missiles"] = {
             "%t. Sequenced. Unavoidable.",
             "%t. Arithmetic, delivered.",
-            "/em holds the channel steady, counting under his breath",
             "%t. One. Two. Three. Four.",
             "%t. The arcane does not miss.",
             "%t. No dodging pure mathematics.",
@@ -201,7 +190,6 @@ RPVox_CLASSES.MAGE = {
             "%t. No incantation required.",
             "%t. Quick and hot.",
             "%t. That is what haste is for.",
-            "/em snaps his fingers",
             "%t. Punctuation.",
             "%t. A small correction.",
             "%t. Immediate. Unarguable.",
@@ -209,7 +197,6 @@ RPVox_CLASSES.MAGE = {
         ["SPELL:Pyroblast"] = {
             "%t. This one took a moment. Enjoy it.",
             "Observe what patience produces, %t.",
-            "/em holds the working aloft until it is unbearable to look at",
             "%t. The long cast is always the interesting one.",
             "%t. That was worth the wait.",
             "Consider this a formal statement, %t.",
@@ -221,7 +208,6 @@ RPVox_CLASSES.MAGE = {
         ["SPELL:Blizzard"] = {
             "%t. Weather, on request.",
             "All of you. Simultaneously, %t.",
-            "/em raises both hands and the sky answers",
             "%t. A localised catastrophe.",
             "%t. Everyone receives a portion.",
             "%t. The forecast is unfavourable.",
@@ -231,7 +217,6 @@ RPVox_CLASSES.MAGE = {
         ["SPELL:Frost Nova"] = {
             "Stay, %t.",
             "%t. Rooted. Now we can talk.",
-            "/em stamps once and the ground goes white",
             "%t. Distance is a tactical resource.",
             "You will wait there, %t.",
             "%t. Immobilised. Predictably.",
@@ -241,7 +226,6 @@ RPVox_CLASSES.MAGE = {
         ["SPELL:Blink"] = {
             "%t. Elsewhere.",
             "%t. Spatial reasoning.",
-            "/em is abruptly somewhere else",
             "You were expecting me to remain, %t?",
             "%t. Distance, corrected.",
             "%t. The shortest path is not always continuous.",
@@ -251,7 +235,6 @@ RPVox_CLASSES.MAGE = {
         ["SPELL:Polymorph"] = {
             "You will be more agreeable as a sheep, %t.",
             "%t. An improvement, honestly.",
-            "/em sketches a shape in the air and the target simplifies",
             "Do not struggle. It only prolongs the wool, %t.",
             "%t. A temporary demotion.",
             "%t. There. Much quieter.",
@@ -263,7 +246,6 @@ RPVox_CLASSES.MAGE = {
         ["SPELL:Counterspell"] = {
             "%t. No.",
             "%t. That will not be happening.",
-            "/em cuts the air and the working collapses",
             "Silence. It suits you, %t.",
             "Your casting was sloppy anyway, %t.",
             "%t. Denied.",
@@ -272,7 +254,6 @@ RPVox_CLASSES.MAGE = {
         },
         ["SPELL:Ice Block"] = {
             "%t. Excuse me a moment.",
-            "/em vanishes inside a shell of ice",
             "%t. Reassessing from inside a very cold box.",
             "%t. Temporarily unavailable.",
             "%t. This is a tactical retreat with better insulation.",
@@ -282,7 +263,6 @@ RPVox_CLASSES.MAGE = {
         },
         ["SPELL:Evocation"] = {
             "%t. One moment. Refuelling.",
-            "/em stands still, drawing the ambient arcane inward",
             "Do keep them occupied, %t.",
             "%t. Restoring the reservoir.",
             "%t. This is the least dignified part of the profession.",
@@ -293,7 +273,6 @@ RPVox_CLASSES.MAGE = {
         ["SPELL:Arcane Intellect"] = {
             "There. You will think marginally faster, %t.",
             "%t. A modest improvement to a modest mind.",
-            "/em taps a colleague on the forehead",
             "Do try to use it, %t.",
             "%t. Cleverness, applied externally.",
             "You are welcome, %t.",
@@ -302,7 +281,6 @@ RPVox_CLASSES.MAGE = {
         },
         ["SPELL:Conjure Water"] = {
             "%t. Water from nothing. Still impressive, I think.",
-            "/em produces water out of the air, unimpressed with himself",
             "%t. Hydration, provided.",
             "Do not ask where it comes from, %t.",
             "%t. A trick, but a useful one.",
@@ -313,7 +291,6 @@ RPVox_CLASSES.MAGE = {
         ["SPELL:Shoot"] = {
             "%t. Regrettable, but necessary.",
             "%t. Out of mana. Into indignity.",
-            "/em fires the wand with a look of profound disappointment",
             "%t. Years of study, reduced to this.",
             "%t. A stick. I am reduced to a stick.",
             "%t. Conserving. Do not comment.",
@@ -326,7 +303,6 @@ RPVox_CLASSES.MAGE = {
         },
         ["SPELL:Conjure Food"] = {
             "%t. Sustenance. Of a sort.",
-            "/em conjures a meal and looks faintly embarrassed",
             "%t. Yes, yes. Food. Marvellous.",
             "%t. Years of study, and this is what people ask for.",
             "%t. It is edible. That is the entire claim.",
@@ -337,7 +313,6 @@ RPVox_CLASSES.MAGE = {
 
         ["IDLE:QUESTACCEPT"] = {
             "Very well. A practical application.",
-            "/em accepts the task with visible reservations",
             "I will require expenses.",
             "This is well beneath my training. I accept anyway.",
             "Fine. Where is it, and what does it know?",
@@ -350,7 +325,6 @@ RPVox_CLASSES.MAGE = {
         ["REACT:LOWHEALTH"] = {
             "%t. This is going poorly.",
             "%t. Cloth. The eternal problem with cloth.",
-            "/em backs away, calculating",
             "%t. I require distance immediately.",
             "%t. That was closer than the theory allows.",
             "%t. Recalculating.",
@@ -367,7 +341,6 @@ RPVox_CLASSES.MAGE = {
             "%t. Withdrawing. Obviously.",
             "%t. The odds are deteriorating.",
             "%t. Someone do something useful.",
-            "/em checks his own condition with alarm",
             "%t. This is precisely the scenario I dislike.",
             "%t. Too close. Far too close.",
             "%t. I would like a wall between us.",
@@ -382,7 +355,6 @@ RPVox_CLASSES.MAGE = {
         ["REACT:DEATH"] = {
             "%t. Ah. Miscalculated.",
             "%t. That is embarrassing.",
-            "/em collapses in a heap of expensive robes",
             "%t. The variables were unfavourable.",
             "%t. I shall revise my model.",
             "%t. A regrettable outcome.",
@@ -402,7 +374,6 @@ RPVox_CLASSES.MAGE = {
             "%t. I have died more elegantly before.",
             "%t. Tell the Kirin Tor it was quick.",
             "%t. Insufficient distance. Always insufficient distance.",
-            "/em goes still, one hand still shaping a spell",
             "The arcane does not save you from arithmetic, %t.",
             "%t. That was an error I will not repeat.",
             "%t. I require a resurrection and an apology.",
@@ -414,7 +385,6 @@ RPVox_CLASSES.MAGE = {
         ["REACT:RESURRECT"] = {
             "Thank you. Now, where are my components?",
             "Restored. Let us not discuss it.",
-            "/em rises and immediately checks his robes",
             "That was inefficient. Continuing.",
             "Back. Do not comment.",
             "The model has been updated.",
@@ -432,7 +402,6 @@ RPVox_CLASSES.MAGE = {
             "Functional. Barely dignified.",
             "Do not look at me like that.",
             "Right. Position, then power.",
-            "/em brushes himself off with wounded pride",
             "I have revised the plan entirely.",
             "Returned. Let us pretend otherwise.",
             "That gap in the record is now closed.",
@@ -446,7 +415,6 @@ RPVox_CLASSES.MAGE = {
         ["REACT:KILLINGBLOW"] = {
             "%t. As predicted.",
             "%t. Q.E.D.",
-            "/em dusts his hands with mild satisfaction",
             "The maths were never in your favour, %t.",
             "%t. Resolved.",
             "%t. That is the expected result.",
@@ -478,7 +446,6 @@ RPVox_CLASSES.MAGE = {
         ["REACT:COMBATSTART"] = {
             "%t. Very well. Let us be quick.",
             "You have interrupted my reading, %t.",
-            "/em begins shaping something complicated",
             "%t. Positions, please.",
             "%t. This will be instructive.",
             "%t. I would advise against this.",
@@ -510,7 +477,6 @@ RPVox_CLASSES.MAGE = {
         ["REACT:COMBATEND"] = {
             "As expected.",
             "Concluded.",
-            "/em straightens his sleeves",
             "That was hardly worth the mana.",
             "Results recorded.",
             "Tidy enough.",
@@ -542,7 +508,6 @@ RPVox_CLASSES.MAGE = {
         ["REACT:INTERRUPTED"] = {
             "%t. Rude.",
             "%t. That was six seconds of work.",
-            "/em glares over the ruined working",
             "You have no idea what you just interrupted, %t.",
             "%t. Very well. The short version.",
             "%t. That was deliberate. I noticed.",
@@ -597,15 +562,12 @@ RPVox_CLASSES.WARRIOR = {
         -- Abilities -----------------------------------------------------
         ["MELEE"] = {
             "%t. This is the job. Swing, breathe, swing.",
-            "/em works through the swing the way he was drilled to",
             "%t. Nothing clever. Never has been.",
             "%t. Keep your guard up. Mine is up.",
             "%t. That's one. Come on.",
-            "/em takes a hit on the shield and answers it",
             "%t. I do this all day. Literally all day.",
             "%t. Stay on your feet. Makes it fairer.",
             "%t. Steel and shouting. That's the whole trade.",
-            "/em plants his feet and goes to work",
         },
 
         ["SPELL:Charge"] = {

@@ -53,7 +53,6 @@ RPVox_LINES["SPELL:Power Word: Shield"] = {
     "%t. The word is spoken. Nothing gets past it.",
     "You will feel the blow. You will not feel the ending, %t.",
     "Hold, %t. I have made you difficult to kill.",
-    "/em traces a ward in the air with two fingers",
     "Stand behind the word, %t.",
 }
 
@@ -74,7 +73,6 @@ RPVox_LINES["SPELL:Mind Blast"] = {
     "%t. I have been in worse minds. Mine, mostly.",
     "%t. Silence in there. I insist.",
     "Get out of your own head, %t. I am moving in.",
-    "/em stares until something behind the eyes gives way",
     "Your thoughts are mine now, %t.",
 }
 
@@ -94,7 +92,6 @@ RPVox_LINES["SPELL:Smite"] = {
     "%t. The Light and I have an arrangement.",
     "Let it sear. It seared me first, %t.",
     "%t. A gift from the thing that left me in the dirt.",
-    "/em calls down a light he no longer believes in",
     "The Light and I have an arrangement, %t.",
     "Take it, %t. It was never comfortable to carry.",
 }
@@ -116,7 +113,6 @@ RPVox_LINES["SPELL:Renew"] = {
     "You will feel better shortly. Irritating, isn't it, %t.",
     "%t. Mending. Not undoing. Nothing undoes.",
     "Grow back, %t. I envy you the ability.",
-    "/em lays a cold hand briefly on a shoulder",
     "Stay standing, %t. That is all I ask.",
 }
 
@@ -137,7 +133,6 @@ RPVox_LINES["SPELL:Lesser Heal"] = {
     "You get the Light. I got the grave, %t.",
     "%t. Better. Now stay out of the way.",
     "Stop bleeding, %t. That is an order.",
-    "/em closes the wound with visible distaste",
     "Better, %t. Now stay out of the way.",
 }
 
@@ -244,13 +239,9 @@ RPVox_LINES["REACT:LOWHEALTH"] = {
     "%t. One more breath I do not need.",
     "%t. I am difficult to kill. Ask the grave.",
     "Break me, then. See what stands up, %t.",
-    "/em sways, one hand pressed to a wound that will not close",
-    "/em spits something dark into the dirt",
     "Not while %t still stands.",
     "%t. Barely a body left, and I did not want it anyway.",
-    "/em grips the wound and keeps walking",
     "You have taken half of me, %t. Take the rest if you can.",
-    "/em breathes out slowly, though the breath does nothing",
     "Down to the last of it. Still standing, %t.",
 }
 
@@ -355,11 +346,8 @@ RPVox_LINES["REACT:DEATH"] = {
     "%t. Not the end. Never the end.",
     "Down. Cold. Waiting, %t.",
     "%t. It is only death. I have had worse afternoons.",
-    "/em collapses without a sound",
     "Remember the name, %t. I will find you.",
-    "/em goes still, eyes open",
     "You win nothing, %t.",
-    "/em settles into the dirt, unhurried",
     "Well struck, %t. Enjoy it briefly.",
 }
 
@@ -464,10 +452,7 @@ RPVox_LINES["REACT:RESURRECT"] = {
     "Reanimated and mildly annoyed.",
     "The Forsaken endure. That is all we do.",
     "Once more, then. Once more.",
-    "/em rises stiffly, joints protesting",
-    "/em brushes the grave dirt from a threadbare robe",
     "Back on my feet and unimpressed.",
-    "/em rolls a shoulder until something clicks into place",
     "Where is %t? I was not finished.",
 }
 
@@ -573,11 +558,8 @@ RPVox_LINES["REACT:KILLINGBLOW"] = {
     "%t. The dirt claims another.",
     "%t. Done. Say nothing more.",
     "Rest, %t. You have earned that much.",
-    "/em looks down at the body without expression",
     "Goodbye, %t.",
-    "/em steps over the corpse without slowing",
     "Sleep, %t. Truly sleep. I envy you.",
-    "/em makes a small, dismissive gesture over the dead",
 }
 
 RPVox_LINES["REACT:COMBATSTART"] = {
@@ -681,11 +663,8 @@ RPVox_LINES["REACT:COMBATSTART"] = {
     "Try to make it last, %t.",
     "%t. Weapons out. Whispers louder.",
     "%t. So be it.",
-    "/em fixes %t with a long, colourless stare",
     "You should not have done that, %t.",
-    "/em rolls back a sleeve, unhurried",
     "Come along then, %t.",
-    "/em chills the air around him noticeably",
 }
 
 RPVox_LINES["REACT:COMBATEND"] = {
@@ -789,10 +768,6 @@ RPVox_LINES["REACT:COMBATEND"] = {
     "Nothing broken. Nothing mended.",
     "So. Where was I.",
     "Back to the long waiting.",
-    "/em straightens his robes with cold precision",
-    "/em surveys the bodies without satisfaction",
-    "/em wipes something dark from his hands",
-    "/em exhales out of old habit",
 }
 
 RPVox_LINES["REACT:INTERRUPTED"] = {
@@ -897,9 +872,7 @@ RPVox_LINES["REACT:INTERRUPTED"] = {
     "%t. That will be remembered. Everything is.",
     "%t. Very well. Where was I.",
     "That was rude, %t.",
-    "/em glares, jaw tight",
     "You will regret that, %t.",
-    "/em bites off the ruined syllable",
 }
 
 RPVox_LINES["REACT:LEVELUP"] = {
@@ -908,7 +881,6 @@ RPVox_LINES["REACT:LEVELUP"] = {
     "Another step away from what I was.",
     "I improve. The world does not.",
     "More power. The same hunger.",
-    "/em flexes a hand, testing something newly remembered",
     "The Shadow rewards persistence.",
     "Better at this than I ever was at living.",
     "[grim] Growing stronger for a war I did not choose.",
@@ -919,20 +891,17 @@ RPVox_LINES["REACT:LEVELUP"] = {
 
 RPVox_LINES["REACT:FALLING"] = {
     "The ground and I disagree about pace.",
-    "/em lands badly and straightens with an audible click",
     "Bones. Always the bones.",
     "That is a stupid way to be hurt.",
     "Gravity: the one thing more patient than me.",
     "I have fallen from worse.",
     "Nothing broken that was not already loose.",
-    "/em brushes the dirt off without expression",
     "[weary] Everything hurts. This is merely new.",
     "Down is easy. Up is the problem.",
 }
 
 RPVox_LINES["REACT:DROWNING"] = {
     "I do not need the air. I resent the reminder.",
-    "/em thrashes, more irritated than afraid",
     "Water. The one thing I cannot intimidate.",
     "Corpses float. Eventually.",
     "This body forgets it does not breathe.",
@@ -943,7 +912,6 @@ RPVox_LINES["REACT:DROWNING"] = {
 
 RPVox_LINES["REACT:DURABILITY"] = {
     "This armour has given all it had.",
-    "/em examines a split seam with distaste",
     "Falling apart. The armour too.",
     "Held together with thread and habit.",
     "I should see a smith. I will not.",
@@ -956,18 +924,15 @@ RPVox_LINES["REACT:DURABILITY"] = {
 
 RPVox_LINES["IDLE:MOUNT"] = {
     "Ride, then.",
-    "/em settles into the saddle without a sound",
     "The beast does not like me. Sensible.",
     "Faster than walking. Barely worth the trouble.",
     "Even the horses know what I am.",
     "[weary] More miles. Always more miles.",
     "Somewhere else, then. Somewhere always else.",
-    "/em takes the reins in cold hands",
 }
 
 RPVox_LINES["IDLE:QUESTACCEPT"] = {
     "Very well. I will see it done.",
-    "/em takes the task without enthusiasm",
     "Another errand for the dead.",
     "You want it done properly. Hence me.",
     "I will attend to it.",
@@ -980,18 +945,15 @@ RPVox_LINES["IDLE:QUESTACCEPT"] = {
 
 RPVox_LINES["IDLE:QUEST"] = {
     "Done. Pay me and say nothing.",
-    "/em hands over the work without ceremony",
     "Errands. The dead run errands now.",
     "Consider it finished.",
     "You wanted it done. It is done.",
     "[grim] Another small service to a world that owes me.",
     "Take it. I want nothing but the coin.",
-    "/em accepts the payment with a curt nod",
 }
 
 RPVox_LINES["IDLE:DISCOVERY"] = {
     "I have not stood here before.",
-    "/em surveys the ground with faint suspicion",
     "New country. Same rot underneath.",
     "Somewhere else to be unwelcome.",
     "The living built this. It shows.",
@@ -1166,7 +1128,6 @@ RPVox_LINES["SPELL:Heal"] = {
     "%t. Properly, this time. Not a patch.",
     "The Light is slow through cold hands, %t.",
     "%t. Closed. Stay closed.",
-    "/em works the wound shut without hurrying",
     "%t. There. That will hold longer than the last one.",
     "Breathe. It is doing its work, %t.",
     "%t. Mending is a patience I did not used to have.",
@@ -1175,11 +1136,9 @@ RPVox_LINES["SPELL:Heal"] = {
 RPVox_LINES["SPELL:Greater Heal"] = {
     "%t. Everything I have. Do not waste it.",
     "%t. All of it, at once. Stand up.",
-    "/em pours everything into a wound and does not look away",
     "%t. This is the whole of what I can do.",
     "You will not die on my watch, %t.",
     "%t. Whole. Actually whole. Rare, that.",
-    "/em holds a broken thing together until it stops being broken",
     "%t. I cannot do this for myself. I can do it for you.",
     "%t. There. Undone. All of it undone.",
     "Get up. You are mended, %t.",
@@ -1188,7 +1147,6 @@ RPVox_LINES["SPELL:Greater Heal"] = {
 RPVox_LINES["SPELL:Flash Heal"] = {
     "%t. Quickly. No time for the good work.",
     "%t. There. Crude, but you are upright.",
-    "/em snaps a wound shut and moves on",
     "%t. Take that and stop bleeding.",
     "Fast and ugly. It will hold, %t.",
     "%t. No craft in that. Only speed.",
@@ -1197,17 +1155,14 @@ RPVox_LINES["SPELL:Flash Heal"] = {
 
 RPVox_LINES["SPELL:Prayer of Healing"] = {
     "All of you. Stand up.",
-    "/em spreads both hands and the wounded stop bleeding",
     "Everyone. Now. Together.",
     "I have enough for all of you. Barely.",
-    "/em gives the whole group what he would not spend on himself",
     "Up. All of you. There is more coming.",
     "Nobody falls here. Not while I am standing.",
 }
 
 RPVox_LINES["SPELL:Binding Heal"] = {
     "%t. One for you. One for me. Unusual.",
-    "/em mends somebody else and himself in the same breath",
     "%t. I so rarely include myself.",
     "%t. Both of us. Do not read anything into it.",
     "%t. Even I am worth patching occasionally.",
@@ -1215,40 +1170,32 @@ RPVox_LINES["SPELL:Binding Heal"] = {
 
 RPVox_LINES["SPELL:Prayer of Mending"] = {
     "%t. Carry that. Pass it on when you are done.",
-    "/em sets something waiting under the skin",
     "%t. It will jump to whoever needs it next.",
     "%t. A debt that pays itself forward.",
     "%t. Hold it until somebody bleeds.",
 }
 
 RPVox_LINES["SPELL:Circle of Healing"] = {
-    "/em opens both hands and the ring of them mends at once",
     "All of you at once. Efficient.",
     "Everyone inside the circle. Stand.",
-    "/em heals a whole ring of people without looking at any of them",
     "There. All of you. Now keep up.",
 }
 
 RPVox_LINES["SPELL:Power Word: Fortitude"] = {
     "%t. Harder to kill. That is the whole gift.",
-    "/em lays a word on somebody's shoulders like a coat",
     "%t. Take it. You will need it before I do.",
     "%t. A little more of you to lose. You are welcome.",
     "%t. The word holds. It always holds.",
-    "/em speaks a blessing in a voice with no warmth in it",
 }
 
 RPVox_LINES["SPELL:Prayer of Fortitude"] = {
     "All of you. Stand closer.",
-    "/em blesses the whole group with visible impatience",
     "There. Every one of you, harder to kill.",
     "Take it and stop asking.",
-    "/em speaks one word over all of them at once",
 }
 
 RPVox_LINES["SPELL:Divine Spirit"] = {
     "%t. Spirit. I gave mine away. Have some of this instead.",
-    "/em passes on something he no longer possesses himself",
     "%t. There. Deeper wells for you.",
     "%t. Take it. I have no use for spirit any more.",
     "%t. Ironic, is it not.",
@@ -1256,65 +1203,52 @@ RPVox_LINES["SPELL:Divine Spirit"] = {
 
 RPVox_LINES["SPELL:Prayer of Spirit"] = {
     "All of you. Deeper wells.",
-    "/em grants the whole group something he lost a long time ago",
     "Take it. Every one of you.",
     "There. Spirit, from a man without one.",
 }
 
 RPVox_LINES["SPELL:Shadow Protection"] = {
     "%t. The dark will slide off you now.",
-    "/em wraps somebody in the very thing he is made of",
     "%t. I know what the Shadow does. Consider yourself warned and warded.",
     "%t. It cannot have you. Only me.",
     "%t. Armour against the thing I am.",
 }
 
 RPVox_LINES["SPELL:Inner Fire"] = {
-    "/em lights something under the ribs that gives off no heat",
     "There. A fire that does not warm me.",
-    "/em burns quietly and feels nothing at all",
     "The Light sits under my skin. It never settles.",
     "Lit. For whatever that is worth.",
 }
 
 RPVox_LINES["SPELL:Levitate"] = {
-    "/em rises a hand's breadth off the ground and stays there",
     "The ground and I have never been friends.",
-    "/em drifts, which is more dignified than walking",
     "Lighter than I look. Considerably less of me now.",
     "Off the dirt. Good.",
 }
 
 RPVox_LINES["SPELL:Resurrection"] = {
-    "/em kneels and calls somebody back who had already gone",
     "Get up. I came back. So can you.",
     "Not yet. I have not finished with you.",
-    "/em drags a soul back with the ease of long practice",
     "Up. It is easier the first time. Trust me.",
     "You will hate this part. Everyone does.",
-    "/em returns somebody to a body and says nothing about the cost",
     "Come back. The world is not done being awful.",
 }
 
 RPVox_LINES["SPELL:Dispel Magic"] = {
     "%t. Whatever that was, it is gone.",
-    "/em strips something off with two impatient fingers",
     "%t. Borrowed power. Give it back.",
     "%t. That was not yours to wear.",
     "%t. Off. Now.",
 }
 
 RPVox_LINES["SPELL:Mass Dispel"] = {
-    "/em sweeps a hand and half the field loses whatever it was hiding behind",
     "All of it. Off. All of you.",
     "Nothing here keeps what it borrowed.",
-    "/em unmakes a dozen small protections at once",
     "There. Everybody honest again.",
 }
 
 RPVox_LINES["SPELL:Abolish Disease"] = {
     "%t. Out. Whatever it is, out.",
-    "/em draws the sickness out and looks at it with professional interest",
     "%t. I have seen worse in the Apothecarium. Much worse.",
     "%t. Clean. For now.",
     "%t. Disease is only rot in a hurry. I would know.",
@@ -1322,30 +1256,25 @@ RPVox_LINES["SPELL:Abolish Disease"] = {
 
 RPVox_LINES["SPELL:Cure Disease"] = {
     "%t. There. Cleaner than you were.",
-    "/em pulls something unpleasant out and discards it",
     "%t. You are welcome. Do not thank me aloud.",
     "%t. Rot has no business in the living.",
 }
 
 RPVox_LINES["SPELL:Shackle Undead"] = {
     "%t. Stay. I know exactly what you are.",
-    "/em binds one of his own kind without any visible pleasure",
     "%t. I am not proud of this.",
     "%t. Be still. You and I are not so different.",
     "%t. The Dark Lady would understand.",
-    "/em locks something in place that used to be a person",
 }
 
 RPVox_LINES["SPELL:Mind Soothe"] = {
     "%t. Calm. There is nothing here worth your attention.",
-    "/em quiets a mind with a touch it will not remember",
     "%t. Go back to whatever you were doing.",
     "%t. Nothing happened. Nobody came past.",
 }
 
 RPVox_LINES["SPELL:Mind Control"] = {
     "%t. Your hands. My intentions.",
-    "/em takes hold of a mind and steers it like a cart",
     "%t. Do not fight it. You are not winning that argument.",
     "%t. Walk. Yes. Just like that.",
     "%t. I will give it back. Most of it.",
@@ -1354,34 +1283,27 @@ RPVox_LINES["SPELL:Mind Control"] = {
 
 RPVox_LINES["SPELL:Holy Fire"] = {
     "%t. Burn. The Light does that too.",
-    "/em sets somebody alight with a thing that was meant to comfort",
     "%t. Holy, and on fire. Both true.",
     "%t. It burned me first. Ask anyone.",
     "%t. The Light is not gentle. It is only well spoken of.",
-    "/em calls down a fire he stopped believing in years ago",
 }
 
 RPVox_LINES["SPELL:Holy Nova"] = {
-    "/em opens outward and the Light goes everywhere at once",
     "%t. Everyone. Whether they wanted it or not.",
     "%t. Mine mended. Yours burned. Same spell.",
-    "/em releases the Light in a ring and stands very still inside it",
     "%t. It sorts you out by itself. Clever thing.",
 }
 
 RPVox_LINES["SPELL:Shadow Word: Death"] = {
     "%t. Die.",
-    "/em says one word and something in a chest stops",
     "%t. That is the shortest sentence I know.",
     "%t. It costs me. It costs you more.",
     "%t. One word. That is all it ever needed.",
-    "/em speaks a word that hurts him to shape",
     "%t. I do not use that one lightly.",
 }
 
 RPVox_LINES["SPELL:Vampiric Embrace"] = {
     "%t. What I take from you keeps them standing.",
-    "/em turns a wound into somebody else's medicine",
     "%t. You are useful now. That is more than you were.",
     "%t. Your ending pays for their continuing.",
     "%t. Nothing wasted. Not even you.",
@@ -1389,51 +1311,41 @@ RPVox_LINES["SPELL:Vampiric Embrace"] = {
 
 RPVox_LINES["SPELL:Vampiric Touch"] = {
     "%t. That will drink from you slowly.",
-    "/em leaves something in a wound that feeds",
     "%t. It takes. It keeps taking.",
     "%t. You will notice it getting quieter in there.",
     "%t. The Shadow eats and I get to keep working.",
 }
 
 RPVox_LINES["SPELL:Shadowform"] = {
-    "/em stops being entirely present and does not miss it",
     "There. Better. This is closer to what I am.",
-    "/em folds into the Shadow the way one puts on an old coat",
     "The whispers are louder in here. That is the trade.",
     "Less of me. More of it. An improvement.",
-    "/em becomes difficult to look at directly",
 }
 
 RPVox_LINES["SPELL:Silence"] = {
     "%t. Nothing. Not one more word.",
-    "/em closes a hand and a voice simply stops",
     "%t. Shut. Entirely shut.",
     "%t. You had a spell coming. Not any more.",
     "%t. Quiet suits you.",
 }
 
 RPVox_LINES["SPELL:Shadowfiend"] = {
-    "/em opens a small hole in the dark and lets something out of it",
     "%t. Go on. Bring me back what you take.",
     "%t. It is hungry. It is always hungry.",
-    "/em sends something with too many legs toward a target",
     "%t. Do not look at it. It dislikes being looked at.",
     "%t. Mine. Briefly. Mostly.",
 }
 
 RPVox_LINES["SPELL:Devouring Plague"] = {
     "%t. Something is eating you now. From the inside.",
-    "/em plants a plague and steps back out of habit",
     "%t. What it takes from you, it gives to me.",
     "%t. A Forsaken gift. Enjoy it.",
     "%t. This one is older than the Scourge. Older than me.",
-    "/em speaks a plague into being with the ease of long practice",
     "%t. Rot with purpose. That is the improvement.",
 }
 
 RPVox_LINES["SPELL:Touch of Weakness"] = {
     "%t. Strike me. Find out what it costs.",
-    "/em waits, quite still, for somebody to make a mistake",
     "%t. Whatever you do to me, you do to yourself.",
     "%t. I am wearing something unpleasant. Do not touch it.",
     "%t. The first blow is always free. The second is not.",

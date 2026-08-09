@@ -13,7 +13,6 @@ RPVox_MOOD_LINES.GRIM = {
     ["REACT:LOWHEALTH"] = {
         "Cut deeper. I want to see what is under it, %t.",
         "You have opened a dead thing. Look inside, %t.",
-        "/em does not react to the wound at all",
         "%t. There is nothing in me left to kill.",
         "Take it. It was never mine, %t.",
         "You are hurting a corpse. Think about that, %t.",
@@ -29,7 +28,6 @@ RPVox_MOOD_LINES.GRIM = {
         "%t. The wound does not close. Neither will this.",
         "You are running out of me to destroy, %t.",
         "%t. I have been carved before. By experts.",
-        "/em watches the blood fall with distant interest",
         "There is very little left, and all of it is aimed at you, %t.",
         "%t. Hurt me. It only sharpens things.",
         "%t. This body is a formality.",
@@ -55,7 +53,6 @@ RPVox_MOOD_LINES.GRIM = {
         "%t. Nothing left but the working.",
         "Cut, then. It changes nothing, %t.",
         "This is a very dangerous moment for you, %t.",
-        "/em straightens slowly, and the air goes colder",
         "I am running out. So are you, %t.",
         "You wanted to see me bleed. Look closely, %t.",
         "%t. The last of me is the worst of me.",
@@ -94,7 +91,6 @@ RPVox_MOOD_LINES.GRIM = {
         "%t. There is nothing behind my eyes but the work.",
         "You will not walk away from this, %t.",
         "%t. The last of my blood is the coldest.",
-        "/em smiles without any warmth at all",
         "%t. I have been ruined for years. This is nothing.",
         "You have made this personal, %t.",
         "%t. Nothing stops now.",
@@ -141,7 +137,6 @@ RPVox_MOOD_LINES.GRIM = {
     ["REACT:DEATH"] = {
         "%t. This is not finished.",
         "You have delayed me. Nothing more, %t.",
-        "/em falls without a sound",
         "I will find you, %t.",
         "Remember the face, %t.",
         "%t. The dark keeps me only briefly.",
@@ -168,7 +163,6 @@ RPVox_MOOD_LINES.GRIM = {
         "%t. I fall. The intent does not.",
         "Nothing you have done matters, %t.",
         "You are already too late, %t.",
-        "/em goes cold and still, eyes open",
         "%t. The Dark Lady is not finished with me.",
         "You will regret being efficient, %t.",
         "%t. There is no victory in this.",
@@ -244,7 +238,6 @@ RPVox_MOOD_LINES.GRIM = {
     ["REACT:RESURRECT"] = {
         "I said I would return.",
         "Back. Colder.",
-        "/em rises with the air chilling around him",
         "Now we continue.",
         "The dark returned me. It has a reason.",
         "You should have made certain, %t.",
@@ -272,7 +265,6 @@ RPVox_MOOD_LINES.GRIM = {
         "Up, and the temperature falls.",
         "That killing bought nothing.",
         "Back. Precisely as promised.",
-        "/em opens his eyes and they are entirely without light",
         "Every return costs something. Someone will pay it.",
         "Nothing was settled. Now it will be.",
         "I am back and the whispers came with me.",
@@ -346,7 +338,6 @@ RPVox_MOOD_LINES.GRIM = {
 
     ["REACT:KILLINGBLOW"] = {
         "Stay down. Stay dead, %t.",
-        "/em watches until the body stops moving entirely",
         "%t. That is what happens.",
         "Nothing left of you, %t.",
         "You should have run, %t.",
@@ -375,7 +366,6 @@ RPVox_MOOD_LINES.GRIM = {
         "Nothing of you continues, %t.",
         "You had a life. It is concluded, %t.",
         "%t. That is what defiance costs.",
-        "/em turns away without a word",
         "Rest, and be grateful it takes, %t.",
         "Nothing about this was personal until you made it so, %t.",
         "The ground is yours now, %t.",
@@ -474,7 +464,6 @@ RPVox_MOOD_LINES.GRIM = {
 
     ["REACT:COMBATSTART"] = {
         "You should not have, %t.",
-        "/em fixes his eyes on %t and does not blink",
         "%t. That was a mistake.",
         "Come here, %t.",
         "%t. The Shadow wakes.",
@@ -503,7 +492,6 @@ RPVox_MOOD_LINES.GRIM = {
         "You have made a serious error, %t.",
         "%t. Nothing survives what is about to happen.",
         "Stand where you are, %t.",
-        "/em raises both hands and the light dims slightly",
         "That was your one chance to leave, %t.",
         "%t. There is nothing to negotiate.",
         "%t. The Shadow does the talking now.",
@@ -603,7 +591,6 @@ RPVox_MOOD_LINES.GRIM = {
     ["REACT:COMBATEND"] = {
         "Nothing left standing.",
         "It is done.",
-        "/em surveys the bodies without expression",
         "That is finished.",
         "Silence. As it should be.",
         "The ground has them now.",
@@ -705,7 +692,6 @@ RPVox_MOOD_LINES.GRIM = {
 
     ["REACT:INTERRUPTED"] = {
         "You will regret that, %t.",
-        "/em goes very still and very cold",
         "Do that again, %t.",
         "%t. That was noted.",
         "You have made this worse for yourself, %t.",
@@ -744,7 +730,6 @@ RPVox_MOOD_LINES.GRIM = {
         "You have bought yourself something unpleasant, %t.",
         "%t. I am colder for that.",
         "%t. Nothing about that was wise.",
-        "/em looks up slowly, and nothing behind the eyes moves",
         "%t. That was noted and filed.",
         "You will answer for the interruption, %t.",
         "%t. The dark does not require my voice.",

@@ -16,7 +16,6 @@ RPVox_MOOD_LINES.MAGE_GRIM = {
     ["SPELL:Frostbolt"] = {
         "%t. Cold is patient. So am I.",
         "You will slow, and then you will stop, %t.",
-        "/em freezes the air without any change of expression",
         "%t. There is no warmth left in this exchange.",
         "Feel the temperature leave you, %t.",
         "%t. Slower. That is how it begins.",
@@ -37,7 +36,6 @@ RPVox_MOOD_LINES.MAGE_GRIM = {
     },
     ["SPELL:Fireball"] = {
         "Burn. There is no argument after fire, %t.",
-        "/em looses the flame without ceremony",
         "%t. Combustion is the honest solution.",
         "Everything you are is fuel, %t.",
         "%t. There will not be enough left to bury.",
@@ -59,7 +57,6 @@ RPVox_MOOD_LINES.MAGE_GRIM = {
     },
     ["SPELL:Arcane Missiles"] = {
         "You cannot dodge arithmetic, %t.",
-        "/em holds the channel with cold, total focus",
         "%t. Each one is a decision already made.",
         "%t. There is no chance involved. Only sequence.",
         "%t. The arcane does not miss. Ever.",
@@ -82,7 +79,6 @@ RPVox_MOOD_LINES.MAGE_GRIM = {
     ["SPELL:Fire Blast"] = {
         "%t. Immediately.",
         "%t. No incantation. No warning.",
-        "/em snaps his fingers and something ignites",
         "%t. That did not require thought.",
         "%t. Instant, and entirely deliberate.",
         "%t. A small cruelty, precisely placed.",
@@ -103,7 +99,6 @@ RPVox_MOOD_LINES.MAGE_GRIM = {
     },
     ["SPELL:Pyroblast"] = {
         "%t. I took my time with this one.",
-        "/em holds the working until it is painful to look at",
         "%t. Patience produces the worst results.",
         "%t. This is what waiting buys.",
         "You watched me build it. That was your mistake, %t.",
@@ -125,7 +120,6 @@ RPVox_MOOD_LINES.MAGE_GRIM = {
     },
     ["SPELL:Blizzard"] = {
         "All of you. Simultaneously, %t.",
-        "/em raises both hands and the sky turns against the field",
         "%t. Weather is not merciful.",
         "%t. There is nowhere in that circle to stand.",
         "%t. Everyone receives their portion.",
@@ -147,7 +141,6 @@ RPVox_MOOD_LINES.MAGE_GRIM = {
     },
     ["SPELL:Frost Nova"] = {
         "Stay, %t.",
-        "/em stamps once and the ground seizes",
         "You will wait there until I decide, %t.",
         "%t. Rooted. Now we begin properly.",
         "%t. Distance is mine to control.",
@@ -169,7 +162,6 @@ RPVox_MOOD_LINES.MAGE_GRIM = {
     },
     ["SPELL:Blink"] = {
         "%t. Elsewhere. Obviously.",
-        "/em is abruptly somewhere more advantageous",
         "You will not touch me, %t.",
         "%t. Space is negotiable. My safety is not.",
         "%t. Reach for me again.",
@@ -191,7 +183,6 @@ RPVox_MOOD_LINES.MAGE_GRIM = {
     },
     ["SPELL:Polymorph"] = {
         "You are more useful as livestock, %t.",
-        "/em reduces the target to something simpler",
         "%t. Be quiet. Be woolly.",
         "%t. That is an improvement on the original.",
         "You will wait your turn as a sheep, %t.",
@@ -213,7 +204,6 @@ RPVox_MOOD_LINES.MAGE_GRIM = {
     },
     ["SPELL:Counterspell"] = {
         "%t. No.",
-        "/em cuts the air and the working dies",
         "%t. That will not be happening.",
         "Silence suits you better, %t.",
         "You do not get to cast that, %t.",
@@ -235,7 +225,6 @@ RPVox_MOOD_LINES.MAGE_GRIM = {
     },
     ["SPELL:Ice Block"] = {
         "Wait there. I am reconsidering, %t.",
-        "/em vanishes into a shell of perfect ice",
         "%t. Nothing reaches me in here.",
         "You have accomplished nothing, %t.",
         "%t. This is not fear. It is scheduling.",
@@ -257,7 +246,6 @@ RPVox_MOOD_LINES.MAGE_GRIM = {
     },
     ["SPELL:Evocation"] = {
         "Do not interrupt this, %t.",
-        "/em stands still and draws the ambient arcane inward",
         "%t. Refuelling. Then finishing.",
         "You have a few seconds. Use them poorly, %t.",
         "The reservoir refills. Yours does not, %t.",
@@ -279,7 +267,6 @@ RPVox_MOOD_LINES.MAGE_GRIM = {
     },
     ["SPELL:Arcane Intellect"] = {
         "There. Think faster. It will not save you, %t.",
-        "/em taps a colleague on the brow without warmth",
         "%t. A modest improvement to a modest mind.",
         "%t. Use it. I will not offer twice.",
         "You are marginally less useless now, %t.",
@@ -297,7 +284,6 @@ RPVox_MOOD_LINES.MAGE_GRIM = {
     },
     ["SPELL:Conjure Water"] = {
         "%t. Water from nothing. Consider what else I can make.",
-        "/em pulls water out of empty air without looking at it",
         "%t. I create. That is the whole of the difference.",
         "Take it. It costs me nothing, %t.",
         "%t. Matter is a suggestion.",
@@ -311,7 +297,6 @@ RPVox_MOOD_LINES.MAGE_GRIM = {
     },
     ["SPELL:Conjure Food"] = {
         "%t. Sustenance from nothing. Remember who made it.",
-        "/em conjures a meal with visible contempt for the request",
         "You eat because I permit it, %t.",
         "%t. Matter, on demand.",
         "%t. This is the least of what I can do.",
@@ -325,7 +310,6 @@ RPVox_MOOD_LINES.MAGE_GRIM = {
     },
     ["SPELL:Shoot"] = {
         "%t. Even without power, I am the greater threat.",
-        "/em fires the wand with cold economy",
         "%t. Small wounds. Sufficient ones.",
         "I do not need mana to end you, %t.",
         "You will die of accumulation, %t.",
@@ -350,7 +334,6 @@ RPVox_MOOD_LINES.MAGE_GRIM = {
 
     ["REACT:LOWHEALTH"] = {
         "%t. Miscalculation. Correcting.",
-        "/em backs away with absolute composure",
         "You have done well to reach me. It ends here, %t.",
         "%t. That was closer than the model permits.",
         "Do not mistake proximity for victory, %t.",
@@ -402,7 +385,6 @@ RPVox_MOOD_LINES.MAGE_GRIM = {
     },
     ["REACT:DEATH"] = {
         "%t. An error. It will be corrected.",
-        "/em falls without protest, eyes still calculating",
         "Note the conditions. I will not repeat them, %t.",
         "You have won nothing but a delay, %t.",
         "%t. The model was wrong. That is all.",
@@ -454,7 +436,6 @@ RPVox_MOOD_LINES.MAGE_GRIM = {
     },
     ["REACT:RESURRECT"] = {
         "Returned. The model is updated.",
-        "/em rises and immediately checks the field with cold eyes",
         "That will not happen twice.",
         "Back, and considerably less patient.",
         "The error is corrected.",
@@ -506,7 +487,6 @@ RPVox_MOOD_LINES.MAGE_GRIM = {
     },
     ["REACT:KILLINGBLOW"] = {
         "%t. Resolved.",
-        "/em watches the body settle without any expression",
         "%t. Predictable from the opening.",
         "%t. One variable removed permanently.",
         "You were never going to survive that, %t.",
@@ -558,7 +538,6 @@ RPVox_MOOD_LINES.MAGE_GRIM = {
     },
     ["REACT:COMBATSTART"] = {
         "You have chosen very poorly, %t.",
-        "/em begins shaping something that lowers the temperature",
         "There is no version of this you survive, %t.",
         "%t. I would advise against closing.",
         "You are already inside the working, %t.",
@@ -610,7 +589,6 @@ RPVox_MOOD_LINES.MAGE_GRIM = {
     },
     ["REACT:COMBATEND"] = {
         "Concluded.",
-        "/em surveys the field and finds it acceptable",
         "Nothing left standing that was standing before.",
         "As calculated.",
         "The demonstration is complete.",
@@ -662,7 +640,6 @@ RPVox_MOOD_LINES.MAGE_GRIM = {
     },
     ["REACT:INTERRUPTED"] = {
         "You have no idea what you interrupted, %t.",
-        "/em stops, and the temperature drops noticeably",
         "%t. That was deliberate. So is what follows.",
         "You will regret being quick, %t.",
         "%t. Noted. Filed. Answered shortly.",
