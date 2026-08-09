@@ -1,4 +1,4 @@
-﻿-- RPVox -- core
+-- RPVox -- core
 -- Roleplay lines fired from combat, personal reactions, and idle activity.
 --
 -- Settings live in named profiles. Each character remembers which profile it
@@ -515,14 +515,12 @@ local function PickLine(trigger)
     return words[index]
 end
 
--- A channel has no emote formatting of its own, so speech and actions would
--- arrive looking identical: "Sketch: Come here" and "Sketch: straightens his
--- robes" read the same. Actions get wrapped the way roleplayers write them.
--- In /say and /em mode nothing changes -- the client formats emotes itself.
+-- Carries the say-or-emote decision through to the sender, which needs it to
+-- tag the payload so the receiving side can render an action as an action.
+-- In /say and /em mode nothing changes: the client formats emotes itself.
 local function ForOutput(msg, channel, output)
     if (output or "VOX") ~= "VOX" then return msg, channel end
-    if channel == "EMOTE" then return "*" .. msg .. "*", "VOX" end
-    return msg, "VOX"
+    return msg, (channel == "EMOTE") and "VOXEMOTE" or "VOXSAY"
 end
 
 -- Used by the Test line button so a preview matches what would really be said.
@@ -565,38 +563,59 @@ if UIErrorsFrame and UIErrorsFrame.AddMessage then
 end
 
 -- Output mode --------------------------------------------------------------
--- With output = "VOX" every line goes to a custom chat channel instead of
--- /say and /em, so a character can be as talkative as you like without
--- filling public chat. Emotes are sent as plain text: the channel already
--- prefixes your name, so "straightens his robes" reads correctly.
-RPVox.VOX_CHANNEL = "Vox"
+-- output = "VOX" sends each line as an addon message with SAY distribution.
+-- The server range-limits that exactly as it does /say, so only players who
+-- are actually nearby receive it -- and because it is an addon message it
+-- never appears in public chat. Their copy of RPVox prints it locally.
+--
+-- The trade is that only people running RPVox see anything at all. A custom
+-- chat channel was tried first and abandoned: channels are realm-wide and
+-- have no concept of distance, which is the opposite of what roleplay needs.
+--
+-- output = "PUBLIC" is the original behaviour: real /say and /em, which
+-- everybody nearby can read whether they run the addon or not.
+RPVox.VOX_CHANNEL = "nearby"
+local ADDON_PREFIX = "RPVox"
 
-local function VoxIndex()
-    local id = GetChannelName(RPVox.VOX_CHANNEL)
-    if type(id) == "number" and id > 0 then return id end
-    return nil
+do
+    local reg = (C_ChatInfo and C_ChatInfo.RegisterAddonMessagePrefix)
+             or RegisterAddonMessagePrefix
+    if reg then pcall(reg, ADDON_PREFIX) end
 end
 
--- Safe to call repeatedly; joining a channel you are already in does nothing.
-function RPVox:JoinVox()
-    if VoxIndex() then return true end
-    pcall(JoinChannelByName, RPVox.VOX_CHANNEL)
-    return VoxIndex() ~= nil
+-- Addon messages are not subject to the hardware-event rule that governs
+-- SendChatMessage, so this path cannot be silently refused.
+local function SendAddon(payload)
+    local send = (C_ChatInfo and C_ChatInfo.SendAddonMessage) or SendAddonMessage
+    if not send then return false end
+    return pcall(send, ADDON_PREFIX, payload, "SAY")
 end
 
--- Every line leaves through here. Never falls back to /say when the channel
--- is missing: a silent line is better than unexpected public chat.
+-- Every line leaves through here.
 local function RawSend(msg, channel)
-    if channel ~= "VOX" then
-        return pcall(SendChatMessage, msg, channel)
+    if channel == "VOXSAY" or channel == "VOXEMOTE" then
+        local kind = (channel == "VOXEMOTE") and "E" or "S"
+        return SendAddon(kind .. "|" .. msg)
     end
-    local id = VoxIndex() or (RPVox:JoinVox() and VoxIndex())
-    if not id then
-        Debug("vox channel unavailable; line dropped:", msg)
-        return false
-    end
-    return pcall(SendChatMessage, msg, "CHANNEL", nil, id)
+    return pcall(SendChatMessage, msg, channel)
 end
+
+-- Receiving. Rendered locally so speech and actions look like the real thing:
+-- white "Name says: ..." for speech, orange "Name does ..." for an action.
+local rx = CreateFrame("Frame")
+rx:RegisterEvent("CHAT_MSG_ADDON")
+rx:SetScript("OnEvent", function(_, _, prefix, payload, _, sender)
+    if prefix ~= ADDON_PREFIX or type(payload) ~= "string" then return end
+    local kind, text = payload:match("^(%a)|(.*)$")
+    if not kind or text == "" then return end
+    local name = (Ambiguate and Ambiguate(sender, "none"))
+              or sender:match("^[^-]+") or sender
+    if kind == "E" then
+        DEFAULT_CHAT_FRAME:AddMessage(name .. " " .. text, 1.0, 0.5, 0.25)
+    else
+        DEFAULT_CHAT_FRAME:AddMessage(name .. " says: " .. text, 1.0, 1.0, 1.0)
+    end
+end)
 
 function RPVox:Queue(msg, channel, ttl)
     pending = { msg = msg, channel = channel, at = GetTime(), ttl = ttl or PENDING_TTL }
@@ -1082,9 +1101,6 @@ frame:SetScript("OnEvent", function(self, event, ...)
         end
         RPVox:UseProfile(wanted)
 
-        -- Channels are not available the instant PLAYER_LOGIN fires, so give
-        -- the client a moment before joining. RawSend also joins lazily.
-        C_Timer.After(5, function() RPVox:JoinVox() end)
 
         -- Say which profile is in use, and complain if it does not match.
         local pclass = P and P.class
@@ -1340,18 +1356,15 @@ SlashCmdList["RPVox"] = function(input)
         local want = (rest or ""):lower()
         if want == "vox" or want == "channel" then
             P.output = "VOX"
-            RPVox:JoinVox()
-            print("|cff00ff00RPVox:|r speaking in the "
-                .. RPVox.VOX_CHANNEL .. " channel."
-                .. (VoxIndex() and "" or " |cffff0000Could not join it -- try /join "
-                    .. RPVox.VOX_CHANNEL .. "|r"))
+            print("|cff00ff00RPVox:|r speaking to nearby players who run RPVox."
+                .. " Nothing goes to public chat.")
         elseif want == "say" or want == "public" then
             P.output = "PUBLIC"
             print("|cff00ff00RPVox:|r speaking in /say and /em.")
         else
             print("|cff00ff00RPVox:|r output is "
                 .. ((P.output or "VOX") == "VOX"
-                    and ("the " .. RPVox.VOX_CHANNEL .. " channel") or "/say and /em")
+                    and "nearby RPVox users" or "/say and /em")
                 .. ".  Use: /rpvox output vox | say")
         end
 
@@ -1368,8 +1381,7 @@ SlashCmdList["RPVox"] = function(input)
         print("  enabled:    " .. tostring(P and P.enabled))
         print("  global gap: " .. tostring(P and P.globalCooldown) .. "s")
         if (P and P.output or "VOX") == "VOX" then
-            print("  output:     the " .. RPVox.VOX_CHANNEL .. " channel"
-                .. (VoxIndex() and " (joined)" or " |cffff0000(NOT joined)|r"))
+            print("  output:     nearby players running RPVox (say range)")
         else
             print("  output:     /say and /em")
         end

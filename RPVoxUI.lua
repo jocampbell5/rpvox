@@ -1,4 +1,4 @@
-﻿-- RPVox -- configuration UI
+-- RPVox -- configuration UI
 -- /rpcry opens this window.
 
 local ROW_HEIGHT   = 22
@@ -268,20 +268,19 @@ local function CreateUI()
     f.master = master
 
     -- Where the lines go ------------------------------------------------------
-    -- Ticked (the default): everything goes to the Vox channel, so a talkative
-    -- character never fills public chat. Unticked: /say and /em as before.
+    -- Ticked (the default): lines go only to nearby players running RPVox and
+    -- never touch public chat. Unticked: real /say and /em, which everybody
+    -- nearby can read whether they have the addon or not.
     local voxBox = CreateFrame("CheckButton", "$parentVox", f, "UICheckButtonTemplate")
     voxBox:SetPoint("TOPLEFT", master, "BOTTOMLEFT", 0, -2)
     voxBox:SetSize(24, 24)
     voxBox.text = voxBox:CreateFontString(nil, "OVERLAY", "GameFontNormal")
     voxBox.text:SetPoint("LEFT", voxBox, "RIGHT", 2, 0)
-    voxBox.text:SetText("Speak in the " .. (RPVox.VOX_CHANNEL or "Vox")
-        .. " channel, not /say")
+    voxBox.text:SetText("Nearby RPVox users only (keeps public chat clear)")
     voxBox:SetScript("OnClick", function(self)
         local p = RPVox:Profile()
         if self:GetChecked() then
             p.output = "VOX"
-            RPVox:JoinVox()
         else
             p.output = "PUBLIC"
         end
