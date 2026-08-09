@@ -585,11 +585,18 @@ end
 
 -- Addon messages are not subject to the hardware-event rule that governs
 -- SendChatMessage, so this path cannot be silently refused.
-local function SendAddon(payload)
+local function SendAddonRaw(payload, dist)
     local send = (C_ChatInfo and C_ChatInfo.SendAddonMessage) or SendAddonMessage
     if not send then return false end
-    return pcall(send, ADDON_PREFIX, payload, "SAY")
+    return pcall(send, ADDON_PREFIX, payload, dist)
 end
+
+local function SendAddon(payload)
+    return SendAddonRaw(payload, "SAY")
+end
+
+RPVox.SendAddonRaw = function(_, payload, dist) return SendAddonRaw(payload, dist) end
+RPVox.AddonPrefix  = ADDON_PREFIX
 
 -- Every line leaves through here.
 local function RawSend(msg, channel)
@@ -607,12 +614,22 @@ local RP_TAG = "|cff9d7cd8[RP]|r "
 
 local rx = CreateFrame("Frame")
 rx:RegisterEvent("CHAT_MSG_ADDON")
-rx:SetScript("OnEvent", function(_, _, prefix, payload, _, sender)
+rx:SetScript("OnEvent", function(_, _, prefix, payload, dist, sender)
     if prefix ~= ADDON_PREFIX or type(payload) ~= "string" then return end
     local kind, text = payload:match("^(%a)|(.*)$")
     if not kind or text == "" then return end
     local name = (Ambiguate and Ambiguate(sender, "none"))
               or sender:match("^[^-]+") or sender
+
+    -- Diagnostic pings always print, whatever the debug setting.
+    if kind == "T" then
+        local sentOver, who = text:match("^([^|]+)|(.*)$")
+        print(("|cff00ff00RPVox nettest:|r got a ping from |cffffff00%s|r"
+            .. " sent over %s, arrived as %s")
+            :format(who or name, sentOver or "?", tostring(dist)))
+        return
+    end
+    Debug("received", kind, "from", name, "over", tostring(dist))
     if kind == "E" then
         -- Stock lines carry no emotes any more, but a player can still write
         -- one in the line editor, so the path stays.
@@ -1357,6 +1374,24 @@ SlashCmdList["RPVox"] = function(input)
         if RPVox.UI and RPVox.UI.frame and RPVox.UI.frame:IsShown() then
             RPVox.UI:Refresh()
         end
+
+    elseif cmd == "nettest" then
+        -- Answers one question: does an addon message actually leave this
+        -- client and reach another one, and over which distribution.
+        local reg = (C_ChatInfo and C_ChatInfo.RegisterAddonMessagePrefix)
+                 or RegisterAddonMessagePrefix
+        local okReg = reg and select(1, pcall(reg, RPVox.AddonPrefix))
+        print("|cff00ff00RPVox nettest|r")
+        print("  prefix '" .. tostring(RPVox.AddonPrefix) .. "' registered: "
+            .. tostring(okReg and true or false))
+        local me = UnitName("player") or "?"
+        for _, dist in ipairs({ "SAY", "YELL", "PARTY", "RAID", "GUILD" }) do
+            local ok = RPVox:SendAddonRaw("T|" .. dist .. "|" .. me, dist)
+            print(("  %-6s -> %s"):format(dist, ok and "accepted by client"
+                                                    or "|cffff0000refused|r"))
+        end
+        print("  Stand next to the other player and have them run it too.")
+        print("  Whatever arrives will print here as 'got a ping'.")
 
     elseif cmd == "output" then
         local want = (rest or ""):lower()

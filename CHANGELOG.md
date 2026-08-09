@@ -1,5 +1,16 @@
 # Changelog
 
+## 4.2.1 — 2026-08-07
+
+- **Received lines now carry an `[RP]` tag** so they are never mistaken for
+  something a player actually typed in `/say`.
+- **All emote lines removed** — 1,144 of them across every pack. Faking emote
+  formatting over a message channel read badly; emotes need their own
+  mechanism, which is not built yet. A `/em` line you write yourself in the
+  line editor still works.
+- Added `/rpvox nettest` for diagnosing whether lines are reaching other
+  players.
+
 ## 4.2 — 2026-08-07
 
 - **Lines no longer go into public chat.** RPVox now sends each line to the
