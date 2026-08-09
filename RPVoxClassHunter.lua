@@ -77,7 +77,7 @@ RPVox_CLASSES.HUNTER = {
             "That was the polite one, %t.",
             "%t. Quel'Thalas sends its regards.",
             "/em flicks an arrow alight with a bored gesture",
-            "%t. Do you feel that? That is breeding.",
+            "%t. Do you feel that? That is bleeding.",
             "%t. Even my warning shots are better dressed than you.",
             "A touch of colour, %t. You were so drab.",
             "%t. I hardly aimed. Imagine if I had.",
