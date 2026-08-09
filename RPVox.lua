@@ -46,7 +46,7 @@ local DEDUPE_WINDOW = 0.6
 -- for an action they actually took.
 local ROLL_THROTTLE = 1.5
 
-local SEED_VERSION   = 14 -- bump to offer a fresh set of stock lines
+local SEED_VERSION   = 15 -- bump to offer a fresh set of stock lines
 local CHANCE_VERSION = 2   -- bump to re-apply stock chances over saved ones
 local LINE_VERSION   = 1   -- bump to rewrite saved lines in place
 
