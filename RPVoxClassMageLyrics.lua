@@ -8,6 +8,7 @@ RPVox_CLASSES = RPVox_CLASSES or {}
 
 RPVox_CLASSES.MAGE_LYRICS = {
     name = "Mage-Lyrics",
+    class = "MAGE",
     spells = {
         { spell = "Frostbolt",                 icon = 135846,                                                  chance = 10 },
         { spell = "Ice Lance",                 icon = "Interface\\Icons\\Spell_Frost_FrostBlast",              chance = 10 },

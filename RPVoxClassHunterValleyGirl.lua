@@ -8,6 +8,7 @@ RPVox_CLASSES = RPVox_CLASSES or {}
 
 RPVox_CLASSES.HUNTER_VALLEYGIRL = {
     name = "Hunter-ValleyGirl",
+    class = "HUNTER",
     spells = {
         { spell = "Auto Shot",                 icon = "Interface\\Icons\\INV_Weapon_Bow_07",                   chance = 10 },
         { spell = "Hunter's Mark",             icon = "Interface\\Icons\\Ability_Hunter_SniperShot",           chance = 10 },

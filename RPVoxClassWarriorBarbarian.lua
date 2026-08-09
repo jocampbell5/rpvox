@@ -8,6 +8,7 @@ RPVox_CLASSES = RPVox_CLASSES or {}
 
 RPVox_CLASSES.WARRIOR_BARBARIAN = {
     name = "Warrior-Barbarian",
+    class = "WARRIOR",
     spells = {
         { spell = "Charge",                    icon = "Interface\\Icons\\Ability_Warrior_Charge",              chance = 10 },
         { spell = "Intercept",                 icon = "Interface\\Icons\\Ability_Rogue_Sprint",                chance = 10 },

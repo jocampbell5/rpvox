@@ -1,5 +1,5 @@
 -- RPVox -- configuration UI
--- /rpcry opens this window.
+-- /rpvox opens this window.
 
 local ROW_HEIGHT   = 22
 local VISIBLE_ROWS = 13
@@ -336,7 +336,7 @@ local function CreateUI()
         "Only players standing near you who also run RPVox. The range is the",
         "same as /say. Nothing is ever sent to public chat, so you cannot spam",
         "strangers with it -- but they cannot read your character either.",
-        "Lines arrive tagged |cff3fd0ff[RP]|r and coloured, so nobody confuses",
+        "Lines arrive tagged |cffedd994[RP]|r and coloured, so nobody confuses",
         "them with something you typed yourself.",
         "",
         "|cff3fd0ffHOW OFTEN|r",

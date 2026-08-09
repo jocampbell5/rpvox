@@ -8,6 +8,7 @@ RPVox_CLASSES = RPVox_CLASSES or {}
 
 RPVox_CLASSES.PRIEST_LYRICS = {
     name = "Priest (Lyrics)",
+    class = "PRIEST",
     spells = {
         { spell = "Lesser Heal",               icon = "Interface\\Icons\\Spell_Holy_LesserHeal",               chance = 10 },
         { spell = "Heal",                      icon = "Interface\\Icons\\Spell_Holy_Heal",                     chance = 10 },

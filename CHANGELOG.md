@@ -2,12 +2,15 @@
 
 ## 4.5 — 2026-08-09
 
-- **Four new voices, as alternative class packs.** Pick them from the class
+- **Five new voices, as alternative class packs.** Pick them from the class
   list in the settings window, the same place you pick Mage or Priest:
   - **Mage-Lyrics** and **Priest-Lyrics** — every line bends a well-known
     rock, hip hop or R&B hook into the spell being cast. Frostbolt opens on
     "Ice, ice, %t", Greater Heal on "And I will always love you, %t, but you
     have to stop standing in things."
+  - **Priest-Rhyming** — a priest who speaks only in verse, and never once
+    breaks. Holy spells get measured hymnal couplets, Shadow spells get
+    manic doggerel, so he sounds like a different man the moment he specs.
   - **Hunter-ValleyGirl** — Feign Death is "I'm literally dead. Like.
     Literally dead." Revive Pet is a genuine meltdown.
   - **Warrior-Barbarian** — a barbarian who mostly wants to hit things,
@@ -18,6 +21,23 @@
   a dropdown away and switching back costs nothing.
 - Each new pack covers its class's full spellbook — 54 to 75 abilities — plus
   every reaction and idle trigger, at around a dozen lines each.
+- **Fixed: an alternate pack claimed its spells would never fire.** A profile
+  built on one of the new packs warned at login that it was on the wrong
+  class, and said its spells were dead. Both were wrong — the check compared
+  the pack's key against your class, and `PRIEST_RHYMING` is not the string
+  `PRIEST`. Lines fired perfectly well throughout; the warning was the only
+  broken part. The same comparison also stopped a new pack ever being
+  auto-selected for the right character. A pack now states which class it
+  serves, and both checks ask it.
+- **RP lines are parchment, not cyan.** Cyan was distinct but cold and the eye
+  slid past it. Cream turned out no better: on a dark chat background it is
+  brightness, not hue, that separates one colour from another, so a warm
+  near-white just read as `/say`. The new colour drops brightness as well as
+  blue, and stays clear of yellow.
+- **The addon stopped advertising a command it is not called.** Ten places —
+  the whole `/rpvox help` listing among them — told you to type `/rpcry`.
+  That still works and always will, but it is the old name, and nothing
+  should be teaching it to new players.
 
 ## 4.4.1 - 2026-08-09
 

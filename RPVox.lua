@@ -182,6 +182,16 @@ local function ClassPack(profile)
     return key and RPVox_CLASSES and RPVox_CLASSES[key] or nil
 end
 
+-- Which of the game's classes a pack is written for. Usually that is the key
+-- itself, but a pack can serve a class under a different key -- PRIEST_RHYMING
+-- is still for priests -- and says so with its own `class` field. Only the
+-- "is this profile on the right character" checks use this; mood packs still
+-- scope on profile.class, so an alternate pack stays clear of the stock moods.
+local function PackClass(key)
+    local pack = key and RPVox_CLASSES and RPVox_CLASSES[key]
+    return (pack and pack.class) or key
+end
+
 -- Stock lines for a trigger = the class's own set (or the generic one), plus
 -- every mood pack that applies, each line tagged with its mood as it is added.
 -- Mood packs therefore stay plain text on disk and cost nothing to maintain.
@@ -658,12 +668,16 @@ end
 -- tell at a glance.
 -- The whole line is coloured, not just the tag. White text reading
 -- "Name says: ..." is indistinguishable from real /say at a glance.
--- Cyan, because nothing else in the default chat uses it: say is white,
--- yell red, whisper pink, party lavender, raid orange, guild green,
--- emote orange, channels yellow. Purple was too near whisper.
-local RP_TAG   = "|cff3fd0ff[RP]|r "
-local RP_R, RP_G, RP_B = 0.25, 0.82, 1.00     -- cyan
-local EM_R, EM_G, EM_B = 0.20, 0.66, 0.82     -- the same hue, dimmer
+-- Parchment, because it reads as speech rather than as a system notice. Cyan
+-- was distinct but cold and the eye skipped it. A near-white cream failed for
+-- the opposite reason: on a dark chat background luminance, not hue, is what
+-- separates colours, so anything that bright reads as /say however warm its
+-- tint. Hence brightness pulled down as well as blue. Still clear of the rest
+-- of default chat: yell red, whisper pink, party lavender, raid orange,
+-- guild green, emote orange, channels and system yellow.
+local RP_TAG   = "|cffedd994[RP]|r "
+local RP_R, RP_G, RP_B = 0.93, 0.85, 0.58     -- parchment
+local EM_R, EM_G, EM_B = 0.76, 0.69, 0.46     -- the same hue, dimmer
 
 local rx = CreateFrame("Frame")
 rx:RegisterEvent("CHAT_MSG_ADDON")
@@ -1214,7 +1228,7 @@ frame:SetScript("OnEvent", function(self, event, ...)
         local wanted = db.characters[CharKey()]
         if not wanted or not db.profiles[wanted] then
             for _, name in ipairs(RPVox:ProfileNames()) do
-                if db.profiles[name].class == myClass then wanted = name break end
+                if PackClass(db.profiles[name].class) == myClass then wanted = name break end
             end
         end
         if not wanted or not db.profiles[wanted] then
@@ -1228,9 +1242,9 @@ frame:SetScript("OnEvent", function(self, event, ...)
 
         -- Say which profile is in use, and complain if it does not match.
         local pclass = P and P.class
-        if pclass and myClass and pclass ~= myClass then
+        if pclass and myClass and PackClass(pclass) ~= myClass then
             print(("|cffff8800RPVox:|r using profile '%s' (%s) on a %s. "
-                .. "Its spells will never fire -- pick another in /rpcry.")
+                .. "Its spells will never fire -- pick another in /rpvox.")
                 :format(tostring(db.activeProfile), RPVox:ClassName(pclass),
                         RPVox:ClassName(myClass)))
         else
@@ -1613,15 +1627,15 @@ SlashCmdList["RPVox"] = function(input)
 
     elseif cmd == "help" then
         print("|cff00ff00RPVox|r")
-        print("  /rpcry                 open the settings window")
-        print("  /rpcry on | off        kill switch for this profile")
-        print("  /rpcry profile         list profiles")
-        print("  /rpcry profile <name>  use that profile on this character")
-        print("  /rpcry mood            show moods in this profile")
-        print("  /rpcry mood <name>     only say lines tagged [name] (or 'any')")
-        print("  /rpcry status          what is armed right now")
-        print("  /rpcry debug           log why lines do or do not fire")
-        print("  /rpcry testfire        send one line immediately")
+        print("  /rpvox                 open the settings window")
+        print("  /rpvox on | off        kill switch for this profile")
+        print("  /rpvox profile         list profiles")
+        print("  /rpvox profile <name>  use that profile on this character")
+        print("  /rpvox mood            show moods in this profile")
+        print("  /rpvox mood <name>     only say lines tagged [name] (or 'any')")
+        print("  /rpvox status          what is armed right now")
+        print("  /rpvox debug           log why lines do or do not fire")
+        print("  /rpvox testfire        send one line immediately")
 
     else
         RPVox:ToggleUI()

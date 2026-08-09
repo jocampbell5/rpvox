@@ -29,5 +29,6 @@ RPVoxClassMageLyrics.lua
 RPVoxClassPriestLyrics.lua
 RPVoxClassHunterValleyGirl.lua
 RPVoxClassWarriorBarbarian.lua
+RPVoxClassPriestRhyming.lua
 RPVox.lua
 RPVoxUI.lua
