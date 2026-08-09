@@ -141,6 +141,19 @@ RPVox_CLASSES.MAGE = {
     },
     lines = {
         -- Abilities -----------------------------------------------------
+        ["MELEE"] = {
+            "%t. I am hitting you with a stick. Note how far this has fallen.",
+            "/em swings a staff with the technique of a man who does not swing staves",
+            "%t. This is a failure of planning, not of power.",
+            "%t. Every second of this is an argument for more mana.",
+            "%t. Crude. Extremely crude.",
+            "/em jabs with the end of a staff and looks appalled",
+            "%t. I have three degrees and I am doing this.",
+            "%t. Do not tell anyone about this part.",
+            "%t. Physical contact. Revolting.",
+            "/em resorts to the blunt end and resents it deeply",
+        },
+
         ["SPELL:Frostbolt"] = {
             "%t. Cold is simply the absence of argument.",
             "%t. Slow down. I insist.",
@@ -582,6 +595,19 @@ RPVox_CLASSES.WARRIOR = {
     },
     lines = {
         -- Abilities -----------------------------------------------------
+        ["MELEE"] = {
+            "%t. This is the job. Swing, breathe, swing.",
+            "/em works through the swing the way he was drilled to",
+            "%t. Nothing clever. Never has been.",
+            "%t. Keep your guard up. Mine is up.",
+            "%t. That's one. Come on.",
+            "/em takes a hit on the shield and answers it",
+            "%t. I do this all day. Literally all day.",
+            "%t. Stay on your feet. Makes it fairer.",
+            "%t. Steel and shouting. That's the whole trade.",
+            "/em plants his feet and goes to work",
+        },
+
         ["SPELL:Charge"] = {
             "%t. OUT OF MY WAY!",
             "%t. Closing!",
