@@ -43,6 +43,18 @@ RPVox_CLASSES.HUNTER = {
 
         -- Abilities -----------------------------------------------------
 
+        ["MELEE"] = {
+            "%t. You have made me use my hands. Unforgivable.",
+            "/em strikes with a blade she plainly resents having drawn",
+            "%t. This is not what I am for.",
+            "%t. Do you know how far I usually stand from people?",
+            "%t. Close work. How vulgar.",
+            "/em puts her boot into someone and steps back from the mess",
+            "%t. I shall want to wash after this.",
+            "%t. Stop crowding me.",
+            "%t. I am better at range and we both know it.",
+            "/em fights at arm's length and hates every moment",
+        },
         ["SPELL:Hunter's Mark"] = {
             "%t. You are on the list now.",
             "Marked. Do try to be interesting, %t.",

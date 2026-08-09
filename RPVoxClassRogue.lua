@@ -41,6 +41,18 @@ RPVox_CLASSES.ROGUE = {
 
         -- Abilities -----------------------------------------------------
 
+        ["MELEE"] = {
+            "%t. Plain work. It still counts.",
+            "/em works close in, economically, without hurrying",
+            "%t. Not every job needs a plan.",
+            "%t. This is the unskilled part.",
+            "%t. Hold still. You are making it take longer.",
+            "/em keeps his weight on the back foot out of habit",
+            "%t. Nothing clever. Nothing wasted.",
+            "%t. I would rather have done this from behind.",
+            "%t. Standard rate for standard work.",
+            "/em checks the angle, adjusts, and goes again",
+        },
         ["SPELL:Sinister Strike"] = {
             "%t. Standard work. Standard rate.",
             "/em works with the economy of a man paid by the job, not the hour",

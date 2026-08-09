@@ -44,6 +44,18 @@ RPVox_CLASSES.WARLOCK = {
 
         -- Abilities -----------------------------------------------------
 
+        ["MELEE"] = {
+            "%t. Must I do this personally?",
+            "/em swings a staff with the technique of a man who reads for a living",
+            "%t. This is beneath both of us.",
+            "%t. I have staff for this. Literally.",
+            "%t. Unbecoming. Effective, but unbecoming.",
+            "/em hits somebody with a book's worth of momentum",
+            "%t. Consider this an administrative error.",
+            "%t. Somebody will hear about this.",
+            "%t. I am a professional, not a labourer.",
+            "/em resorts to violence and looks embarrassed by it",
+        },
         ["SPELL:Shadow Bolt"] = {
             "%t. Standard remedy for non-payment.",
             "/em signs something in the air with two fingers",

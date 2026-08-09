@@ -267,11 +267,32 @@ local function CreateUI()
     end)
     f.master = master
 
+    -- Where the lines go ------------------------------------------------------
+    -- Ticked (the default): everything goes to the Vox channel, so a talkative
+    -- character never fills public chat. Unticked: /say and /em as before.
+    local voxBox = CreateFrame("CheckButton", "$parentVox", f, "UICheckButtonTemplate")
+    voxBox:SetPoint("TOPLEFT", master, "BOTTOMLEFT", 0, -2)
+    voxBox:SetSize(24, 24)
+    voxBox.text = voxBox:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+    voxBox.text:SetPoint("LEFT", voxBox, "RIGHT", 2, 0)
+    voxBox.text:SetText("Speak in the " .. (RPVox.VOX_CHANNEL or "Vox")
+        .. " channel, not /say")
+    voxBox:SetScript("OnClick", function(self)
+        local p = RPVox:Profile()
+        if self:GetChecked() then
+            p.output = "VOX"
+            RPVox:JoinVox()
+        else
+            p.output = "PUBLIC"
+        end
+    end)
+    f.voxBox = voxBox
+
     -- Chattiness ------------------------------------------------------------
     -- One timer for the whole profile: after any line, everything stays quiet
     -- until it expires. Dragging left talks more, right talks less.
     local ggap = CreateFrame("Slider", "RPVoxGlobalSlider", f, "OptionsSliderTemplate")
-    ggap:SetPoint("TOPLEFT", master, "BOTTOMLEFT", 4, -16)
+    ggap:SetPoint("TOPLEFT", voxBox, "BOTTOMLEFT", 4, -16)
     ggap:SetWidth(126)
     ggap:SetMinMaxValues(0, 600)
     ggap:SetValueStep(5)
@@ -676,6 +697,7 @@ function UI:Refresh()
     if not profile then return end
 
     self.frame.master:SetChecked(profile.enabled)
+    self.frame.voxBox:SetChecked((profile.output or "VOX") == "VOX")
 
     UIDropDownMenu_SetText(self.frame.profileDD, RPVox:ProfileName() or "?")
     UIDropDownMenu_SetText(self.frame.moodDD, RPVox:GetMood() or "Any")

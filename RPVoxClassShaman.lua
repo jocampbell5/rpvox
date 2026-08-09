@@ -43,6 +43,18 @@ RPVox_CLASSES.SHAMAN = {
 
         -- Abilities -----------------------------------------------------
 
+        ["MELEE"] = {
+            "%t. Old woman. Heavy hands. Do the arithmetic.",
+            "/em swings something blunt with sixty years of practice behind it",
+            "%t. The elements are busy. This one is mine.",
+            "%t. I did not always have totems.",
+            "%t. Down you go.",
+            "/em hits hard and steps back to let the ground do the rest",
+            "%t. My arms still work. Note that.",
+            "%t. Sometimes you just hit the thing.",
+            "%t. Come here, then.",
+            "/em plants her feet and does not give any ground at all",
+        },
         ["SPELL:Lightning Bolt"] = {
             "%t. The sky agreed. It does not always.",
             "/em asks the air for something and gets it on the third try",

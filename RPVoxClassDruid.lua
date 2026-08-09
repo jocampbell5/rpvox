@@ -41,6 +41,18 @@ RPVox_CLASSES.DRUID = {
 
         -- Abilities -----------------------------------------------------
 
+        ["MELEE"] = {
+            "%t. Teeth, then. If that is what you want.",
+            "/em stops being careful with her hands",
+            "%t. This shape has fewer manners.",
+            "%t. Everything green defends itself. So do I.",
+            "%t. I did not want to be close to you.",
+            "/em strikes the way weather strikes, without malice",
+            "%t. The wood is old and so am I.",
+            "%t. Enough. Down.",
+            "%t. Nothing personal. Only necessary.",
+            "/em plants her feet and simply will not be moved",
+        },
         ["SPELL:Wrath"] = {
             "%t. The wood is angry with you.",
             "/em lets something green and old travel down her arm",

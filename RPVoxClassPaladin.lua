@@ -42,6 +42,18 @@ RPVox_CLASSES.PALADIN = {
 
         -- Abilities -----------------------------------------------------
 
+        ["MELEE"] = {
+            "%t. Plain steel. It does not need blessing.",
+            "/em swings with the flat economy of drilled repetition",
+            "%t. No Light in that one. Just the arm.",
+            "%t. My people learned this before they learned the rest.",
+            "%t. Down.",
+            "/em brings a hammer down without a word over it",
+            "%t. This part I do not have to borrow.",
+            "%t. Steel is honest. That is why I keep it.",
+            "%t. Again. And again, if I must.",
+            "/em sets his shield and pushes forward a pace",
+        },
         ["SPELL:Crusader Strike"] = {
             "%t. Plain work. I am capable of plain work.",
             "/em swings without a prayer, without a word, without hesitation",

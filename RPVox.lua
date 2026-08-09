@@ -46,7 +46,7 @@ local DEDUPE_WINDOW = 0.6
 -- for an action they actually took.
 local ROLL_THROTTLE = 1.5
 
-local SEED_VERSION   = 15 -- bump to offer a fresh set of stock lines
+local SEED_VERSION   = 16 -- bump to offer a fresh set of stock lines
 local CHANCE_VERSION = 2   -- bump to re-apply stock chances over saved ones
 local LINE_VERSION   = 1   -- bump to rewrite saved lines in place
 
@@ -554,6 +554,40 @@ if UIErrorsFrame and UIErrorsFrame.AddMessage then
     end
 end
 
+-- Output mode --------------------------------------------------------------
+-- With output = "VOX" every line goes to a custom chat channel instead of
+-- /say and /em, so a character can be as talkative as you like without
+-- filling public chat. Emotes are sent as plain text: the channel already
+-- prefixes your name, so "straightens his robes" reads correctly.
+RPVox.VOX_CHANNEL = "Vox"
+
+local function VoxIndex()
+    local id = GetChannelName(RPVox.VOX_CHANNEL)
+    if type(id) == "number" and id > 0 then return id end
+    return nil
+end
+
+-- Safe to call repeatedly; joining a channel you are already in does nothing.
+function RPVox:JoinVox()
+    if VoxIndex() then return true end
+    pcall(JoinChannelByName, RPVox.VOX_CHANNEL)
+    return VoxIndex() ~= nil
+end
+
+-- Every line leaves through here. Never falls back to /say when the channel
+-- is missing: a silent line is better than unexpected public chat.
+local function RawSend(msg, channel)
+    if channel ~= "VOX" then
+        return pcall(SendChatMessage, msg, channel)
+    end
+    local id = VoxIndex() or (RPVox:JoinVox() and VoxIndex())
+    if not id then
+        Debug("vox channel unavailable; line dropped:", msg)
+        return false
+    end
+    return pcall(SendChatMessage, msg, "CHANNEL", nil, id)
+end
+
 function RPVox:Queue(msg, channel, ttl)
     pending = { msg = msg, channel = channel, at = GetTime(), ttl = ttl or PENDING_TTL }
 
@@ -562,7 +596,7 @@ function RPVox:Queue(msg, channel, ttl)
     -- difference between speaking as you cast and speaking a keystroke later.
     local before = blockedAt
     attemptedAt = GetTime()
-    pcall(SendChatMessage, msg, channel)
+    RawSend(msg, channel)
 
     -- Next frame, decide what happened. A block sets blockedAt; no block
     -- means it went out and the queued copy must be discarded so it cannot
@@ -589,7 +623,7 @@ function RPVox:Flush()
 
     local msg, channel = pending.msg, pending.channel
     pending = nil
-    local ok, err = pcall(SendChatMessage, msg, channel)
+    local ok, err = RawSend(msg, channel)
     if ok then
         Debug("sent:", msg)
     else
@@ -744,6 +778,9 @@ local function Fire(trigger)
     lastAnyCry = now
     local _, body = SplitMood(raw)
     local msg, channel = SplitChannel(body)
+    -- The line still decides say-vs-emote for its own wording; the profile
+    -- decides where it actually goes.
+    if (P.output or "VOX") == "VOX" then channel = "VOX" end
     msg = Expand(msg)
     Debug("FIRE:", trigger.name, "->", channel, "->", msg)
 
@@ -857,6 +894,7 @@ local function NewProfileTable()
     return {
         enabled       = true,
         globalCooldown = DEFAULT_GLOBALCD,
+        output        = "VOX",
         triggers      = {},
     }
 end
@@ -987,6 +1025,7 @@ local function InitDB()
         if repairing then RepairLines(p) end
         if p.globalCooldown == nil then p.globalCooldown = DEFAULT_GLOBALCD end
         if p.enabled        == nil then p.enabled        = true             end
+        if p.output         == nil then p.output         = "VOX"            end
     end
 end
 
@@ -1033,6 +1072,10 @@ frame:SetScript("OnEvent", function(self, event, ...)
             wanted = RPVox:ProfileNames()[1]
         end
         RPVox:UseProfile(wanted)
+
+        -- Channels are not available the instant PLAYER_LOGIN fires, so give
+        -- the client a moment before joining. RawSend also joins lazily.
+        C_Timer.After(5, function() RPVox:JoinVox() end)
 
         -- Say which profile is in use, and complain if it does not match.
         local pclass = P and P.class
@@ -1284,6 +1327,25 @@ SlashCmdList["RPVox"] = function(input)
             RPVox.UI:Refresh()
         end
 
+    elseif cmd == "output" then
+        local want = (rest or ""):lower()
+        if want == "vox" or want == "channel" then
+            P.output = "VOX"
+            RPVox:JoinVox()
+            print("|cff00ff00RPVox:|r speaking in the "
+                .. RPVox.VOX_CHANNEL .. " channel."
+                .. (VoxIndex() and "" or " |cffff0000Could not join it -- try /join "
+                    .. RPVox.VOX_CHANNEL .. "|r"))
+        elseif want == "say" or want == "public" then
+            P.output = "PUBLIC"
+            print("|cff00ff00RPVox:|r speaking in /say and /em.")
+        else
+            print("|cff00ff00RPVox:|r output is "
+                .. ((P.output or "VOX") == "VOX"
+                    and ("the " .. RPVox.VOX_CHANNEL .. " channel") or "/say and /em")
+                .. ".  Use: /rpvox output vox | say")
+        end
+
     elseif cmd == "status" then
         print("|cff00ff00RPVox status|r")
         print("  profile:    " .. tostring(RPVoxDB.activeProfile)
@@ -1296,6 +1358,12 @@ SlashCmdList["RPVox"] = function(input)
         print("  lines:      " .. total .. " across " .. #P.triggers .. " triggers")
         print("  enabled:    " .. tostring(P and P.enabled))
         print("  global gap: " .. tostring(P and P.globalCooldown) .. "s")
+        if (P and P.output or "VOX") == "VOX" then
+            print("  output:     the " .. RPVox.VOX_CHANNEL .. " channel"
+                .. (VoxIndex() and " (joined)" or " |cffff0000(NOT joined)|r"))
+        else
+            print("  output:     /say and /em")
+        end
         local n = 0
         for _, t in ipairs(P.triggers) do
             if t.enabled ~= false and #(t.words or {}) > 0 then
