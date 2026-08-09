@@ -1,5 +1,24 @@
 # Changelog
 
+## 4.5 — 2026-08-09
+
+- **Four new voices, as alternative class packs.** Pick them from the class
+  list in the settings window, the same place you pick Mage or Priest:
+  - **Mage-Lyrics** and **Priest-Lyrics** — every line bends a well-known
+    rock, hip hop or R&B hook into the spell being cast. Frostbolt opens on
+    "Ice, ice, %t", Greater Heal on "And I will always love you, %t, but you
+    have to stop standing in things."
+  - **Hunter-ValleyGirl** — Feign Death is "I'm literally dead. Like.
+    Literally dead." Revive Pet is a genuine meltdown.
+  - **Warrior-Barbarian** — a barbarian who mostly wants to hit things,
+    written the way Arnold would say it. "It's naht a tumah. It is chust
+    anger."
+- These sit **alongside** the existing voices rather than replacing them. The
+  stock Mage, Priest, Hunter and Warrior packs are untouched, so switching is
+  a dropdown away and switching back costs nothing.
+- Each new pack covers its class's full spellbook — 54 to 75 abilities — plus
+  every reaction and idle trigger, at around a dozen lines each.
+
 ## 4.4.1 - 2026-08-09
 
 - **Fixed: every popup button did nothing.** New profile, Copy, Rename, Add
