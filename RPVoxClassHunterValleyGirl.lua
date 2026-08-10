@@ -440,6 +440,8 @@ RPVox_CLASSES.HUNTER_VALLEYGIRL = {
             "Hunter's Mark, %t. You're kind of famous now.",
             "I've circled you, %t. In my head.",
             "Don't take it personally, %t. Take it a little personally.",
+            "Marked. Sorry, you were the one.",
+            "You're on my radar now. Literally.",
         },
 
         ["SPELL:Arcane Shot"] = {
@@ -455,6 +457,8 @@ RPVox_CLASSES.HUNTER_VALLEYGIRL = {
             "Little zap, %t. Don't be dramatic.",
             "I like this one, %t. It matches my nails.",
             "Boop, %t.",
+            "That's the sparkly one. You're welcome.",
+            "I like this one. It matches my nails.",
         },
 
         ["SPELL:Steady Shot"] = {
@@ -470,6 +474,8 @@ RPVox_CLASSES.HUNTER_VALLEYGIRL = {
             "And again, %t. And again.",
             "It's giving routine, %t.",
             "Muscle memory, %t. Very impressive of me.",
+            "Steady Shot. The boring reliable one.",
+            "This is the one I do like nine hundred times.",
         },
 
         ["SPELL:Aimed Shot"] = {
@@ -560,6 +566,8 @@ RPVox_CLASSES.HUNTER_VALLEYGIRL = {
             "Nobody wants to hear that spell, %t.",
             "Read the room, %t.",
             "Bye, %t. Talk later. Or don't.",
+            "Silencing Shot. It's giving quiet.",
+            "You were saying? No you weren't.",
         },
 
         ["SPELL:Scatter Shot"] = {
@@ -575,6 +583,8 @@ RPVox_CLASSES.HUNTER_VALLEYGIRL = {
             "I need a second, %t. So do you, apparently.",
             "Where are you going, %t? Exactly.",
             "Byeee for like four seconds, %t.",
+            "Go be confused somewhere else.",
+            "Where are you going? Exactly.",
         },
 
         ["SPELL:Distracting Shot"] = {
@@ -590,6 +600,8 @@ RPVox_CLASSES.HUNTER_VALLEYGIRL = {
             "That got your attention, %t.",
             "Hi. Hello. Yes, me, %t.",
             "Stop bothering them and bother me, %t.",
+            "Distracting Shot. Rude of me, honestly.",
+            "Come here. No, seriously.",
         },
 
         ["SPELL:Concussive Shot"] = {
@@ -605,6 +617,8 @@ RPVox_CLASSES.HUNTER_VALLEYGIRL = {
             "You're walking now, %t. Slowly.",
             "Leaving? Absolutely not, %t.",
             "Stay, %t. I mean it.",
+            "Where are you going? We were literally talking.",
+            "Concussive Shot. You're not going anywhere.",
         },
 
         ["SPELL:Serpent Sting"] = {
@@ -620,6 +634,8 @@ RPVox_CLASSES.HUNTER_VALLEYGIRL = {
             "Set it and forget it, %t.",
             "I'll check back in ten seconds, %t.",
             "You look unwell, %t. Just saying.",
+            "That is gonna be so bad for your skin.",
+            "You're gonna feel that for a while.",
         },
 
         ["SPELL:Scorpid Sting"] = {
@@ -635,6 +651,8 @@ RPVox_CLASSES.HUNTER_VALLEYGIRL = {
             "I've made you worse, %t. On purpose.",
             "Scorpid venom, %t. Very unpleasant.",
             "Missing feels bad, %t. I'd know. I don't miss.",
+            "Okay now you can't hit anything.",
+            "Your accuracy is a mess now. Sorry!",
         },
 
         ["SPELL:Viper Sting"] = {
@@ -650,6 +668,8 @@ RPVox_CLASSES.HUNTER_VALLEYGIRL = {
             "Cast something, %t. Go on. Try.",
             "I'm taking it, %t. All of it.",
             "Broke, %t. Magically broke.",
+            "Okay so you can't cast now. Awkward.",
+            "I'm taking it. All of it.",
         },
 
         ["SPELL:Wyvern Sting"] = {
@@ -665,6 +685,8 @@ RPVox_CLASSES.HUNTER_VALLEYGIRL = {
             "Out cold, %t.",
             "I'll deal with you later, %t.",
             "Goodnight, %t.",
+            "Okay you're having a lie down.",
+            "I'll deal with you later.",
         },
 
         ["SPELL:Raptor Strike"] = {
@@ -695,6 +717,8 @@ RPVox_CLASSES.HUNTER_VALLEYGIRL = {
             "Ha! Got you, %t.",
             "That's for the dodge, %t.",
             "Bite back, %t. That's the whole spell.",
+            "It's giving instant regret.",
+            "You swung first. Remember that.",
         },
 
         ["SPELL:Wing Clip"] = {
@@ -710,6 +734,8 @@ RPVox_CLASSES.HUNTER_VALLEYGIRL = {
             "Hobbling is not a good look, %t.",
             "Stay right there, %t.",
             "I clipped you, %t. Like a coupon.",
+            "Nope. Nope nope nope. We are not doing this.",
+            "Okay now we're both slow. Kidding, just you.",
         },
 
         ["SPELL:Counterattack"] = {
@@ -725,6 +751,8 @@ RPVox_CLASSES.HUNTER_VALLEYGIRL = {
             "Nice try, %t. Genuinely, nice try.",
             "That's a counter, %t. Look it up.",
             "Now you're stuck AND hurt, %t.",
+            "Blocked. Now sit still.",
+            "That's a counter. Look it up.",
         },
 
         ["SPELL:Disengage"] = {
@@ -740,6 +768,8 @@ RPVox_CLASSES.HUNTER_VALLEYGIRL = {
             "Much better, %t. From here.",
             "You were breathing on me, %t.",
             "That's my comfort zone, %t. Way over here.",
+            "Nope. Not doing melee today.",
+            "Bye! Not permanently. Just spatially.",
         },
 
         ["SPELL:Deterrence"] = {
@@ -755,6 +785,8 @@ RPVox_CLASSES.HUNTER_VALLEYGIRL = {
             "This is embarrassing for you, %t.",
             "Keep going, %t. I'll wait.",
             "Nope, %t. Nope. Nope.",
+            "Miss. Miss. Miss again.",
+            "I'm just gonna stand here. Deal with it.",
         },
 
         ["SPELL:Readiness"] = {
@@ -770,6 +802,8 @@ RPVox_CLASSES.HUNTER_VALLEYGIRL = {
             "That's not fair, is it, %t.",
             "Reset, %t. Watch this.",
             "Everything I just did, %t. Again.",
+            "It's giving second chances.",
+            "Reset. Watch this.",
         },
 
         ["SPELL:Freezing Trap"] = {
@@ -785,6 +819,8 @@ RPVox_CLASSES.HUNTER_VALLEYGIRL = {
             "You're on ice, %t. Literally.",
             "Don't move. Actually you can't, %t.",
             "Perfect placement, %t. I'm so good at this.",
+            "Okay stay right there. Perfect.",
+            "You walked right into it. Amazing.",
         },
 
         ["SPELL:Explosive Trap"] = {
@@ -800,6 +836,8 @@ RPVox_CLASSES.HUNTER_VALLEYGIRL = {
             "That's gonna burn for a bit, %t.",
             "Everyone's getting one, %t.",
             "Hot, %t. Very hot.",
+            "Oops. Did you step on that?",
+            "Don't stand there. Too late.",
         },
 
         ["SPELL:Immolation Trap"] = {
@@ -815,6 +853,9 @@ RPVox_CLASSES.HUNTER_VALLEYGIRL = {
             "Fire is such a vibe, %t.",
             "Smells like %t in here.",
             "Careful. Too late, %t.",
+            "You're on fire. Like, actually.",
+            "You found it! Congrats.",
+            "Smells like you in here.",
         },
 
         ["SPELL:Frost Trap"] = {
@@ -830,6 +871,8 @@ RPVox_CLASSES.HUNTER_VALLEYGIRL = {
             "Skating, %t. Basically skating.",
             "Cold feet, %t. Literally.",
             "You're all walking now, %t.",
+            "Everyone's slow now. Sorry!",
+            "Take your time. You have to.",
         },
 
         ["SPELL:Snake Trap"] = {
@@ -845,6 +888,8 @@ RPVox_CLASSES.HUNTER_VALLEYGIRL = {
             "They bite, %t. A lot.",
             "That's a lot of hissing, %t.",
             "Sorry not sorry, %t.",
+            "Ew. Even I don't like this one.",
+            "It's giving infestation.",
         },
 
         ["SPELL:Flare"] = {
@@ -860,6 +905,8 @@ RPVox_CLASSES.HUNTER_VALLEYGIRL = {
             "Stealth? In this economy, %t?",
             "I literally see everything, %t.",
             "Busted, %t.",
+            "Come out, come out.",
+            "I literally see everything.",
         },
 
         ["SPELL:Feign Death"] = {
@@ -890,6 +937,8 @@ RPVox_CLASSES.HUNTER_VALLEYGIRL = {
             "Someone else's turn, %t.",
             "I didn't do anything, %t. Prove it.",
             "Go on, tank. That's yours, %t.",
+            "Okay so this is your problem now? Byeee.",
+            "I didn't do anything. Prove it.",
         },
 
         ["SPELL:Bestial Wrath"] = {
@@ -1025,6 +1074,8 @@ RPVox_CLASSES.HUNTER_VALLEYGIRL = {
             "Nothing personal, %t. Just curious.",
             "Numbers! I love numbers, %t.",
             "Noted, %t.",
+            "Okay let me just look at your stats.",
+            "Reading you like a book.",
         },
 
         ["SPELL:Eyes of the Beast"] = {
@@ -1055,6 +1106,8 @@ RPVox_CLASSES.HUNTER_VALLEYGIRL = {
             "That's a big animal running very fast, %t.",
             "Byeee, %t.",
             "Not in my house, %t.",
+            "Go be scared over there.",
+            "I didn't even hurt you. Dramatic.",
         },
 
         ["SPELL:Aspect of the Hawk"] = {
@@ -1235,6 +1288,8 @@ RPVox_CLASSES.HUNTER_VALLEYGIRL = {
             "That's the elf thing, %t. It's very good.",
             "Mana, please. And silence, %t.",
             "You're welcome, %t. And also be quiet.",
+            "Okay everyone stop casting.",
+            "Free mana AND you shut up. Iconic.",
         },
     },
 }

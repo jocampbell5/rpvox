@@ -1,4 +1,4 @@
--- RPVox -- Priest (Lyrics) class pack
+-- RPVox -- Priest-Lyrics class pack
 --
 -- Voice: song-lyric puns. Every line bends a well-known rock, hip hop or
 -- R&B hook into the spell being cast. Kept in the addon rather than in saved
@@ -7,7 +7,7 @@
 RPVox_CLASSES = RPVox_CLASSES or {}
 
 RPVox_CLASSES.PRIEST_LYRICS = {
-    name = "Priest (Lyrics)",
+    name = "Priest-Lyrics",
     class = "PRIEST",
     spells = {
         { spell = "Lesser Heal",               icon = "Interface\\Icons\\Spell_Holy_LesserHeal",               chance = 10 },
@@ -87,6 +87,8 @@ RPVox_CLASSES.PRIEST_LYRICS = {
             "Under pressure, %t, and out of range of anything useful.",
             "Should I stay or should I go, %t? I am staying. Regrettably.",
             "Bad to the bone, %t. Bad at this, specifically.",
+            "Can't touch this? I am literally touching this.",
+            "Under pressure, and out of range of anything useful.",
         },
 
         ["REACT:LOWHEALTH"] = {
@@ -105,6 +107,8 @@ RPVox_CLASSES.PRIEST_LYRICS = {
             "Hit me one more time and find out, %t.",
             "Hurts so good. No it does not, %t.",
             "Still standing, %t.",
+            "I get knocked down. Then I heal myself.",
+            "Bridge over troubled water. I am the bridge.",
         },
 
         ["REACT:DEATH"] = {
@@ -152,6 +156,8 @@ RPVox_CLASSES.PRIEST_LYRICS = {
             "Who's next, %t?",
             "The Light works in mysterious ways, %t.",
             "That's the way, uh huh, I like it, %t.",
+            "Killing me softly? No. Loudly.",
+            "That's the way, uh huh, I like it.",
         },
 
         ["REACT:COMBATSTART"] = {
@@ -167,6 +173,8 @@ RPVox_CLASSES.PRIEST_LYRICS = {
             "It's about to go down, %t.",
             "Here we go again, %t.",
             "Onward, %t.",
+            "It's the final countdown.",
+            "You picked the wrong priest.",
         },
 
         ["REACT:COMBATEND"] = {
@@ -193,6 +201,8 @@ RPVox_CLASSES.PRIEST_LYRICS = {
             "You shook me, %t.",
             "Cry me a river, %t. I am casting it again.",
             "Ain't that a shame, %t.",
+            "You interrupted my hymn.",
+            "Cry me a river. I am casting it again.",
         },
 
         ["REACT:LEVELUP"] = {
@@ -428,6 +438,8 @@ RPVox_CLASSES.PRIEST_LYRICS = {
             "Hold on, %t. Hold on to a very small amount of health.",
             "Signed, sealed, delivered, %t. Barely.",
             "Lesser Heal, %t. The clue is in the name.",
+            "Lesser Heal. The name is doing a lot of honest work there.",
+            "Every little thing counts, and this is the littlest thing.",
         },
 
         ["SPELL:Heal"] = {
@@ -443,6 +455,8 @@ RPVox_CLASSES.PRIEST_LYRICS = {
             "Bridge over troubled water, %t. The mid-range version.",
             "I got you, babe, %t.",
             "Heal, %t. Reliable, unglamorous, always there.",
+            "Lean on me, when you're not strong. That is literally the job description.",
+            "Ain't no mountain high enough to keep me from getting a Heal to you.",
         },
 
         ["SPELL:Greater Heal"] = {
@@ -458,6 +472,8 @@ RPVox_CLASSES.PRIEST_LYRICS = {
             "Rescue me, %t? Fine. Just this once. Again.",
             "Stand by me, %t, and I will stand by the mana bill.",
             "This is the big one, %t. Do not waste it.",
+            "And I will always love you, but you have to stop standing in things.",
+            "Ain't no mountain high enough, ain't no health bar low enough.",
         },
 
         ["SPELL:Flash Heal"] = {
@@ -473,6 +489,8 @@ RPVox_CLASSES.PRIEST_LYRICS = {
             "Faster than a speeding anything, %t.",
             "I got you, %t. Barely, but I got you.",
             "No time to think, %t. Only time to cast.",
+            "Hold on, I'm coming. Hold on, this is going to cost me everything.",
+            "Flash Heal. No time to explain, no time to cast anything better.",
         },
 
         ["SPELL:Binding Heal"] = {
@@ -488,6 +506,8 @@ RPVox_CLASSES.PRIEST_LYRICS = {
             "Reunited, %t. Both of us, upright.",
             "I get by with a little help from myself, %t.",
             "Everybody hurts, %t. Including the healer.",
+            "One for you and one for me. We're all in this together.",
+            "Binding Heal. Sharing is caring and I am running low.",
         },
 
         ["SPELL:Renew"] = {
@@ -503,6 +523,8 @@ RPVox_CLASSES.PRIEST_LYRICS = {
             "And the beat goes on, %t.",
             "Give it time, %t. Give it a little time.",
             "Tick, tick, tick, %t. In your favour, for once.",
+            "Time after time, it keeps ticking away on you.",
+            "Ain't no stopping it now. It has got the moment and it is ticking.",
         },
 
         ["SPELL:Prayer of Healing"] = {
@@ -518,6 +540,8 @@ RPVox_CLASSES.PRIEST_LYRICS = {
             "Reach out and touch somebody's health bar, %t.",
             "One more time, %t. All of you.",
             "Get up, everybody, %t. Get up.",
+            "We are family, and the whole family stood in the fire.",
+            "Everybody's talking at me, and everybody is also on fire.",
         },
 
         ["SPELL:Prayer of Mending"] = {
@@ -533,6 +557,8 @@ RPVox_CLASSES.PRIEST_LYRICS = {
             "Pass the parcel, %t. Everybody wins.",
             "It goes around, %t. It comes around.",
             "One cast, five saves, %t. My favourite arithmetic.",
+            "It bounces, like a rubber ball, and it comes back to you.",
+            "Prayer of Mending. One heal, five owners, nobody says thank you.",
         },
 
         ["SPELL:Circle of Healing"] = {
@@ -548,6 +574,8 @@ RPVox_CLASSES.PRIEST_LYRICS = {
             "Stand closer, %t. That is not affection, that is range.",
             "Everybody in, %t. Nobody out.",
             "One button, five people, %t. Worth every drop.",
+            "It's the circle of life, and it moves us all. Mostly it moves my mana.",
+            "We are family. All of you, all at once, one button.",
         },
 
         ["SPELL:Power Word: Shield"] = {
@@ -563,6 +591,8 @@ RPVox_CLASSES.PRIEST_LYRICS = {
             "Solid as a rock, %t.",
             "Try me, %t. Actually, try that.",
             "Nothing gets in, %t. That is the entire pitch.",
+            "This one is bulletproof. Nothing you have is getting through.",
+            "Bubble up, and try not to look so pleased about it.",
         },
 
         ["SPELL:Lightwell"] = {
@@ -578,6 +608,8 @@ RPVox_CLASSES.PRIEST_LYRICS = {
             "It is free healing, %t, and it is right there.",
             "Nobody clicks it, %t. Nobody has ever clicked it.",
             "Hope is a thing with a click box, %t.",
+            "This little light of mine. I'm gonna let it stand there being ignored.",
+            "It is right there. It is free. It is right there.",
         },
 
         ["SPELL:Desperate Prayer"] = {
@@ -593,6 +625,8 @@ RPVox_CLASSES.PRIEST_LYRICS = {
             "Nothing left but faith and this button, %t.",
             "Pray for me, %t. Do not bother, I did it myself.",
             "When you're going through hell, keep going, %t.",
+            "Desperate Prayer. The name is not being dramatic. That is the situation.",
+            "Praying is the whole plan now. There is no second plan.",
         },
 
         ["SPELL:Resurrection"] = {
@@ -608,6 +642,8 @@ RPVox_CLASSES.PRIEST_LYRICS = {
             "Second chance, %t. Use it better than the first.",
             "Alive again, %t. You're welcome.",
             "Get on your feet, %t.",
+            "Reunited and it feels so good. Now go and do it again.",
+            "Return of the mack. Buff yourself before you run in.",
         },
 
         ["SPELL:Pain Suppression"] = {
@@ -623,6 +659,8 @@ RPVox_CLASSES.PRIEST_LYRICS = {
             "Numb, %t. Beautifully numb.",
             "Eight seconds of peace, %t. Spend them well.",
             "I've got you, %t. For now.",
+            "Pain Suppression. I cannot stop it, I can only turn it down.",
+            "Hurt less. That is the entire spell and it is enough.",
         },
 
         ["SPELL:Power Word: Fortitude"] = {
@@ -638,6 +676,8 @@ RPVox_CLASSES.PRIEST_LYRICS = {
             "Every little bit helps, %t. This is a big bit.",
             "You're gonna need this, %t. You always do.",
             "Stamina, %t. The unglamorous buff.",
+            "What doesn't kill you makes you stronger. This helps with the first part.",
+            "Power Word: Fortitude. Bigger, better, considerably beefier.",
         },
 
         ["SPELL:Prayer of Fortitude"] = {
@@ -653,6 +693,8 @@ RPVox_CLASSES.PRIEST_LYRICS = {
             "Stand tall, all of you, %t.",
             "You're welcome, %t. Collectively.",
             "Nobody thank me at once, %t.",
+            "We are family, and the whole family is getting stamina.",
+            "Prayer of Fortitude. One reagent, five people, nobody says thank you.",
         },
 
         ["SPELL:Divine Spirit"] = {
@@ -668,6 +710,8 @@ RPVox_CLASSES.PRIEST_LYRICS = {
             "Take my spirit, %t. Give it back in casts.",
             "Feeling spiritual, %t?",
             "Regeneration, %t. The slow kind. The good kind.",
+            "Gonna have a friend in Jesus? No. You have got a spirit buff.",
+            "I'm a soul man. That is not a boast, it is a specialisation.",
         },
 
         ["SPELL:Prayer of Spirit"] = {
@@ -683,6 +727,8 @@ RPVox_CLASSES.PRIEST_LYRICS = {
             "Spirits up, %t. Mana up.",
             "You're welcome, %t. All of you.",
             "That reagent cost more than your boots, %t.",
+            "Spirit in the sky, and spirit for everybody standing near it.",
+            "Prayer of Spirit. We are family, spiritually and expensively.",
         },
 
         ["SPELL:Shadow Protection"] = {
@@ -698,6 +744,8 @@ RPVox_CLASSES.PRIEST_LYRICS = {
             "Warded, %t. Go and be brave about it.",
             "Nothing from the night, %t.",
             "Turn out the lights, %t. It will not matter.",
+            "Fear of the dark? Not while I am standing here.",
+            "Whatever is coming out of the dark, it arrives smaller.",
         },
 
         ["SPELL:Prayer of Shadow Protection"] = {
@@ -713,6 +761,8 @@ RPVox_CLASSES.PRIEST_LYRICS = {
             "Group warded, %t. Behave.",
             "Turn out the lights, %t. Nobody cares.",
             "One cast, five saves, %t.",
+            "Prayer of Shadow Protection. We are family, and the family is warded.",
+            "Prayer of Shadow Protection. The whole group, the whole reagent.",
         },
 
         ["SPELL:Inner Fire"] = {
@@ -728,6 +778,8 @@ RPVox_CLASSES.PRIEST_LYRICS = {
             "Lit from within, %t.",
             "Burning bright, %t.",
             "I'm on fire, %t. It's fine. It's a buff.",
+            "This priest is on fire, and it is entirely internal.",
+            "Inner Fire. Burning up in here and armoured out there.",
         },
 
         ["SPELL:Fear Ward"] = {
@@ -743,6 +795,8 @@ RPVox_CLASSES.PRIEST_LYRICS = {
             "No running today, %t.",
             "Fear is cancelled, %t.",
             "Scream all you like, %t. He is not moving.",
+            "Don't fear the reaper. Certainly don't run from him.",
+            "Fear Ward. Whatever screams at you next, you are staying put.",
         },
 
         ["SPELL:Power Infusion"] = {
@@ -758,6 +812,8 @@ RPVox_CLASSES.PRIEST_LYRICS = {
             "Go on then, %t. Impress me.",
             "The power is yours, %t.",
             "Don't waste it, %t. I am watching.",
+            "I've got the power, and now for a little while you do.",
+            "Power Infusion. Fifteen seconds of being important.",
         },
 
         ["SPELL:Inner Focus"] = {
@@ -773,6 +829,8 @@ RPVox_CLASSES.PRIEST_LYRICS = {
             "One for free, %t. Do not get used to it.",
             "Cost me nothing, %t. Costs you plenty.",
             "Concentrate, %t. Just this once.",
+            "This one's on the house. Free of charge, literally.",
+            "Focus. Just a little bit, just for one cast.",
         },
 
         ["SPELL:Dispel Magic"] = {
@@ -788,6 +846,8 @@ RPVox_CLASSES.PRIEST_LYRICS = {
             "Not on my watch, %t.",
             "Take it off, %t. Take it all off.",
             "Nothing sticks to you today, %t.",
+            "Cleaning out my closet, and now yours.",
+            "Dispel Magic. Whatever that was, it is gone.",
         },
 
         ["SPELL:Mass Dispel"] = {
@@ -803,6 +863,8 @@ RPVox_CLASSES.PRIEST_LYRICS = {
             "Clean slate for everyone, %t.",
             "Not on my watch, %t. Not any of it.",
             "Whatever all of you had, %t, you do not now.",
+            "Free your minds. All of them. It is a big spell.",
+            "Whatever all of you are carrying, put it down.",
         },
 
         ["SPELL:Cure Disease"] = {
@@ -818,6 +880,8 @@ RPVox_CLASSES.PRIEST_LYRICS = {
             "Gone, %t. Do not touch it again.",
             "Feeling better, %t? You should be.",
             "Sick no more, %t.",
+            "Doctor, doctor, give me the news. Actually, never mind. Cured.",
+            "Cure Disease. That was disgusting and now it is gone.",
         },
 
         ["SPELL:Abolish Disease"] = {
@@ -833,6 +897,8 @@ RPVox_CLASSES.PRIEST_LYRICS = {
             "Persistent? So am I, %t.",
             "Clean, %t. And staying clean.",
             "Try coming back, %t. It will not.",
+            "Doctor, doctor, again. This one keeps working after I leave.",
+            "It will not stick this time. That is the whole point.",
         },
 
         ["SPELL:Levitate"] = {
@@ -848,6 +914,8 @@ RPVox_CLASSES.PRIEST_LYRICS = {
             "Drifting, %t.",
             "You're flying, %t. Sort of.",
             "Gravity is optional today, %t.",
+            "You're walking on air. Try not to enjoy it too much.",
+            "Your feet don't touch the ground now. Mind the reagent cost.",
         },
 
         ["SPELL:Mind Soothe"] = {
@@ -863,6 +931,8 @@ RPVox_CLASSES.PRIEST_LYRICS = {
             "Peace, %t. Temporarily.",
             "Simmer down, %t.",
             "You never saw us, %t.",
+            "Relax. Don't do it. Whatever it was, don't.",
+            "Mind Soothe. Nothing to see, nobody worth chasing.",
         },
 
         ["SPELL:Mind Vision"] = {
@@ -878,6 +948,8 @@ RPVox_CLASSES.PRIEST_LYRICS = {
             "Eyes on you, %t. Literally yours.",
             "Show me what you see, %t.",
             "I'm in, %t.",
+            "Somebody's watching you. It's me. It has been for a while.",
+            "Private eyes. They're watching you. Well. One of them is.",
         },
 
         ["SPELL:Shackle Undead"] = {
@@ -893,6 +965,8 @@ RPVox_CLASSES.PRIEST_LYRICS = {
             "Bound, %t. Do not struggle.",
             "One at a time, %t.",
             "Hold still, %t. This is for everyone's good.",
+            "Stop. In the name of the Light, before you break my group.",
+            "Stand still and stand there. We will get to you.",
         },
 
         ["SPELL:Mind Control"] = {
@@ -908,6 +982,8 @@ RPVox_CLASSES.PRIEST_LYRICS = {
             "Dance, %t.",
             "Off the cliff, %t. Go on.",
             "Every step you take, %t, I am taking it for you.",
+            "Mind Control. Walk this way. No, that way.",
+            "Say my name. You will. You will say exactly what I want.",
         },
 
         ["SPELL:Fade"] = {
@@ -923,6 +999,8 @@ RPVox_CLASSES.PRIEST_LYRICS = {
             "Invisible in plain sight, %t.",
             "Forget about me, %t.",
             "Wrong target, %t.",
+            "Fade to black. Nothing here worth hitting.",
+            "Fade. I was never the interesting one anyway.",
         },
 
         ["SPELL:Smite"] = {
@@ -938,6 +1016,8 @@ RPVox_CLASSES.PRIEST_LYRICS = {
             "The Light says no, %t.",
             "One more for the faith, %t.",
             "Straight down the middle, %t.",
+            "Let there be light. Directly into your face.",
+            "Straight to the face with the Light. It is a classic for a reason.",
         },
 
         ["SPELL:Holy Fire"] = {
@@ -953,6 +1033,8 @@ RPVox_CLASSES.PRIEST_LYRICS = {
             "Sacred flame, %t.",
             "Burning for you, %t. Not romantically.",
             "Fire and faith, %t.",
+            "Burn, baby, burn. Righteously, though, so it doesn't count.",
+            "This priest is on fire, and so, now, are you.",
         },
 
         ["SPELL:Holy Nova"] = {
@@ -968,6 +1050,8 @@ RPVox_CLASSES.PRIEST_LYRICS = {
             "Nova, %t. Do not stand too close.",
             "It goes off in all directions, %t.",
             "One for everyone, %t. Whether you wanted it or not.",
+            "Everybody dance now. Everybody take a little damage now.",
+            "Holy Nova. Expensive, and everybody loves it.",
         },
 
         ["SPELL:Shoot"] = {
@@ -983,6 +1067,8 @@ RPVox_CLASSES.PRIEST_LYRICS = {
             "Plink, %t.",
             "It counts as damage, %t. Barely.",
             "Years of scripture, %t, and a stick.",
+            "Shot through the heart, and you're to blame. I'm out of mana.",
+            "Out of mana and into indignity. Nothing but a bad time.",
         },
 
         ["SPELL:Mind Blast"] = {
@@ -998,6 +1084,8 @@ RPVox_CLASSES.PRIEST_LYRICS = {
             "That was your brain, %t. Was.",
             "Blast off, %t.",
             "Right between the ears, %t.",
+            "I just can't get you out of my head. So I am putting something into yours.",
+            "Boom. That was the inside of your skull.",
         },
 
         ["SPELL:Shadow Word: Pain"] = {
@@ -1013,6 +1101,8 @@ RPVox_CLASSES.PRIEST_LYRICS = {
             "It's still working, %t. It is always working.",
             "You'll feel that for a while, %t.",
             "Patience, %t. It gets worse.",
+            "Love hurts, but this hurts considerably more and for longer.",
+            "Just a little bit of pain, every few seconds, forever.",
         },
 
         ["SPELL:Shadow Word: Death"] = {
@@ -1028,6 +1118,8 @@ RPVox_CLASSES.PRIEST_LYRICS = {
             "Goodnight, %t.",
             "That's all she wrote, %t.",
             "Down you go, %t.",
+            "Finish him. That is not a suggestion, it is the spell.",
+            "Shadow Word: Death. It hurts me too, but less.",
         },
 
         ["SPELL:Mind Flay"] = {
@@ -1043,6 +1135,8 @@ RPVox_CLASSES.PRIEST_LYRICS = {
             "This takes a moment, %t. Enjoy the moment.",
             "Still going, %t.",
             "Head first, %t.",
+            "You just can't get me out of your head. That is rather the point.",
+            "I am in there now, and I am taking my time.",
         },
 
         ["SPELL:Psychic Scream"] = {
@@ -1058,6 +1152,8 @@ RPVox_CLASSES.PRIEST_LYRICS = {
             "Four directions, %t. Pick one.",
             "Get out, %t.",
             "Nobody stays, %t.",
+            "Somebody scream. Everybody scream. There we are.",
+            "Off you go. All of you, in four directions.",
         },
 
         ["SPELL:Shadowform"] = {
@@ -1073,6 +1169,8 @@ RPVox_CLASSES.PRIEST_LYRICS = {
             "No more Mister Nice Priest, %t.",
             "The shadow takes over, %t.",
             "This is who I really am, %t.",
+            "I see a red door and I want it painted black.",
+            "Shadowform. Hello darkness, my old friend.",
         },
 
         ["SPELL:Vampiric Embrace"] = {
@@ -1088,6 +1186,8 @@ RPVox_CLASSES.PRIEST_LYRICS = {
             "Thanks for the blood, %t.",
             "It's a group effort, %t. You are the group.",
             "Suffering, redistributed, %t.",
+            "Vampiric Embrace. Love bites. It bites the whole group better.",
+            "Everything that happens to you now feeds somebody.",
         },
 
         ["SPELL:Vampiric Touch"] = {
@@ -1103,6 +1203,8 @@ RPVox_CLASSES.PRIEST_LYRICS = {
             "You're funding this, %t.",
             "Slow drain, %t. Steady income.",
             "Nothing personal, %t. Just mana.",
+            "Love bites. This one bites and keeps the change.",
+            "You are paying my mana bill. You do not get a say.",
         },
 
         ["SPELL:Silence"] = {
@@ -1118,6 +1220,8 @@ RPVox_CLASSES.PRIEST_LYRICS = {
             "No more casting, %t.",
             "You had a lot to say, %t. Not now.",
             "Enjoy the quiet, %t.",
+            "Hello darkness, my old friend. Now you try it.",
+            "Hush. That is the whole spell and it is beautiful.",
         },
 
         ["SPELL:Shadowfiend"] = {
@@ -1133,6 +1237,8 @@ RPVox_CLASSES.PRIEST_LYRICS = {
             "Off you go, little one, %t.",
             "Don't look at it, %t. It bites.",
             "Ten seconds of chaos, %t.",
+            "Say hello to my little friend. He eats mana bars.",
+            "Shadowfiend. Bad kitty. Very good kitty, actually.",
         },
 
         ["SPELL:Devouring Plague"] = {
@@ -1148,6 +1254,8 @@ RPVox_CLASSES.PRIEST_LYRICS = {
             "This one is on a timer, %t. A long one.",
             "Sickness, %t. The gift that keeps giving.",
             "You will not shake this, %t.",
+            "This one is on a long timer. Get comfortable.",
+            "Devouring Plague. Long, slow and profitable.",
         },
 
         ["SPELL:Touch of Weakness"] = {
@@ -1163,6 +1271,8 @@ RPVox_CLASSES.PRIEST_LYRICS = {
             "Less and less, %t.",
             "That cost you, %t.",
             "Try again, %t. It will hurt less. For me.",
+            "Touch me and regret it. That is the arrangement now.",
+            "Whatever you hit me with, it comes back smaller.",
         },
 
         ["SPELL:Hex of Weakness"] = {
@@ -1179,6 +1289,8 @@ RPVox_CLASSES.PRIEST_LYRICS = {
             "Smaller by the second, %t.",
             "The hex is on, %t.",
             "Good luck with that, %t.",
+            "You're weaker now, and it is only going one direction.",
+            "Hex of Weakness. Everything lands softer from here.",
         },
 
         ["SPELL:Shadowguard"] = {
@@ -1194,6 +1306,8 @@ RPVox_CLASSES.PRIEST_LYRICS = {
             "Careful now, %t.",
             "Three charges, %t. Use them wisely. Or do not.",
             "That was your idea, %t.",
+            "Touch me and get zapped. Your choice entirely.",
+            "Shocking. Genuinely, electrically shocking.",
         },
 
         ["SPELL:Starshards"] = {
@@ -1209,6 +1323,8 @@ RPVox_CLASSES.PRIEST_LYRICS = {
             "Look up, %t. Actually, do not.",
             "Moonlight and shrapnel, %t.",
             "One after another, %t.",
+            "There's a starman waiting in the sky, and he is dropping things on you.",
+            "Shards from the sky. One after another after another.",
         },
 
         ["SPELL:Elune's Grace"] = {
@@ -1224,6 +1340,8 @@ RPVox_CLASSES.PRIEST_LYRICS = {
             "Not tonight, %t.",
             "Moonlight makes me hard to hit, %t.",
             "Swing away, %t.",
+            "I see a bad moon rising. It is rising for you.",
+            "Dodge this. Or rather, watch me dodge that.",
         },
 
         ["SPELL:Feedback"] = {
@@ -1239,6 +1357,8 @@ RPVox_CLASSES.PRIEST_LYRICS = {
             "Every spell costs you double, %t.",
             "Noise, %t. Expensive noise.",
             "Play it again, %t. Go on.",
+            "Feedback. Turn it down or lose the mana.",
+            "That's the sound of your spell failing. Loudly.",
         },
 
         ["SPELL:Chastise"] = {
@@ -1254,6 +1374,8 @@ RPVox_CLASSES.PRIEST_LYRICS = {
             "Sit still, %t.",
             "The Light is disappointed, %t.",
             "Time out, %t. A real one.",
+            "You've been a bad boy. Go and stand over there.",
+            "Chastise. Consider this a time out with consequences.",
         },
 
         ["SPELL:Symbol of Hope"] = {
@@ -1269,6 +1391,8 @@ RPVox_CLASSES.PRIEST_LYRICS = {
             "Hope in a bottle, %t.",
             "Keep going, %t. Here is the fuel.",
             "Never give up, %t.",
+            "Don't stop believin'. And here is some mana to believe with.",
+            "Hold on to that feeling. And that mana.",
         },
 
         ["SPELL:Consume Magic"] = {
@@ -1284,6 +1408,8 @@ RPVox_CLASSES.PRIEST_LYRICS = {
             "Gone, %t. And useful to me.",
             "Waste not, %t.",
             "Thanks for that, %t.",
+            "Om nom. That was your buff and now it is my mana.",
+            "Whatever that was, it tasted like mana.",
         },
     },
 }

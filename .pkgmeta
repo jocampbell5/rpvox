@@ -11,3 +11,4 @@ manual-changelog:
 ignore:
   - .github
   - README.md
+  - tools

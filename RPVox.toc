@@ -2,7 +2,7 @@
 ## Title: RPVox
 ## Notes: Gives your character a voice: roleplay lines and emotes for combat, reactions and everyday life.
 ## Author: jocampbell5
-## Version: 4.5
+## Version: 4.6
 ## X-License: MIT
 ## X-Website: https://github.com/jocampbell5/rpvox
 ## X-Curse-Project-ID: 1643063
@@ -30,5 +30,8 @@ RPVoxClassPriestLyrics.lua
 RPVoxClassHunterValleyGirl.lua
 RPVoxClassWarriorBarbarian.lua
 RPVoxClassPriestRhyming.lua
+RPVoxClassMageAnimated.lua
+RPVoxClassPriestDirge.lua
 RPVox.lua
+RPVoxBubble.lua
 RPVoxUI.lua

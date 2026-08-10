@@ -96,6 +96,8 @@ RPVox_CLASSES.MAGE_LYRICS = {
             "I fought the law and the law was a stick, %t.",
             "Smack that, %t. Reluctantly.",
             "Can't touch this. I am touching it. That is the problem, %t.",
+            "Hit me with your best shot. Then I hit back.",
+            "Can't touch this. I am touching it. That is the problem.",
         },
 
         ["REACT:LOWHEALTH"] = {
@@ -114,6 +116,8 @@ RPVox_CLASSES.MAGE_LYRICS = {
             "Ain't no mountain high enough to keep me from that healer, %t.",
             "Tubthumping over here, %t.",
             "Every breath I take is getting shorter, %t.",
+            "Bridge over troubled water would be lovely right now.",
+            "Ain't no mountain high enough to keep me from that healer.",
         },
 
         ["REACT:DEATH"] = {
@@ -164,6 +168,8 @@ RPVox_CLASSES.MAGE_LYRICS = {
             "Who's next, %t?",
             "Down goes another one, %t.",
             "Say my name, %t. You cannot. That is the issue.",
+            "Hit the road. And don't you come back.",
+            "Say my name. You cannot. That is the issue.",
         },
 
         ["REACT:COMBATSTART"] = {
@@ -180,6 +186,8 @@ RPVox_CLASSES.MAGE_LYRICS = {
             "Cry me a river afterwards, %t.",
             "It's about to go down, %t.",
             "Started at the bottom. So will you, %t.",
+            "Let's get ready to rumble.",
+            "Started at the bottom. So will you.",
         },
 
         ["REACT:COMBATEND"] = {
@@ -208,6 +216,8 @@ RPVox_CLASSES.MAGE_LYRICS = {
             "Every cast you take, %t. Every one you break.",
             "That was mid-verse, %t.",
             "Ain't that a shame, %t.",
+            "Killing me softly with that kick.",
+            "Every cast you take. Every one you break.",
         },
 
         ["REACT:LEVELUP"] = {
@@ -441,6 +451,9 @@ RPVox_CLASSES.MAGE_LYRICS = {
             "All right, stop. %t is about to get chilly.",
             "Cold as ice, %t. Well. You are now.",
             "Word to your mother. And to your kneecaps, %t.",
+            "Ice, ice.",
+            "All right, stop. You are about to get chilly.",
+            "Word to your mother. And to your kneecaps.",
         },
 
         ["SPELL:Ice Lance"] = {
@@ -449,6 +462,8 @@ RPVox_CLASSES.MAGE_LYRICS = {
             "Straight up, no chaser, %t.",
             "Cold as ice, and I am willing to sacrifice you, %t.",
             "Ice, ice, and one more, %t.",
+            "Too cold. Way too cold.",
+            "Straight up, no chaser.",
         },
 
         ["SPELL:Frost Nova"] = {
@@ -457,6 +472,8 @@ RPVox_CLASSES.MAGE_LYRICS = {
             "Not to the left, not to the right. Nowhere, %t.",
             "Stand by me, %t. You have no choice.",
             "Freeze frame, %t.",
+            "Stop. Nova time.",
+            "Not to the left, not to the right. Nowhere.",
         },
 
         ["SPELL:Blizzard"] = {
@@ -465,6 +482,8 @@ RPVox_CLASSES.MAGE_LYRICS = {
             "November rain, but colder, %t.",
             "Snow. Blind. %t.",
             "Set fire to the rain? No, %t. I froze it.",
+            "It's raining ice. Hallelujah.",
+            "Set fire to the rain? No. I froze it.",
         },
 
         ["SPELL:Cone of Cold"] = {
@@ -473,6 +492,8 @@ RPVox_CLASSES.MAGE_LYRICS = {
             "Chill out, %t. That was not a suggestion.",
             "Ice, ice, everybody, %t.",
             "Cool it now, %t. All of you.",
+            "Everybody in the front. Ice up.",
+            "Chill out. That was not a suggestion.",
         },
 
         ["SPELL:Ice Barrier"] = {
@@ -481,6 +502,8 @@ RPVox_CLASSES.MAGE_LYRICS = {
             "Bulletproof. Ice proof. Whatever you have, %t.",
             "Nothing else matters, %t. Especially not your sword.",
             "Can't touch this, %t.",
+            "Another one bites the ice.",
+            "Bulletproof. Ice proof. Whatever you have.",
         },
 
         ["SPELL:Ice Block"] = {
@@ -497,6 +520,8 @@ RPVox_CLASSES.MAGE_LYRICS = {
             "Speed of sound, %t. Coldplay, if you like.",
             "Ice in the veins, %t. Watch this.",
             "Gotta go fast, %t.",
+            "This is why I'm cold.",
+            "Speed of sound. Coldplay, if you like.",
         },
 
         ["SPELL:Cold Snap"] = {
@@ -505,6 +530,8 @@ RPVox_CLASSES.MAGE_LYRICS = {
             "Rewind. Selecta, %t.",
             "Regulate, %t. Everything is back.",
             "If I could turn back time, %t. I just did.",
+            "Second verse, same as the first.",
+            "If I could turn back time. I just did.",
         },
 
         ["SPELL:Summon Water Elemental"] = {
@@ -513,6 +540,8 @@ RPVox_CLASSES.MAGE_LYRICS = {
             "Smooth as water, %t.",
             "It's raining. Personally, %t.",
             "Two against one now, %t.",
+            "Say hello to my little friend. He is damp.",
+            "Two against one now.",
         },
 
         ["SPELL:Frost Ward"] = {
@@ -521,6 +550,8 @@ RPVox_CLASSES.MAGE_LYRICS = {
             "Ain't no sunshine, and ain't no frostbite, %t.",
             "Ice against ice, %t. I know how this ends.",
             "Bring the cold, %t. I brought a coat.",
+            "Ain't no sunshine, and ain't no frostbite.",
+            "Bring the cold. I brought a coat.",
         },
 
         ["SPELL:Frost Armor"] = {
@@ -545,6 +576,8 @@ RPVox_CLASSES.MAGE_LYRICS = {
             "We didn't start the fire, %t. Actually, I did.",
             "Ring of fire, %t. Down, down, down.",
             "Great balls of fire, %t.",
+            "We didn't start the fire. Actually, I did.",
+            "Great balls of fire.",
         },
 
         ["SPELL:Fire Blast"] = {
@@ -553,6 +586,8 @@ RPVox_CLASSES.MAGE_LYRICS = {
             "Light it up, %t.",
             "No cast. No wait. Straight fire, %t.",
             "Hot right now, %t.",
+            "Too hot. Somebody call somebody.",
+            "Hot right now.",
         },
 
         ["SPELL:Scorch"] = {
@@ -561,6 +596,8 @@ RPVox_CLASSES.MAGE_LYRICS = {
             "Feel the heat coming on, %t.",
             "Warming up, %t. Bear with me.",
             "One layer at a time, like a slow jam, %t.",
+            "Feel the heat coming on.",
+            "One layer at a time, like a slow jam.",
         },
 
         ["SPELL:Flamestrike"] = {
@@ -569,6 +606,8 @@ RPVox_CLASSES.MAGE_LYRICS = {
             "Dancing on the ceiling? Try the floor, %t.",
             "Stayin' alive is not an option down there, %t.",
             "Watch your step, %t. It's getting hot in here.",
+            "Dancing on the ceiling? Try the floor.",
+            "Watch your step. It's getting hot in here.",
         },
 
         ["SPELL:Pyroblast"] = {
@@ -577,6 +616,8 @@ RPVox_CLASSES.MAGE_LYRICS = {
             "Firestarter, %t.",
             "Boom. Shake the room, %t.",
             "Big things coming, %t. Look up.",
+            "It's getting hot in here. That is not a figure of speech.",
+            "Big things coming. Look up.",
         },
 
         ["SPELL:Blast Wave"] = {
@@ -585,6 +626,8 @@ RPVox_CLASSES.MAGE_LYRICS = {
             "Push it, %t. All of you, out.",
             "Bounce, %t.",
             "Boom, %t. That is the sound of a room clearing.",
+            "Push it. All of you, out.",
+            "Boom. That is the sound of a room clearing.",
         },
 
         ["SPELL:Dragon's Breath"] = {
@@ -593,6 +636,8 @@ RPVox_CLASSES.MAGE_LYRICS = {
             "Puff the magic dragon, %t.",
             "Breathe, %t. That is my job, not yours.",
             "Hot in the face, %t.",
+            "Smoke on the water. Fire in the sky.",
+            "Puff the magic dragon.",
         },
 
         ["SPELL:Combustion"] = {
@@ -601,6 +646,8 @@ RPVox_CLASSES.MAGE_LYRICS = {
             "I'm on fire, %t.",
             "Light my fire, and then some, %t.",
             "Turn up the heat, %t.",
+            "Burning down the house.",
+            "Turn up the heat.",
         },
 
         ["SPELL:Fire Ward"] = {
@@ -609,6 +656,8 @@ RPVox_CLASSES.MAGE_LYRICS = {
             "Burn, baby, burn. Not this baby, %t.",
             "Through the fire and out the other side, %t.",
             "Fireproof, %t.",
+            "You can't burn me. Nothing else matters.",
+            "Burn, baby, burn. Not this baby.",
         },
 
         ["SPELL:Molten Armor"] = {
@@ -617,6 +666,8 @@ RPVox_CLASSES.MAGE_LYRICS = {
             "Armour on fire, %t.",
             "Touch me and burn, %t.",
             "Hot in the shell, %t.",
+            "Careful. I'm burning up.",
+            "Hot in the shell.",
         },
 
         ["SPELL:Arcane Missiles"] = {
@@ -625,6 +676,8 @@ RPVox_CLASSES.MAGE_LYRICS = {
             "Ain't no stopping them now, %t.",
             "Can't stop, won't stop, %t.",
             "Every little thing lands, %t.",
+            "Hit me, baby, four more times.",
+            "Ain't no stopping them now.",
         },
 
         ["SPELL:Arcane Blast"] = {
@@ -633,6 +686,8 @@ RPVox_CLASSES.MAGE_LYRICS = {
             "Bigger. Louder. More expensive, %t.",
             "Blast off, %t.",
             "Boom, %t. And the next one costs me more.",
+            "Bigger. Louder. More expensive.",
+            "Boom. And the next one costs me more.",
         },
 
         ["SPELL:Arcane Explosion"] = {
@@ -641,6 +696,8 @@ RPVox_CLASSES.MAGE_LYRICS = {
             "Boom, boom, %t.",
             "It's a party, %t. You are not invited.",
             "Shake it off, %t. You cannot.",
+            "Jump around.",
+            "Shake it off. You cannot.",
         },
 
         ["SPELL:Counterspell"] = {
@@ -649,6 +706,8 @@ RPVox_CLASSES.MAGE_LYRICS = {
             "Stop. In the name of the Kirin Tor, %t.",
             "The sound of silence, %t.",
             "Shut up and dance? No, %t. Just the first part.",
+            "Stop. In the name of the Kirin Tor.",
+            "Shut up and dance? No. Just the first part.",
         },
 
         ["SPELL:Polymorph"] = {
@@ -657,6 +716,8 @@ RPVox_CLASSES.MAGE_LYRICS = {
             "Baa baa black sheep, %t.",
             "You had a bad day, %t. And now you have wool.",
             "Sheep to sleep, %t.",
+            "Who let the sheep out.",
+            "Baa baa black sheep.",
         },
 
         ["SPELL:Blink"] = {
@@ -665,6 +726,8 @@ RPVox_CLASSES.MAGE_LYRICS = {
             "Catch me if you can, %t.",
             "Blink and you missed it, %t.",
             "Bye bye bye, %t.",
+            "Now you see me. Now you don't.",
+            "Catch me if you can.",
         },
 
         ["SPELL:Slow"] = {
@@ -673,6 +736,8 @@ RPVox_CLASSES.MAGE_LYRICS = {
             "Time is on my side, %t. Not yours.",
             "Slow jam, %t.",
             "Ain't no hurry now, %t.",
+            "Slow ride. Take it easy.",
+            "Time is on my side. Not yours.",
         },
 
         ["SPELL:Spellsteal"] = {
@@ -681,6 +746,8 @@ RPVox_CLASSES.MAGE_LYRICS = {
             "Thank you. Next, %t.",
             "Gold digger, %t. Guilty.",
             "You had it, %t. Past tense.",
+            "Finders keepers.",
+            "You had it. Past tense.",
         },
 
         ["SPELL:Remove Lesser Curse"] = {
@@ -689,6 +756,8 @@ RPVox_CLASSES.MAGE_LYRICS = {
             "No more drama, %t.",
             "Free your mind, %t.",
             "That comes right off, %t.",
+            "No more drama.",
+            "That comes right off.",
         },
 
         ["SPELL:Mana Shield"] = {
@@ -697,6 +766,8 @@ RPVox_CLASSES.MAGE_LYRICS = {
             "Bills, bills, bills. Mine, %t.",
             "Take it out of the wrong account, %t.",
             "Every little thing comes out of the blue bar, %t.",
+            "Hit me with your best shot. I'll pay for it.",
+            "Every little thing comes out of the blue bar.",
         },
 
         ["SPELL:Evocation"] = {
@@ -705,6 +776,8 @@ RPVox_CLASSES.MAGE_LYRICS = {
             "Gimme a break. Four seconds, %t.",
             "Waiting on the world to change. And refilling, %t.",
             "Refill. Recharge. Rewind, %t.",
+            "Gimme a break. Four seconds.",
+            "Refill. Recharge. Rewind.",
         },
 
         ["SPELL:Arcane Power"] = {
@@ -713,6 +786,8 @@ RPVox_CLASSES.MAGE_LYRICS = {
             "Can't hold us, %t.",
             "Feel the power, %t.",
             "Turn it all the way up, %t.",
+            "I've got the power.",
+            "Turn it all the way up.",
         },
 
         ["SPELL:Presence of Mind"] = {
@@ -721,6 +796,8 @@ RPVox_CLASSES.MAGE_LYRICS = {
             "Skip to the good part, %t.",
             "Faster than you can say it, %t.",
             "No waiting. No cast, %t.",
+            "Right now. Not later.",
+            "Skip to the good part.",
         },
 
         ["SPELL:Invisibility"] = {
@@ -729,6 +806,8 @@ RPVox_CLASSES.MAGE_LYRICS = {
             "I disappear, %t.",
             "Just a ghost, %t.",
             "Nobody knows where I am, %t.",
+            "Now you don't.",
+            "Nobody knows where I am.",
         },
 
         ["SPELL:Arcane Intellect"] = {
@@ -737,6 +816,8 @@ RPVox_CLASSES.MAGE_LYRICS = {
             "Big brain energy, %t.",
             "Think. Just a little bit harder, %t.",
             "Smooth, %t. And smarter.",
+            "Use your brain. I just gave you more of it.",
+            "Smooth. And smarter.",
         },
 
         ["SPELL:Arcane Brilliance"] = {
@@ -745,6 +826,8 @@ RPVox_CLASSES.MAGE_LYRICS = {
             "Everybody dance now. And think, %t.",
             "All the single mages, %t.",
             "One for all, %t. Stop asking.",
+            "We are family. Take the buff.",
+            "Everybody dance now. And think.",
         },
 
         ["SPELL:Amplify Magic"] = {
@@ -753,6 +836,8 @@ RPVox_CLASSES.MAGE_LYRICS = {
             "Louder. Everything louder, %t.",
             "More is more, %t.",
             "Crank it, %t.",
+            "Pump up the volume.",
+            "Louder. Everything louder.",
         },
 
         ["SPELL:Dampen Magic"] = {
@@ -761,6 +846,8 @@ RPVox_CLASSES.MAGE_LYRICS = {
             "Hush, %t.",
             "Keep it down. Sound of silence, %t.",
             "Lower the volume on all of that, %t.",
+            "Turn it down.",
+            "Lower the volume on all of that.",
         },
 
         ["SPELL:Mage Armor"] = {
@@ -769,6 +856,8 @@ RPVox_CLASSES.MAGE_LYRICS = {
             "Ain't nothing gonna break my stride, %t.",
             "Light armour. Heavy wallet, %t.",
             "It keeps coming back, %t.",
+            "Ain't nothing gonna break my stride.",
+            "It keeps coming back.",
         },
 
         ["SPELL:Slow Fall"] = {
@@ -777,6 +866,8 @@ RPVox_CLASSES.MAGE_LYRICS = {
             "Don't stop me now. Actually, do, %t.",
             "Feather light, %t.",
             "Down, down, down. Softly, %t.",
+            "Don't stop me now. Actually, do.",
+            "Down, down, down. Softly.",
         },
 
         ["SPELL:Detect Magic"] = {
@@ -785,6 +876,8 @@ RPVox_CLASSES.MAGE_LYRICS = {
             "Show me what you're working with, %t.",
             "Let me see what you've got, %t.",
             "Reading you. Every little thing, %t.",
+            "Show me what you're working with.",
+            "Reading you. Every little thing.",
         },
 
         ["SPELL:Conjure Water"] = {
@@ -852,6 +945,8 @@ RPVox_CLASSES.MAGE_LYRICS = {
             "Ain't too proud to beg. Or to use a stick, %t.",
             "Out of mana. Nothing but a bad time, %t.",
             "Pew. That's all I've got, %t.",
+            "Ain't too proud to beg. Or to use a stick.",
+            "Pew. That's all I've got.",
         },
 
         ["SPELL:Teleport: Stormwind"] = {

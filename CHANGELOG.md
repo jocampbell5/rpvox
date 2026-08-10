@@ -1,5 +1,131 @@
 # Changelog
 
+## 4.6 — 2026-08-10
+
+### Speech bubbles that other people can see
+
+Lines used to be yours alone: they arrived in a nearby player's chat frame and
+nothing more. Now a line raises a **speech bubble for whoever said it**, on
+everybody's screen, floating above their character and following them as they
+move.
+
+**This needs friendly nameplates.** There is no way for an addon to work out
+where a character is on screen — the client will not tell it — so the only
+handle on a character's position is their nameplate. Turn it on with:
+
+    /rpvox bubble world
+
+That switches friendly player nameplates on for you, switches them on out of
+combat as well, and **hides the health bars and names** they would otherwise
+draw, so all you see is the bubble. Turning it off puts every setting back
+exactly as it was, and refuses to run mid-fight, because the client locks those
+settings during combat.
+
+Enemy nameplates and friendly NPC nameplates are never touched. Your enemy
+health bars stay exactly as you have them.
+
+Without world mode, bubbles still work — they stack in the corner of the screen,
+labelled with the speaker's name. With it on, a line from someone you cannot see
+is not shown at all rather than falling back to the corner; it is still in your
+chat frame.
+
+Your own bubble stays on screen: this client draws no nameplate above your own
+head, so there is nowhere in the world to put it. `/rpvox bubble mine` hides it
+if you would rather see nothing — your lines still appear above your character
+on everyone else's screen.
+
+### Combat is moments, not one trigger per spell
+
+A profile used to carry over a hundred triggers, and three quarters of them
+meant the same thing — "I pressed a button", written out once per spell. They
+are replaced by seven **moments**: a spell hits, crits or misses, a swing, a
+heal, a buff, and something being held down.
+
+One set of lines now covers your whole spellbook, including spells you have not
+learned yet, and it keeps covering them when you learn more. A fresh profile is
+about twenty entries worth writing rather than a hundred and nine.
+
+A spell can still have its own lines when it earns them: drag it in from your
+spellbook under **Spells Override** and it takes priority over the general set.
+
+Lines can also be written for how a blow landed, using `<crit>`, `<miss>`,
+`<resist>` and the rest as a tag at the front of the line. Melee, heals and
+crowd control use these; the three spell moments have a trigger each instead.
+
+### One chance number for the whole character
+
+Per-trigger chance is gone, replaced by a single **Speaks on N% of the moments**
+slider running from 1% to 100%.
+
+The old number could not keep its promise. Dozens of combat triggers competed
+for one quiet gap, so a spell set to 100% still missed most of its casts — and
+the scale ran down to 0.01%, which is one line in ten thousand swings and
+indistinguishable from switched off.
+
+Rare moments now count for more than common ones automatically, because a swing
+happens twenty-five times a minute and a level-up once an evening and they were
+never going to want the same percentage. A crit is three times likelier to be
+spoken than an ordinary hit, for the same reason.
+
+Existing profiles carry over on the average of their old combat settings, so a
+talkative character stays talkative.
+
+### A new voice: Priest-Dirge
+
+A priest who speaks only in verse, and only ever grimly. Every line is a
+self-contained rhyming couplet — lines fire independently and in any order, so a
+rhyme can never depend on the next one arriving.
+
+> The prayer is finished. The mace is not. A blunt amen for everything you brought.
+
+Written for the moment triggers, so one set of lines covers the whole spellbook.
+
+**Mage-Animated** has been rewritten for the new moments in its own song-lyric
+voice, with crit, miss, resist and immune lines throughout.
+
+### Tidier line lists
+
+Every set used to be given target-free variants by copying a line and deleting
+the name off the end, so half of most lists read as the same thing twice. Those
+copies are removed — except that two are always kept per set, because a set with
+none goes silent whenever you have nothing targeted, which is why they existed.
+Your saved profiles are swept once and told how many lines went.
+
+New lines written for the stock voices can now reach a profile you already have,
+rather than only new ones.
+
+### The bubble is silent
+
+The typewriter tick and the coloured accent sounds are gone, along with
+`/rpvox bubble sound`. They were assembled from whatever sound kits happened to
+exist on this client rather than anything that suited the character speaking —
+every race, class and spell school made the same noise. A tick that says nothing
+about who is talking is worse than no tick.
+
+### Working out why a line did or did not fire
+
+- `/rpvox why` — counts what happened to every trigger and names the reason: the
+  quiet gap, the chance roll, the flood ceiling, no eligible line.
+- `/rpvox trace` — prints the line every swing and cast *would* have said, and
+  which set it came from, without sending anything and without waiting on the
+  chance roll.
+- `/rpvox bubble test` — with a player targeted, walks the whole bubble chain and
+  names the link that broke.
+- `/rpvox bubble client` and `/rpvox bubble cvars` — what your client is and
+  which nameplate settings it actually has.
+
+### Also
+
+- The addon no longer touches keyboard, gamepad or mouse input at all. It used
+  to hold every line until the next keypress, because sending to public chat
+  needs one; lines have travelled as addon messages since 4.4 and cannot be
+  refused, so the whole input gate was watching your keyboard for nothing.
+- The settings window is grouped into **Spells Override · Moments · Reactions ·
+  Idle**, and only the first can add or remove entries.
+- Fixed: the drag hint sat underneath the category tabs and was unreadable.
+- Fixed: the last row of the trigger list was drawn across the bottom border.
+- `/rpvox autotest` is gone with the problem it existed to diagnose.
+
 ## 4.5 — 2026-08-09
 
 - **Five new voices, as alternative class packs.** Pick them from the class

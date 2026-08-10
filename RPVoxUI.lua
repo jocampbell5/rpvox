@@ -2,68 +2,64 @@
 -- /rpvox opens this window.
 
 local ROW_HEIGHT   = 22
-local VISIBLE_ROWS = 13
+
+-- How tall the list inset is, where its first row starts -- the search box
+-- lives in that gap -- and how much clear space to leave above the bottom
+-- border. The row count is worked out from them rather than written down
+-- separately: the two were independent numbers, the inset was shortened to
+-- make room for the buttons beneath it, and the twelfth row carried on being
+-- drawn 8 points across the border it no longer fitted inside.
+local LIST_HEIGHT  = 286
+local LIST_TOP     = 30
+local LIST_BOTTOM  = 8
+local VISIBLE_ROWS = math.floor((LIST_HEIGHT - LIST_TOP - LIST_BOTTOM) / ROW_HEIGHT)
 -- No channel picker: each line decides for itself. "/em ..." emotes,
 -- everything else is said. Say and emote are the only two, deliberately.
 
 local UI = {}
-UI.category = "COMBAT"
+-- Opens on Moments rather than on the first tab. Spells Override is first
+-- because that is where it belongs in the order, but a fresh profile has none,
+-- and a window that opens on an empty list looks broken.
+UI.category = "MOMENT"
+UI.search = ""      -- matches entry names; "" means show everything
 local selected      -- currently selected trigger table
 
 -- Helpers -----------------------------------------------------------------
 
--- The visible list is always just the current tab's triggers.
+-- The visible list is the current tab's triggers, narrowed by the search box
+-- and sorted by name. Sorting is safe here because TriggersInCategory hands
+-- back a fresh table -- the profile's own trigger order is never touched.
 local function Triggers()
     if not RPVoxDB then return {} end
-    return RPVox:TriggersInCategory(UI.category)
+    local list = RPVox:TriggersInCategory(UI.category)
+
+    -- Filter before sorting; there is no point ordering entries about to be
+    -- thrown away. `find` is given plain=true throughout so that typing a "("
+    -- or a "%" is treated as text rather than as a malformed Lua pattern.
+    if UI.search ~= "" then
+        local kept = {}
+        for _, t in ipairs(list) do
+            if (t.name or ""):lower():find(UI.search, 1, true) then
+                table.insert(kept, t)
+            end
+        end
+        list = kept
+    end
+
+    table.sort(list, function(a, b)
+        return (a.name or ""):lower() < (b.name or ""):lower()
+    end)
+    return list
 end
 
 local function WordsToText(words)
     return table.concat(words or {}, "\n")
 end
 
--- The chance slider is logarithmic. A linear 0-100 slider would cram every
--- useful value into the first pixel, so slider position 0-100 maps onto
--- 0.01% - 100% across four decades: 0 = 0.01, 25 = 0.1, 50 = 1, 75 = 10, 100 = 100.
-local function Log10(x)
-    if math.log10 then return math.log10(x) end
-    return math.log(x) / math.log(10)
-end
-
-local function PosToChance(pos)
-    local v = 0.01 * (10 ^ (pos / 25))
-    -- coarser steps as the numbers get bigger, so the readout stays sane
-    if v < 1 then
-        v = math.floor(v * 100 + 0.5) / 100
-    elseif v < 10 then
-        v = math.floor(v * 10 + 0.5) / 10
-    else
-        v = math.floor(v + 0.5)
-    end
-    return math.max(0.01, math.min(100, v))
-end
-
-local function ChanceToPos(chance)
-    chance = math.max(0.01, math.min(100, chance or 0.5))
-    return math.max(0, math.min(100, 25 * (Log10(chance) + 2)))
-end
-
--- Percentages here run from 0.01 to 100, so trailing zeros are noise.
--- No trailing zeros: 0.20 reads as 0.2, 3.00 as 3. Values under a tenth keep
--- their second decimal, since the scale bottoms out at 0.01.
-local function FormatPct(v, bare)
-    v = v or 0
-    local s
-    if v >= 10 then
-        s = ("%d"):format(v + 0.5)
-    else
-        s = ("%.2f"):format(v)
-        s = s:gsub("0+$", "")     -- 0.20 -> 0.2, 3.00 -> 3.
-        s = s:gsub("%.$", "")     -- 3. -> 3
-        if s == "" or s == "0" then s = ("%.2f"):format(v) end
-    end
-    return bare and s or (s .. "%")
-end
+-- The chance slider used to be logarithmic, because it ran from 0.01% and a
+-- linear scale crammed every useful value into the first pixel. It runs 1-100
+-- now and one percent per step is exactly right, so the four-decade mapping
+-- and its log helpers are gone with it.
 
 -- "90", "90s", "2m", "1m30s", "1:30" -> seconds. nil if unparsable.
 local function ParseTime(str)
@@ -301,29 +297,100 @@ local function CreateUI()
     end)
     f.globalSlider = ggap
 
+    -- How talkative, for the whole profile. This used to sit on each trigger,
+    -- where it could not mean anything: seventy-five spell triggers competed
+    -- for one quiet gap, so a spell set to 100% still missed most of its casts.
+    -- One number, and the addon scales it per moment -- a swing and a level-up
+    -- are not the same event and never wanted the same percentage.
+    local chance = CreateFrame("Slider", "RPVoxChanceSlider", f, "OptionsSliderTemplate")
+    -- Clear of the quiet-gap slider's own value box, which MakeValueBox hangs
+    -- 14 points off that slider's right edge at 48 wide. 52 put this slider's
+    -- left end and its "1%" label on top of it; 100 leaves a real gap between
+    -- the two controls so they read as two settings rather than one row.
+    chance:SetPoint("TOPLEFT", ggap, "TOPRIGHT", 100, 0)
+    chance:SetWidth(126)
+    chance:SetMinMaxValues(RPVox.MIN_CHANCE or 1, RPVox.MAX_CHANCE or 100)
+    chance:SetValueStep(1)
+    chance:SetObeyStepOnDrag(true)
+    _G["RPVoxChanceSliderLow"]:SetText("|cffff80801%|r")
+    _G["RPVoxChanceSliderHigh"]:SetText("|cff00ff00100%|r")
+    local ctext = _G["RPVoxChanceSliderText"]
+    ctext:ClearAllPoints()
+    ctext:SetPoint("BOTTOMLEFT", chance, "TOPLEFT", 0, 3)
+    ctext:SetJustifyH("LEFT")
+    chance:SetScript("OnValueChanged", function(self, value)
+        value = math.floor(value + 0.5)
+        ctext:SetText("Speaks on " .. value .. "% of the moments")
+        if not UI.updating then
+            RPVox:SetChance(value)
+            f.chanceBox:SetText(tostring(value))
+        end
+    end)
+    f.chanceSlider = chance
+
+    f.chanceBox = MakeValueBox(f, chance, 44, function(text)
+        -- Two lines, and it has to be two. gsub returns the string *and* the
+        -- number of replacements it made, so tonumber(s:gsub(...)) hands that
+        -- count over as the number base and throws "base out of range" the
+        -- moment you type in the box. The gap slider's box below carries the
+        -- same note, from the first time this was fixed.
+        local cleaned = (text or ""):gsub("[%%%s]", "")
+        local n = tonumber(cleaned)
+        if n then
+            local set = RPVox:SetChance(n)
+            UI.updating = true
+            chance:SetValue(set)
+            UI.updating = false
+            f.chanceBox:SetText(tostring(set))
+        end
+    end)
+
     -- Instructions ----------------------------------------------------------
-    -- An overlay rather than a real tab: it covers the window while it is up
-    -- and gets out of the way entirely when it is not.
-    local help = CreateFrame("Frame", nil, f)
-    help:SetPoint("TOPLEFT", 10, -60)
-    help:SetPoint("BOTTOMRIGHT", -10, 34)
-    help:SetFrameLevel(f:GetFrameLevel() + 10)
+    -- A window of its own, not an overlay on this one. As an overlay it
+    -- covered the thing it was explaining: you could read the markup guide or
+    -- write a line using it, never both at once. It is a reference, and a
+    -- reference belongs open beside the work.
+    --
+    -- Parented to UIParent rather than to the settings window so it survives
+    -- that window closing, and can be dragged anywhere on screen.
+    local help = CreateFrame("Frame", "RPVoxHelpFrame", UIParent,
+                             "BasicFrameTemplateWithInset")
+    help:SetSize(460, 540)
+    help:SetPoint("TOPLEFT", f, "TOPRIGHT", 8, 0)
+    help:SetFrameStrata("DIALOG")
+    help:SetMovable(true)
+    help:EnableMouse(true)
+    help:RegisterForDrag("LeftButton")
+    help:SetScript("OnDragStart", help.StartMoving)
+    help:SetScript("OnDragStop", function(self)
+        self:StopMovingOrSizing()
+        self.moved = true          -- stop re-anchoring it to the main window
+    end)
+    help:SetClampedToScreen(true)
     help:Hide()
-    help.bg = help:CreateTexture(nil, "BACKGROUND")
-    help.bg:SetAllPoints()
-    help.bg:SetColorTexture(0, 0, 0, 0.88)
+    tinsert(UISpecialFrames, "RPVoxHelpFrame")   -- Esc closes it too
+
+    help.title = help:CreateFontString(nil, "OVERLAY", "GameFontHighlight")
+    help.title:SetPoint("TOP", help.TitleBg, "TOP", 0, -5)
+    help.title:SetText("RPVox — Instructions")
+
+    -- Put the button back to "Instructions" however the window was closed:
+    -- the title bar X and Escape both bypass the button's own handler.
+    help:SetScript("OnHide", function()
+        if f.helpButton then f.helpButton:SetText("Instructions") end
+    end)
 
     local hscroll = CreateFrame("ScrollFrame", "RPVoxHelpScroll", help,
                                 "UIPanelScrollFrameTemplate")
-    hscroll:SetPoint("TOPLEFT", 10, -10)
-    hscroll:SetPoint("BOTTOMRIGHT", -30, 10)
+    hscroll:SetPoint("TOPLEFT", 12, -32)
+    hscroll:SetPoint("BOTTOMRIGHT", -32, 12)
     local hbody = CreateFrame("Frame", nil, hscroll)
-    hbody:SetSize(560, 10)
+    hbody:SetSize(400, 10)
     hscroll:SetScrollChild(hbody)
 
     local htext = hbody:CreateFontString(nil, "OVERLAY", "GameFontHighlightLeft")
     htext:SetPoint("TOPLEFT")
-    htext:SetWidth(560)
+    htext:SetWidth(400)
     htext:SetJustifyH("LEFT")
     htext:SetSpacing(3)
     htext:SetText(table.concat({
@@ -340,11 +407,21 @@ local function CreateUI()
         "them with something you typed yourself.",
         "",
         "|cff3fd0ffHOW OFTEN|r",
-        "Two things control it. |cffffff00Chance|r is per trigger: the odds any",
-        "one cast speaks. |cffffff00One line every...|r is for the whole profile:",
-        "after anything is said, everything stays quiet for that long.",
-        "Start low. A character who comments on every fireball stops being a",
-        "character and becomes noise.",
+        "|cffffff00Speaks on ...% of the moments|r is one number for the whole",
+        "character, from 1% to 100%. It used to sit on every trigger, where it",
+        "could not mean much -- dozens of them competed for one quiet gap, so a",
+        "spell set to 100% still missed most of its casts.",
+        "",
+        "Rare moments count for more than common ones automatically. A swing",
+        "happens twenty-five times a minute and a level-up once an evening, so",
+        "they were never going to want the same percentage, and you should not",
+        "have to work that out. Crits are three times likelier to be worth",
+        "saying than an ordinary hit, for the same reason.",
+        "",
+        "|cffffff00One line every...|r is the other half: after anything is said,",
+        "everything stays quiet for that long. Start low on both. A character",
+        "who comments on every fireball stops being a character and becomes",
+        "noise.",
         "",
         "In a |cffffff00dungeon|r the chance is capped at 1% no matter what you",
         "set. In a |cffffff00raid group|r RPVox says nothing at all until you",
@@ -365,6 +442,59 @@ local function CreateUI()
         "      without it in every set.",
         "  |cffffff00%s|r  becomes your own name.",
         "",
+        "|cff3fd0ffSPEECH BUBBLES OVER CHARACTERS|r",
+        "Your lines can float above your character on the screens of other",
+        "people running RPVox, and theirs above them, following as you move.",
+        "",
+        "|cffff8800This needs friendly nameplates turned on.|r Nothing on this",
+        "client will tell an addon where a character is on screen, so their",
+        "nameplate is the only handle there is. Turn it on with:",
+        "",
+        "    |cffffff00/rpvox bubble world|r",
+        "",
+        "That switches friendly player nameplates on, switches them on out of",
+        "combat too, and hides the health bars and names they would draw -- so",
+        "you see the bubble and nothing else. Turning it off puts every setting",
+        "back as it was. It will not run mid-fight; the client locks those",
+        "settings during combat.",
+        "",
+        "Enemy nameplates, friendly NPCs, pets and minions are never touched.",
+        "Your enemy health bars stay exactly as you have them.",
+        "",
+        "Without it, bubbles still work -- they stack in the corner of the",
+        "screen with the speaker's name on them. With it on, a line from",
+        "somebody you cannot see is not shown at all rather than dropping to",
+        "the corner. It is still in your chat frame either way.",
+        "",
+        "Your own bubble stays on screen: there is no nameplate above your own",
+        "head, so there is nowhere in the world to put it.",
+        "|cffffff00/rpvox bubble mine|r hides it -- your lines still appear",
+        "above your character for everybody else.",
+        "",
+        "Not appearing? |cffffff00/rpvox bubble test|r with a player targeted",
+        "walks the whole chain and names the step that failed.",
+        "",
+        "|cff3fd0ffEMPHASIS IN THE SPEECH BUBBLE|r",
+        "These change how a word looks in the bubble. Chat cannot show them, so",
+        "they are stripped there -- write them freely, chat stays clean.",
+        "",
+        "  |cffffff00*loud*|r      bigger, heavy outline",
+        "  |cffffff00_quiet_|r     smaller and faded",
+        "  |cffffff00~wavy~|r      rides a slow wave",
+        "  |cffffff00#shaky#|r     jitters   (# not !, so real punctuation is safe)",
+        "  |cffffff00^tall^|r      squashes and stretches",
+        "",
+        "Colour a span with a school tag, closed by |cffffff00{/}|r:",
+        "",
+        "  |cffffff00{fire}|r |cffffff00{frost}|r |cffffff00{arcane}|r"
+            .. " |cffffff00{holy}|r |cffffff00{shadow}|r |cffffff00{nature}|r",
+        "",
+        "  Come on baby, |cffffff00{fire}#LIGHT MY FIRE#{/}|r, %t.",
+        "",
+        "Everything outside a tag stays white and still. Used sparingly it",
+        "reads as the character leaning on a word; used on a whole line it",
+        "just looks restless.",
+        "",
         "|cff3fd0ffMOODS|r",
         "A mood is a version of your character. Put a tag in front of a line:",
         "",
@@ -377,6 +507,36 @@ local function CreateUI()
         "list, or |cffffff00/rpvox mood add brooding|r. Then tag lines with",
         "[brooding] and select it. Any name works -- it is just a label.",
         "",
+        "|cff3fd0ffMOMENTS, NOT SPELLS|r",
+        "Combat is a handful of entries rather than one per spell -- a spell or",
+        "skill hitting, critting or missing, a swing, a heal, a buff, something",
+        "held down. One set of lines covers your whole spellbook, including",
+        "spells you have not learned yet. Drag a spell in from your spellbook",
+        "and it gets its own lines that override the general ones, for the few",
+        "worth it.",
+        "",
+        "|cff3fd0ffHITS, CRITS AND MISSES|r",
+        "A combat line can be written for how the blow actually landed:",
+        "",
+        "    |cffffff00<crit> Ash. Nothing left of %t but ash.|r",
+        "    |cffffff00<miss> ... and it goes wide. Again.|r",
+        "",
+        "Tag one line in a spell that way and that spell stops speaking when",
+        "the cast goes off, and waits for the combat log instead -- so it can",
+        "tell a crit from a resist. When something happens that you have lines",
+        "for, only those lines are eligible; otherwise the untagged ones are",
+        "used as always. Spells with no tagged lines are untouched and still",
+        "speak the moment the cast lands.",
+        "",
+        "Tags: |cffffff00<hit> <crit> <miss> <dodge> <parry> <block> <resist>|r",
+        "|cffffff00<immune> <absorb> <reflect>|r. Anything without its own lines",
+        "falls back to <miss> (or <hit> for a block), so <crit> and <miss>",
+        "alone will cover most of it. Melee and wands work the same way.",
+        "",
+        "A mood and an outcome can be combined, in either order:",
+        "",
+        "    |cffffff00[grim] <miss> Even the fire has stopped listening.|r",
+        "",
         "|cff3fd0ffCOMMANDS|r",
         "  /rpvox                  open this window",
         "  /rpvox on | off         silence this profile, or wake it",
@@ -385,6 +545,12 @@ local function CreateUI()
         "  /rpvox rebuild          reset this profile's stock lines",
         "  /rpvox status           what is loaded and armed",
         "  /rpvox testfire         say something right now",
+        "  /rpvox trace            print every decision, send nothing",
+        "  /rpvox why              what stopped each trigger speaking",
+        "  /rpvox bubble world     float lines above the character models",
+        "  /rpvox bubble mine      show or hide your own bubble",
+        "  /rpvox bubble others    show or hide other players' bubbles",
+        "  /rpvox bubble test      test a bubble on your target",
         "  /rpvox debug            explain why lines do or do not fire",
         "  /rpvox nettest          check other players are receiving you",
     }, "\n"))
@@ -398,8 +564,14 @@ local function CreateUI()
     hbtn:SetScript("OnClick", function()
         if help:IsShown() then
             help:Hide()
-            hbtn:SetText("Instructions")
         else
+            -- Re-anchor each time it opens: the settings window can be dragged
+            -- while this is shut, and a reference that opens behind the thing
+            -- it explains is no use. Only if it has not been moved itself.
+            if not help.moved then
+                help:ClearAllPoints()
+                help:SetPoint("TOPLEFT", f, "TOPRIGHT", 8, 0)
+            end
             help:Show()
             hbtn:SetText("Close")
         end
@@ -466,7 +638,12 @@ local function CreateUI()
     -- Anchored under the slider rather than at a fixed offset, so the slider's
     -- own "chatty/quiet" labels can never overlap the list.
     listBG:SetPoint("TOPLEFT", ggap, "BOTTOMLEFT", -12, -22)
-    listBG:SetSize(200, 320)
+    -- Everything below the list hangs off its bottom edge -- the buttons, then
+    -- the hint -- and the category tabs own the lowest 40 points of the window,
+    -- the same clearance the detail pane on the right reserves. At the old 320
+    -- the hint ended up underneath the tab strip and unreadable, so the list
+    -- gives up the rows the text below it needs. See LIST_HEIGHT.
+    listBG:SetSize(200, LIST_HEIGHT)
 
     local scroll = CreateFrame("ScrollFrame", "RPVoxListScroll", listBG,
                                "FauxScrollFrameTemplate")
@@ -478,12 +655,64 @@ local function CreateUI()
     end)
     f.scroll = scroll
 
+    -- Search box in the top of the list inset, narrowing the list by name.
+    -- Right edge stops short of the scrollbar so the two never overlap.
+    local function MakeFilterBox(name, label, yOffset, apply)
+        local box = CreateFrame("EditBox", name, listBG, "InputBoxTemplate")
+        box:SetPoint("TOPLEFT", 12, yOffset)
+        box:SetPoint("TOPRIGHT", -30, yOffset)
+        box:SetHeight(18)
+        box:SetAutoFocus(false)
+        box:SetMaxLetters(40)
+        box:SetFontObject(ChatFontNormal)
+        box:SetTextInsets(2, 16, 0, 0)
+
+        local hint = box:CreateFontString(nil, "OVERLAY", "GameFontDisableSmall")
+        hint:SetPoint("LEFT", 4, 0)
+        hint:SetText(label)
+
+        -- Escape only drops focus, so an explicit clear is worth having.
+        local clear = CreateFrame("Button", nil, box)
+        clear:SetSize(16, 16)
+        clear:SetPoint("RIGHT", -2, 0)
+        clear:SetNormalTexture("Interface\\Buttons\\UI-Panel-MinimizeButton-Up")
+        clear:SetPushedTexture("Interface\\Buttons\\UI-Panel-MinimizeButton-Down")
+        clear:Hide()
+        clear:SetScript("OnClick", function()
+            box:SetText("")
+            box:ClearFocus()
+        end)
+
+        box:SetScript("OnTextChanged", function(self)
+            local text = (self:GetText() or ""):lower()
+            apply(text)
+            hint:SetShown(text == "")
+            clear:SetShown(text ~= "")
+            -- A narrower list must not stay scrolled past its own end.
+            FauxScrollFrame_SetOffset(scroll, 0)
+            local bar = _G[scroll:GetName() .. "ScrollBar"]
+            if bar then bar:SetValue(0) end
+            -- UI.frame is only assigned once CreateUI returns, so this can in
+            -- principle fire before the window is fully built.
+            if UI.frame then UI:RefreshList() end
+        end)
+        box:SetScript("OnEnterPressed", function(self) self:ClearFocus() end)
+        box:SetScript("OnEscapePressed", function(self)
+            self:SetText("")
+            self:ClearFocus()
+        end)
+        return box
+    end
+
+    f.search = MakeFilterBox("RPVoxListSearch", "Search names", -6,
+        function(text) UI.search = text end)
+
     f.rows = {}
     for i = 1, VISIBLE_ROWS do
         local row = CreateFrame("Button", nil, listBG)
         row:SetSize(168, ROW_HEIGHT)
         if i == 1 then
-            row:SetPoint("TOPLEFT", 6, -6)
+            row:SetPoint("TOPLEFT", 6, -LIST_TOP)
         else
             row:SetPoint("TOPLEFT", f.rows[i - 1], "BOTTOMLEFT", 0, 0)
         end
@@ -541,6 +770,7 @@ local function CreateUI()
     f.deleteButton = del
     f.addButton = add
 
+
     local hint = f:CreateFontString(nil, "OVERLAY", "GameFontDisableSmall")
     hint:SetPoint("TOPLEFT", add, "BOTTOMLEFT", 0, -6)
     hint:SetPoint("RIGHT", listBG, "RIGHT", 0, 0)
@@ -591,52 +821,15 @@ local function CreateUI()
     pane.enabled = on
 
     -- Chance slider
-    local chance = CreateFrame("Slider", "RPVoxChanceSlider", pane,
-                               "OptionsSliderTemplate")
-    chance:SetPoint("TOPLEFT", on, "BOTTOMLEFT", 4, -24)
-    chance:SetWidth(180)
-    -- Slider position is 0-100; the value it represents is logarithmic.
-    chance:SetMinMaxValues(0, 100)
-    chance:SetValueStep(0.5)
-    chance:SetObeyStepOnDrag(true)
-    _G[chance:GetName() .. "Low"]:SetText("0.01%")
-    _G[chance:GetName() .. "High"]:SetText("100%")
-    chance:SetScript("OnValueChanged", function(self, pos)
-        local value = PosToChance(pos)
-        _G[self:GetName() .. "Text"]:SetText("Chance: " .. FormatPct(value))
-        if selected and not UI.updating then
-            selected.chance = value
-            selected.chanceCustom = true  -- yours now; updates leave it alone
-            pane.chanceBox:SetText(FormatPct(value, true))
-        end
-    end)
-    pane.chance = chance
-
-    pane.chanceBox = MakeValueBox(pane, chance, 54, function(text)
-        if not selected then return end
-        -- gsub returns the string AND a replacement count. Passing that
-        -- straight into tonumber() made the count look like a number base,
-        -- which errored out and silently discarded whatever you typed.
-        local cleaned = (text or ""):gsub("[%%%s]", "")
-        local n = tonumber(cleaned)
-        if n then
-            selected.chance = math.max(0.01, math.min(100, math.floor(n * 100 + 0.5) / 100))
-            selected.chanceCustom = true  -- yours now; updates leave it alone
-        end
-        UI:RefreshDetail()
-    end)
-    local pct = pane:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
-    pct:SetPoint("LEFT", pane.chanceBox, "RIGHT", 3, 0)
-    pct:SetText("%")
 
     -- Sayings box
     local sayLabel = pane:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
-    sayLabel:SetPoint("TOPLEFT", chance, "BOTTOMLEFT", -4, -30)
+    sayLabel:SetPoint("TOPLEFT", on, "BOTTOMLEFT", 0, -22)
     sayLabel:SetText("Sayings -- one per line:")
 
     local syntax = pane:CreateFontString(nil, "OVERLAY", "GameFontDisableSmall")
     syntax:SetPoint("LEFT", sayLabel, "RIGHT", 8, 0)
-    syntax:SetText("|cff909090/em = emote   %t = target   [mood] = only in that mood|r")
+    syntax:SetText("|cff909090/em = emote   %t = target   [mood]   <crit> <miss>|r")
 
     local boxBG = CreateFrame("Frame", nil, pane, "InsetFrameTemplate")
     boxBG:SetPoint("TOPLEFT", sayLabel, "BOTTOMLEFT", 0, -4)
@@ -647,7 +840,20 @@ local function CreateUI()
     boxScroll:SetPoint("TOPLEFT", 6, -6)
     boxScroll:SetPoint("BOTTOMRIGHT", -26, 6)
 
+
     local edit = CreateFrame("EditBox", "RPVoxSayingsEdit", boxScroll)
+    -- Blizzard's ScrollingEdit_OnUpdate does arithmetic on cursorOffset, and
+    -- the only thing that ever sets it is their OnCursorChanged. Selecting a
+    -- trigger calls SetText on a box nobody has clicked in, so it was still
+    -- nil and the error came out of their file rather than ours.
+    --
+    -- On the *edit box*. They are read from the edit box and written to the
+    -- edit box; the scroll frame passed alongside is only used for its height
+    -- and scroll range. Seeding them on the scroll frame instead looked right,
+    -- changed nothing, and cost a round trip -- the error dump gives it away,
+    -- with the frame carrying cursorOffset=0 while the value read came out nil.
+    edit.cursorOffset = 0
+    edit.cursorHeight = 0
     edit:SetMultiLine(true)
     edit:SetAutoFocus(false)
     edit:SetFontObject(ChatFontNormal)
@@ -658,15 +864,223 @@ local function CreateUI()
             selected.words = TextToWords(self:GetText())
             selected.custom = true   -- yours now; stock updates leave it alone
         end
-        ScrollingEdit_OnTextChanged(self, self:GetParent())
+        -- Belt to the braces above, and only when there is a cursor to keep
+        -- in view at all. This call exists to scroll to wherever you are
+        -- typing; setting the text from code is not typing, and asking it to
+        -- chase a cursor nobody has placed is what broke it.
+        self.cursorOffset = self.cursorOffset or 0
+        self.cursorHeight = self.cursorHeight or 0
+        if self:HasFocus() then
+            ScrollingEdit_OnTextChanged(self, self:GetParent())
+        end
     end)
     edit:SetScript("OnCursorChanged", ScrollingEdit_OnCursorChanged)
     boxScroll:SetScrollChild(edit)
     boxScroll:SetScript("OnSizeChanged", function(self, w)
         edit:SetWidth(w)
     end)
-    boxBG:SetScript("OnMouseDown", function() edit:SetFocus() end)
+    -- Only grab focus when the editor is the thing on screen; while a filter
+    -- is up the editor is hidden behind the read-only view.
+    boxBG:SetScript("OnMouseDown", function()
+        if boxScroll:IsShown() then edit:SetFocus() end
+    end)
     pane.edit = edit
+
+    -- Find within the sayings of the entry on screen. This only ever reads the
+    -- editor and moves the cursor: it must never filter what the editor shows,
+    -- because the editor's OnTextChanged writes whatever is displayed straight
+    -- back over selected.words, so hiding a line would delete it.
+    local find = CreateFrame("EditBox", "RPVoxSayingsFind", pane, "InputBoxTemplate")
+    find:SetPoint("BOTTOMLEFT", sayLabel, "TOPLEFT", 6, 6)
+    find:SetSize(190, 18)
+    find:SetAutoFocus(false)
+    find:SetMaxLetters(60)
+    find:SetFontObject(ChatFontNormal)
+    find:SetTextInsets(2, 16, 0, 0)
+
+    local findHint = find:CreateFontString(nil, "OVERLAY", "GameFontDisableSmall")
+    findHint:SetPoint("LEFT", 4, 0)
+    findHint:SetText("Find in sayings")
+
+    local findCount = pane:CreateFontString(nil, "OVERLAY", "GameFontDisableSmall")
+    findCount:SetPoint("LEFT", find, "RIGHT", 8, 0)
+
+    local findClear = CreateFrame("Button", nil, find)
+    findClear:SetSize(16, 16)
+    findClear:SetPoint("RIGHT", -2, 0)
+    findClear:SetNormalTexture("Interface\\Buttons\\UI-Panel-MinimizeButton-Up")
+    findClear:SetPushedTexture("Interface\\Buttons\\UI-Panel-MinimizeButton-Down")
+    findClear:Hide()
+    findClear:SetScript("OnClick", function()
+        find:SetText("")
+        find:ClearFocus()
+    end)
+
+    -- The filtered result gets its own read-only view rather than being put
+    -- into the editor. Two reasons: the editor writes back whatever it shows,
+    -- so a filtered editor would delete the hidden lines on the next
+    -- keystroke; and an EditBox will not render colour escapes, so the matches
+    -- could not be highlighted in it. A FontString does both safely.
+    local filterScroll = CreateFrame("ScrollFrame", "RPVoxSayingsFilterScroll",
+                                     boxBG, "UIPanelScrollFrameTemplate")
+    filterScroll:SetPoint("TOPLEFT", 6, -6)
+    filterScroll:SetPoint("BOTTOMRIGHT", -26, 6)
+    filterScroll:Hide()
+
+    local filterBody = CreateFrame("Frame", nil, filterScroll)
+    filterBody:SetSize(300, 10)
+    filterScroll:SetScrollChild(filterBody)
+
+    filterScroll:SetScript("OnSizeChanged", function(self, w)
+        filterBody:SetWidth(w)
+        for _, r in ipairs(filterBody.rows or {}) do r:SetWidth(w) end
+    end)
+
+    -- One frame per matching line. Each remembers the index it came from in
+    -- selected.words, which is what makes editing a filtered line possible:
+    -- the commit writes back to that index rather than replacing the lot.
+    filterBody.rows = {}
+    local ApplyFilter   -- forward declaration; rows re-run it after a commit
+
+    local function FilterRow(i)
+        local r = filterBody.rows[i]
+        if r then return r end
+
+        r = CreateFrame("Button", nil, filterBody)
+        r:SetWidth(filterBody:GetWidth())
+        if i == 1 then
+            r:SetPoint("TOPLEFT", 0, 0)
+        else
+            r:SetPoint("TOPLEFT", filterBody.rows[i - 1], "BOTTOMLEFT", 0, -2)
+        end
+        r.text = r:CreateFontString(nil, "OVERLAY", "ChatFontNormal")
+        r.text:SetPoint("TOPLEFT", 2, 0)
+        r.text:SetPoint("RIGHT", -2, 0)
+        r.text:SetJustifyH("LEFT")
+
+        r.box = CreateFrame("EditBox", nil, r, "InputBoxTemplate")
+        r.box:SetPoint("TOPLEFT", 4, 0)
+        r.box:SetPoint("RIGHT", -4, 0)
+        r.box:SetHeight(20)
+        r.box:SetAutoFocus(true)
+        r.box:SetFontObject(ChatFontNormal)
+        r.box:Hide()
+
+        local function commit(self)
+            if r.committing then return end
+            r.committing = true
+            local text = (self:GetText() or ""):match("^%s*(.-)%s*$")
+            local idx = r.wordIndex
+            if idx and selected and selected.words then
+                if text == "" then
+                    table.remove(selected.words, idx)
+                else
+                    selected.words[idx] = text
+                end
+                selected.custom = true   -- yours now, as with the main editor
+                -- Keep the hidden editor in step, or it would later write its
+                -- own stale copy back over what was just changed here.
+                pane.edit:SetText(WordsToText(selected.words))
+            end
+            self:Hide()
+            r.text:Show()
+            r.committing = false
+            ApplyFilter()
+        end
+
+        r.box:SetScript("OnEnterPressed", commit)
+        r.box:SetScript("OnEditFocusLost", commit)
+        r.box:SetScript("OnEscapePressed", function(self)
+            r.committing = true          -- abandon, do not write
+            self:Hide()
+            r.text:Show()
+            self:ClearFocus()
+            r.committing = false
+        end)
+
+        r:SetScript("OnClick", function()
+            r.text:Hide()
+            r.box:SetText(r.raw or "")
+            r.box:Show()
+            r.box:SetFocus()
+            r.box:HighlightText()
+        end)
+        r:SetHighlightTexture("Interface\\QuestFrame\\UI-QuestTitleHighlight")
+
+        filterBody.rows[i] = r
+        return r
+    end
+
+    -- Wrap every occurrence of the needle in the line, keeping the original
+    -- capitalisation of the text around and inside the match.
+    local function Highlight(line, needle)
+        local lower = line:lower()
+        local out, at = {}, 1
+        while true do
+            local a, b = lower:find(needle, at, true)
+            if not a then break end
+            out[#out + 1] = line:sub(at, a - 1)
+            out[#out + 1] = "|cffffd100" .. line:sub(a, b) .. "|r"
+            at = b + 1
+        end
+        out[#out + 1] = line:sub(at)
+        return table.concat(out)
+    end
+
+    function ApplyFilter()
+        local needle = (find:GetText() or ""):lower()
+        findHint:SetShown(needle == "")
+        findClear:SetShown(needle ~= "")
+
+        if needle == "" or not selected then
+            filterScroll:Hide()
+            boxScroll:Show()
+            findCount:SetText("")
+            sayLabel:SetText("Sayings -- one per line:")
+            return
+        end
+
+        local words = selected.words or {}
+        local shown, total = 0, #words
+        for idx, w in ipairs(words) do
+            if w:lower():find(needle, 1, true) then
+                shown = shown + 1
+                local r = FilterRow(shown)
+                r.wordIndex = idx        -- where this line lives in the profile
+                r.raw = w
+                r.text:SetText(Highlight(w, needle))
+                r.text:Show()
+                r.box:Hide()
+                r:SetHeight(math.max(14, r.text:GetStringHeight() + 4))
+                r:Show()
+            end
+        end
+        for i = shown + 1, #filterBody.rows do
+            filterBody.rows[i]:Hide()
+        end
+
+        if shown == 0 then
+            findCount:SetText("|cffd08080no match|r")
+        else
+            findCount:SetText(("%d of %d lines"):format(shown, total))
+        end
+
+        local h = 0
+        for i = 1, shown do h = h + filterBody.rows[i]:GetHeight() + 2 end
+        filterBody:SetHeight(math.max(10, h))
+
+        sayLabel:SetText("Sayings -- |cffffd100filtered|r, click a line to edit:")
+        boxScroll:Hide()
+        filterScroll:Show()
+    end
+
+    find:SetScript("OnTextChanged", ApplyFilter)
+    find:SetScript("OnEnterPressed", function(self) self:ClearFocus() end)
+    find:SetScript("OnEscapePressed", function(self)
+        self:SetText("")
+        self:ClearFocus()
+    end)
+    pane.find = find
 
     -- Bottom buttons --------------------------------------------------------
     local test = CreateFrame("Button", nil, f, "UIPanelButtonTemplate")
@@ -710,7 +1124,12 @@ local function CreateUI()
         f.tabs[i] = tab
     end
     PanelTemplates_SetNumTabs(f, #RPVox.CATEGORIES)
-    PanelTemplates_SetTab(f, 1)
+    -- Highlight whichever tab UI.category actually starts on, rather than
+    -- hard-coding the first: the two disagreeing leaves the window showing one
+    -- tab's list with another tab lit up.
+    for i, cat in ipairs(RPVox.CATEGORIES) do
+        if cat == UI.category then PanelTemplates_SetTab(f, i) end
+    end
 
     return f
 end
@@ -755,39 +1174,52 @@ function UI:RefreshDetail()
     self.updating = true
     pane.header:SetText(selected.name)
     pane.enabled:SetChecked(selected.enabled ~= false)
-    local chanceVal = selected.chance or 0.5
-    pane.chance:SetValue(ChanceToPos(chanceVal))
-    -- the slider snaps to its own steps, so label from the stored value
-    _G["RPVoxChanceSliderText"]:SetText("Chance: " .. FormatPct(chanceVal))
-    pane.chanceBox:SetText(FormatPct(chanceVal, true))
     pane.edit:SetText(WordsToText(selected.words))
     pane.edit:ClearFocus()
+    -- A match found in the previous entry means nothing in this one, and its
+    -- highlight would sit over unrelated text. Clearing re-runs the find with
+    -- an empty needle, which drops both the count and the selection.
+    if pane.find then pane.find:SetText("") end
     self.frame.deleteButton:SetEnabled(RPVox:IsRemovable(selected) and true or false)
     self.updating = false
 end
 
 local CATEGORY_HINT = {
-    COMBAT   = "Drag a spell from your spellbook onto this window to add it.",
+    SPELL    = "Drag a spell from your spellbook onto this window to add it. "
+            .. "A spell with lines here speaks instead of the Moments entries.",
+    MOMENT   = "What happens in a fight, whichever spell caused it. These cover "
+            .. "your whole spellbook.",
     REACTION = "Things that happen to you. An entry with no lines never fires.",
     IDLE     = "Everyday actions. Professions match the window you have open.",
 }
 
 function UI:SetCategory(cat)
     self.category = cat
+    -- A filter left over from another tab reads as a broken, empty list, so
+    -- switching tabs starts clean. Setting the text fires OnTextChanged,
+    -- which resets UI.search and the scroll offset for us.
+    if self.frame and self.frame.search then
+        self.frame.search:SetText("")
+    end
     self.lastSelected = self.lastSelected or {}
     if selected then
-        self.lastSelected[selected.category or "COMBAT"] = selected
+        self.lastSelected[selected.category or "MOMENT"] = selected
     end
     selected = self.lastSelected[cat]
     -- make sure the remembered entry still belongs to this tab
-    if not selected or (selected.category or "COMBAT") ~= cat then
+    if not selected or (selected.category or "MOMENT") ~= cat then
         selected = Triggers()[1]
     end
     FauxScrollFrame_SetOffset(self.frame.scroll, 0)
     _G[self.frame.scroll:GetName() .. "ScrollBar"]:SetValue(0)
 
-    local combat = (cat == "COMBAT")
-    self.frame.addButton:SetEnabled(combat)
+    -- Adding and removing belongs to one tab. Everywhere else the list is
+    -- fixed, and a live Add button on a tab that cannot take one is a promise
+    -- the window does not keep.
+    local overrides = (cat == "SPELL")
+    self.frame.addButton:SetEnabled(overrides)
+    self.frame.addButton:SetShown(overrides)
+    self.frame.deleteButton:SetShown(overrides)
     self.frame.hint:SetText(CATEGORY_HINT[cat] or "")
 
     self:Refresh()
@@ -805,15 +1237,22 @@ function UI:Refresh()
     self.frame.deleteProfileButton:SetEnabled(#RPVox:ProfileNames() > 1)
 
     local g = profile.globalCooldown or 180
+    local c = RPVox:GetChance()
     self.updating = true
     self.frame.globalSlider:SetValue(math.max(0, math.min(600, g)))
     _G["RPVoxGlobalSliderText"]:SetText("At most one line every " .. FormatTime(g))
     self.frame.globalBox:SetText(FormatTime(g))
+    self.frame.chanceSlider:SetValue(c)
+    _G["RPVoxChanceSliderText"]:SetText("Speaks on " .. c .. "% of the moments")
+    self.frame.chanceBox:SetText(tostring(c))
     self.updating = false
 
-    self.frame.addButton:SetEnabled(self.category == "COMBAT")
+    local overrides = (self.category == "SPELL")
+    self.frame.addButton:SetEnabled(overrides)
+    self.frame.addButton:SetShown(overrides)
+    self.frame.deleteButton:SetShown(overrides)
     self.frame.hint:SetText(CATEGORY_HINT[self.category] or "")
-    if not selected or (selected.category or "COMBAT") ~= self.category then
+    if not selected or (selected.category or "MOMENT") ~= self.category then
         selected = Triggers()[1]
     end
     self:RefreshList()
@@ -828,9 +1267,9 @@ function UI:Select(trigger)
 end
 
 function UI:AddSpell(name, icon)
-    if self.category ~= "COMBAT" then
+    if self.category ~= "SPELL" then
         PanelTemplates_SetTab(self.frame, 1)
-        self:SetCategory("COMBAT")
+        self:SetCategory("SPELL")
     end
     local existing = RPVox:FindTrigger(name)
     if existing then
