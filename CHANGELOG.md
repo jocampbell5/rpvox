@@ -1,5 +1,14 @@
 # Changelog
 
+## 4.6.1 — 2026-08-10
+
+- **Fixed: an error every time a bubble had nowhere to go.** With
+  `/rpvox bubble world` on, a line from somebody you could not see -- behind
+  you, round a corner, out of range -- threw a Lua error instead of quietly
+  doing nothing. The bubble file called a logging function that only exists
+  inside the main file, so the call reached a global that was never there. It
+  parsed cleanly and only failed when that exact line ran.
+
 ## 4.6 — 2026-08-10
 
 ### Speech bubbles that other people can see

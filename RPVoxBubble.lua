@@ -106,6 +106,15 @@ local SCHEMES = {
 -- worth making, the bubble is silent.
 local CHAR_TIME  = 0.055
 
+-- RPVox.lua keeps Debug as a file-local and hangs a copy on the addon table.
+-- A bare Debug() in this file therefore reaches a global that does not exist,
+-- and throws the moment that line runs -- which shipped in 4.6 and fired every
+-- time a bubble had no nameplate to sit on. Wrapped once, here, rather than
+-- left to be got right at each call site.
+local function Debug(...)
+    if RPVox and RPVox.Debug then RPVox.Debug(...) end
+end
+
 local pinned, demoIndex, scaleMode
 
 -- One bubble per speaker -----------------------------------------------------
