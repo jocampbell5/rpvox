@@ -859,6 +859,17 @@ end
 -- What it does NOT do is touch a frame the client marks forbidden -- see
 -- Untouchable. Those belong to secure code, and reaching into one is a real
 -- way to break their nameplates even though it was not what broke them here.
+--
+-- The whole UnitFrame goes, not its pieces.
+--
+-- Hiding pieces and keeping the name was tried in 4.6.3, to get the plate's
+-- class-coloured name instead of the engine's plain one. It cannot work here:
+-- Blizzard hides a friendly plate's UnitFrame outright on this client and draws
+-- the name from the engine, so the fontstring was set to the right colour,
+-- reported shown, and was never visible. Showing that frame back on the sweep
+-- lost the race against their own code. See §5 of the handoff before trying
+-- again -- the answer is that friendly names are white or green here and that
+-- is the client's business, not this addon's.
 local hiddenArt = {}    -- [plate frame] = true while its art is hidden by us
 
 -- A frame the client marks forbidden belongs to secure code. Touching one from
@@ -1250,6 +1261,16 @@ local function StackBase()
     return 0
 end
 
+-- Returns true when the bubble was given a place, false when world mode
+-- refused it one -- see the WorldOnly branch below. Callers must not Show() a
+-- bubble this returned false for.
+--
+-- Every placement decision lives here, and that is the point of the return
+-- value. The rule used to be written out in ShowOn only, so it held when a line
+-- arrived and not afterwards: OnUpdate notices the plate has gone, calls
+-- b.replace (this function), and the old version happily dropped the speaker
+-- into a screen slot. That is the bug where a friend's line jumped off their
+-- head and into the corner of the interface the moment they ran behind you.
 local function PlaceOther(b)
     local f = b.frame
     f.record = b
@@ -1263,7 +1284,23 @@ local function PlaceOther(b)
         -- without this file running anything every frame.
         FreeSlot(b)
         f:SetPoint("BOTTOM", plate, "TOP", 0, 10)
-        return
+        return true
+    end
+
+    -- Over the character or not at all. Somebody out of view -- behind you,
+    -- round a corner, too far away -- has no nameplate, and putting their line
+    -- in the corner of the screen is the exact thing world mode is for
+    -- avoiding. The chat frame still has it.
+    --
+    -- Only outside. Real lines are never bubbled inside an instance -- ShowFrom
+    -- drops them, since RPVox is off in there -- so this is only reachable
+    -- inside via the test command, which should show its stacked bubble rather
+    -- than silently doing nothing.
+    if RPVoxDB and RPVoxDB.world and not IsInInstance() then
+        FreeSlot(b)
+        f:Hide()
+        Debug("no plate for", b.owner, "-- world mode, so no bubble")
+        return false
     end
 
     local slot = TakeSlot(b)
@@ -1288,6 +1325,7 @@ local function PlaceOther(b)
     local x = (p and p.x) or 0
     local y = (p and p.y) or 200
     f:SetPoint(point, UIParent, point, x, y - drop)
+    return true
 end
 
 -- Re-measure the whole stack. Positions are computed from the heights of the
@@ -1357,23 +1395,10 @@ local function ShowOn(owner, text, styleOverride, holdFor)
     else
         -- The realm stays in the key; nobody needs it over the bubble.
         frame.who:SetText(owner:match("^[^-]+") or owner)
-        PlaceOther(b)
-
-        -- Over the character or not at all. Somebody out of view -- behind
-        -- you, round a corner, too far away -- has no nameplate, and putting
-        -- their line in the corner of the screen is the exact thing world mode
-        -- is for avoiding. The chat frame still has it.
-        -- Only outside. Real lines are never bubbled inside an instance --
-        -- ShowFrom drops them, since RPVox is off in there -- so this branch
-        -- is only reachable inside via the test command, which should show
-        -- its stacked bubble rather than silently doing nothing.
-        if RPVoxDB and RPVoxDB.world and not b.plate
-           and not IsInInstance() then
-            FreeSlot(b)
-            frame:Hide()
-            Debug("no plate for", owner, "-- world mode, so no bubble")
-            return
-        end
+        -- False means world mode had nowhere over their head to put it. The
+        -- frame is already hidden; showing it here is what the rule exists to
+        -- stop.
+        if not PlaceOther(b) then return end
     end
     UIFrameFadeRemoveFrame(frame)     -- cancel any fade still in flight
     frame:SetAlpha(1)

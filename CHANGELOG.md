@@ -1,5 +1,21 @@
 # Changelog
 
+## 4.6.3 — 2026-08-10
+
+- **Fixed: a friend's line jumped off their head and into the corner of your
+  interface the moment they moved out of view.** World mode is meant to put a
+  line over the character or not at all, and it did — but only when the line
+  first arrived. If the speaker then ran behind you, rounded a corner or moved
+  out of range, their nameplate went away and the bubble fell back to the
+  stacked on-screen position mid-sentence. Somebody out of sight now shows
+  nothing at all. Their line is still in your chat frame.
+
+Friendly names in world mode stay as the client draws them — white, or green.
+Making them class coloured was attempted and does not work on 2.5.6: the game
+hides a friendly nameplate's frame and draws the name itself, so there is no
+name for an addon to colour. Nothing about it changed in this release; it is
+noted here only so it is not filed as a new bug.
+
 ## 4.6.2 — 2026-08-10
 
 - **RPVox is now off entirely inside dungeons, raids, battlegrounds and
