@@ -62,11 +62,13 @@ local DEDUPE_WINDOW = 0.6
 -- someone holding a two-hander and be twice as talkative for the same setting.
 local ROLL_THROTTLE = 1.5
 
--- Group content is not the place for this. A raid gets nothing at all, and a
--- five-man is capped hard however high the trigger is set, because people are
--- reading the chat for pulls and marks. Deliberately not a setting: the point
--- is that nobody has to remember to turn it down before going in.
-local DUNGEON_MAX_CHANCE = 1     -- per cent, absolute ceiling in a 5-man
+-- Group content is not the place for this. Inside dungeons, raids,
+-- battlegrounds and arenas RPVox switches off entirely -- no lines and no
+-- bubbles -- because people in there are reading chat for pulls and marks.
+-- It used to cap the chance at 1% in a five-man instead; a rare line in a
+-- dungeon is still a line in a dungeon, so now it is simply off.
+-- Deliberately not a setting: nobody should have to remember to turn it
+-- down on the way in.
 
 local SEED_VERSION   = 17 -- bump to offer a fresh set of stock lines
 local LINE_VERSION   = 2   -- bump to rewrite saved lines in place
@@ -1228,7 +1230,7 @@ local function Fire(trigger, outcome)
         return
     end
 
-    -- Where you are outranks what the slider says. See DUNGEON_MAX_CHANCE.
+    -- Where you are outranks everything. See the group-content note up top.
     local chance = WeightedChance(trigger, outcome)
     if not tracing then
         if IsInRaid and IsInRaid() then
@@ -1236,17 +1238,10 @@ local function Fire(trigger, outcome)
             Note(trigger, "group")
             return
         end
-        local inInstance, kind = IsInInstance()
-        if inInstance then
-            if kind == "raid" then
-                Debug("skip: inside a raid -- RPVox stays quiet")
-                Note(trigger, "group")
-                return
-            elseif kind == "party" and chance > DUNGEON_MAX_CHANCE then
-                Debug(("dungeon: chance capped %.2f -> %.2f")
-                    :format(chance, DUNGEON_MAX_CHANCE))
-                chance = DUNGEON_MAX_CHANCE
-            end
+        if IsInInstance() then
+            Debug("skip: instanced content -- RPVox is off in here")
+            Note(trigger, "group")
+            return
         end
 
         -- One roll per swing rate. See ROLL_THROTTLE.
@@ -2136,6 +2131,8 @@ SlashCmdList["RPVox"] = function(input)
             RPVox.Bubble:Mine()
         elseif rest == "client" then
             RPVox.Bubble:Client()
+        elseif rest == "reset" then
+            RPVox.Bubble:ResetPlates()
         elseif rest == "cvars" then
             RPVox.Bubble:CVars()
         elseif rest:match("^test") then
@@ -2292,11 +2289,8 @@ SlashCmdList["RPVox"] = function(input)
         local inInstance, kind = IsInInstance()
         if IsInRaid and IsInRaid() then
             print("  |cffff8800context:    in a raid group -- silenced|r")
-        elseif inInstance and kind == "raid" then
-            print("  |cffff8800context:    inside a raid -- silenced|r")
-        elseif inInstance and kind == "party" then
-            print(("  |cffff8800context:    in a dungeon -- capped at %g%%|r")
-                :format(DUNGEON_MAX_CHANCE))
+        elseif inInstance then
+            print("  |cffff8800context:    instanced content -- RPVox is off|r")
         end
         local n = 0
         for _, t in ipairs(P.triggers) do
@@ -2342,6 +2336,7 @@ SlashCmdList["RPVox"] = function(input)
         print("  /rpvox bubble world    float lines above the character model")
         print("  /rpvox bubble test     test a bubble on your target")
         print("  /rpvox bubble cvars    list this client's nameplate settings")
+        print("  /rpvox bubble reset    put nameplate settings back to default")
         print("  /rpvox bubble client   what client and nameplate support exist")
         print("  /rpvox bubble others   show or hide other players' bubbles")
         print("  /rpvox bubble mine     show or hide your own bubble")

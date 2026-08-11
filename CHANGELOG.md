@@ -1,5 +1,46 @@
 # Changelog
 
+## 4.6.2 — 2026-08-10
+
+- **RPVox is now off entirely inside dungeons, raids, battlegrounds and
+  arenas** — no lines and no bubbles until you step back out. It used to cap
+  the chance at 1% in a five-man; a rare line in a dungeon is still a line in
+  a dungeon. Related, and the root of a long night of debugging: Blizzard
+  forbids addons from using friendly nameplates in instanced content at all,
+  so bubbles could never have floated over characters in there. World mode now
+  suspends itself at the instance door — your own nameplate settings come
+  back — and resumes when you leave.
+
+- **Fixed: two ways the suspension leaked.** Cancelling the sweep at the
+  instance door was not enough on its own — a nameplate appearing fires an
+  event straight into the hiding code, which only knew whether world mode was
+  enabled, not that it was suspended. And zoning in *during combat* returned
+  before the sweep was cancelled, leaving it running inside. Both closed.
+  Separately, the one restore path that forgot a saved setting whether or not
+  it had actually been put back now keeps it until it verifiably has.
+
+- **Fixed: the bars came back on friendly nameplates in world mode.** Hiding
+  them once was not enough — the client re-shows a plate's frame every time it
+  reuses it, which quietly undid the hide. They are now kept hidden for as
+  long as world mode is on.
+
+- **Fixed: every nameplate count read zero.** The API that lists nameplates
+  returns nothing on this client, silently, and several diagnostics and the
+  bar-hiding were built on it. Plates are now found directly.
+
+- **Fixed: RPVox could break the game's own nameplates.** With world mode on,
+  the addon reached into Blizzard's nameplate frames to hide the health bars,
+  and in 4.6.1 it also called their nameplate driver directly to force a
+  refresh. Both are insecure code touching a secure system: the client marks
+  some nameplates forbidden, and an addon touching one makes Blizzard's own
+  setup fail with "calling 'SetHeight' on bad self" — which can stop nameplates
+  appearing at all, and so stop bubbles anchoring.
+
+  The driver call is gone entirely; if a setting needs a refresh to take hold,
+  the answer is a reload, not reaching into their frames. Hiding the bars now
+  skips any frame the client marks forbidden, and so does anchoring, so a
+  bubble is never hung on one.
+
 ## 4.6.1 — 2026-08-10
 
 - **Fixed: an error every time a bubble had nowhere to go.** With

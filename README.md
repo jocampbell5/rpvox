@@ -99,10 +99,10 @@ there is no public-chat mode.
 
 ## Group content
 
-In a **raid group**, or inside a raid, RPVox says nothing at all until you
-leave. In a **five-man dungeon** the chance is capped at 1% however high you
-have set it. Neither is a setting — people are reading chat for pulls and
-marks, and nobody should have to remember to turn it down on the way in.
+Inside **dungeons, raids, battlegrounds and arenas** — and in any raid group —
+RPVox switches off entirely: no lines, no bubbles, until you step back out.
+This is not a setting. People in there are reading chat for pulls and marks,
+and nobody should have to remember to turn it down on the way in.
 
 ## Included voices
 

@@ -574,6 +574,13 @@ local function UnitFor(name)
     local tracked = plateUnit[name]
     if tracked and is(tracked) then return tracked end
 
+    -- And directly, in case no ADDED event was seen for them -- the map is a
+    -- cache, not the source of truth.
+    for i = 1, 40 do
+        local u = "nameplate" .. i
+        if is(u) then return u end
+    end
+
     local u = is("target") or is("mouseover") or is("focus")
     if u then return u end
     for i = 1, 4 do
@@ -660,6 +667,45 @@ local CANDIDATE_CVARS = {
     "nameplateShowFriendlyPlayers",
     -- your own, if this client has one at all
     "nameplateShowSelf",
+    -- names without health bars, which is the look world mode wants and the
+    -- only safe way to ask for it: the client applies it to its own frames
+    "nameplateShowOnlyNames",
+    -- style and layout. None of these are set by RPVox; they are probed so
+    -- that anything sitting away from its default can be seen, which is the
+    -- only way to find what changed a plate's appearance.
+    "nameplateClassicStyle",
+    "nameplateShowClassicStyle",
+    "NamePlateClassicStyle",
+    "NamePlateVerticalScale",
+    "NamePlateHorizontalScale",
+    "nameplateGlobalScale",
+    "nameplateSelectedScale",
+    "nameplateLargerScale",
+    "nameplateMinScale",
+    "nameplateMaxScale",
+    "nameplateMinScaleDistance",
+    "nameplateMaxScaleDistance",
+    "nameplateSelfScale",
+    "nameplateOtherTopInset",
+    "nameplateOtherBottomInset",
+    "nameplateLargeTopInset",
+    "nameplateLargeBottomInset",
+    "nameplateOverlapH",
+    "nameplateOverlapV",
+    "nameplateMotion",
+    "nameplateMotionSpeed",
+    "nameplateTargetBehindMaxDistance",
+    "nameplateShowDebuffsOnFriendly",
+    "nameplateResourceOnTarget",
+    "nameplateShowFriendlyBuffs",
+    "nameplateNameAnchor",
+    "ShowClassColorInNameplate",
+    "UnitNameFriendlyMinionName",
+    "UnitNameEnemyPlayerName",
+    "UnitNameOwn",
+    -- how far away a plate is drawn at all, which is not the same as how far
+    -- a line carries
+    "nameplateMaxDistance",
     -- and the ones that decide whether plates show at all
     "nameplateShowAll",
     "nameplateShowEnemies",
@@ -717,17 +763,78 @@ local function WorldCVars()
         if l:find("show", 1, true) and l:find("friend", 1, true)
            and not everythingElse then
             want[n] = "1"
-        elseif l == "nameplateshowall" or l == "nameplateshowself" then
+        elseif l == "nameplateshowall" then
             want[n] = "1"
+        -- nameplateShowSelf is deliberately NOT set. It was tried, it produced
+        -- no self nameplate on this client, and every plate stopped appearing
+        -- the moment it went in. It is still probed and reported so the
+        -- diagnostic shows its value, but world mode does not touch it.
         end
+        -- Nothing else. Not the draw distance -- pushing it out to cover say
+        -- range made plates render at sizes the client does not lay out for.
+        -- Not nameplateShowSelf, which produced no self plate here and changes
+        -- how every other plate is arranged. Not nameplateShowOnlyNames, which
+        -- this client does not have. World mode needs friendly plates to
+        -- exist; everything past that was me redecorating somebody else's UI.
     end
     return want, names
 end
 
+-- Walk the nameplate unit tokens rather than asking for a list.
+--
+-- C_NamePlate.GetNamePlates() returns nothing on this client, even with four
+-- plates plainly on screen -- which is why every count read zero and why a
+-- sweep built on it hid nothing. GetNamePlateForUnit works perfectly well; it
+-- is what the anchoring has been using all along. So ask it, unit by unit.
+--
+-- nameplate1..40 is the full range the client uses.
+local function VisiblePlates()
+    local out = {}
+
+    -- The frames themselves, by name. Your own error dump named one:
+    -- "ForbiddenNamePlate1 <WorldFrame.xml:21>". They are global frames the
+    -- world puts up, so they can be taken directly.
+    --
+    -- This is the third method tried here, and the first that does not depend
+    -- on an API returning something. GetNamePlates() comes back empty on this
+    -- client, and the nameplate1..40 unit tokens produced nothing either --
+    -- both silently, which is what made this take so long to find.
+    --
+    -- The unit comes off the frame when it will say, and off its child frame
+    -- when it will not; CompactUnitFrames carry the unit they are displaying.
+    for i = 1, 40 do
+        local plate = _G["NamePlate" .. i]
+        if plate and plate.IsShown and plate:IsShown() then
+            local art = plate.UnitFrame
+            local unit = plate.namePlateUnitToken
+                      or (art and (art.displayedUnit or art.unit))
+                      or (UnitExists("nameplate" .. i) and ("nameplate" .. i))
+                      or nil
+            out[#out + 1] = { plate = plate, unit = unit, art = art }
+        end
+    end
+
+    -- Fall back to the API if the world has no such frames, so a client that
+    -- works the documented way is not left worse off.
+    if #out == 0 and C_NamePlate and C_NamePlate.GetNamePlateForUnit then
+        for i = 1, 40 do
+            local unit = "nameplate" .. i
+            if UnitExists(unit) then
+                local ok, plate = pcall(C_NamePlate.GetNamePlateForUnit, unit)
+                if ok and plate then
+                    out[#out + 1] = { plate = plate, unit = unit,
+                                      art = plate.UnitFrame }
+                end
+            end
+        end
+    end
+    return out
+end
+
 local function AllPlates()
-    if not (C_NamePlate and C_NamePlate.GetNamePlates) then return {} end
-    local ok, list = pcall(C_NamePlate.GetNamePlates)
-    return (ok and type(list) == "table") and list or {}
+    local out = {}
+    for _, entry in ipairs(VisiblePlates()) do out[#out + 1] = entry.plate end
+    return out
 end
 
 -- Only friendly players' plates lose their art. The first version hid every
@@ -739,24 +846,98 @@ end
 -- world mode off restores the CVars but any plate that survives that (a mob
 -- in combat, or plates that were already on) would stay artless for as long
 -- as the frame lives.
+-- Hiding the plate's own frame is what gives world mode its look: no health
+-- bar, no cast bar, and the game's ordinary floating name still above the
+-- character. That is the point of the feature, not an extra.
+--
+-- It was removed for one build on the theory that it caused
+-- "calling 'SetHeight' on bad self" in Blizzard's nameplate file. It did not.
+-- That error arrived with a call to NamePlateDriverFrame:UpdateNamePlateOptions
+-- and had never appeared in the many builds where this hiding ran on its own.
+-- The driver call is gone; this stays.
+--
+-- What it does NOT do is touch a frame the client marks forbidden -- see
+-- Untouchable. Those belong to secure code, and reaching into one is a real
+-- way to break their nameplates even though it was not what broke them here.
 local hiddenArt = {}    -- [plate frame] = true while its art is hidden by us
 
-local function HidePlateArt(plate, unit)
+-- A frame the client marks forbidden belongs to secure code. Touching one from
+-- an addon is how "calling 'SetHeight' on bad self" appears in Blizzard's own
+-- nameplate file, and it can take the whole nameplate system down with it --
+-- which is very likely why plates stopped appearing at all.
+local function Untouchable(frame)
+    if not frame then return true end
+    if frame.IsForbidden then
+        local ok, forbidden = pcall(frame.IsForbidden, frame)
+        if not ok or forbidden then return true end
+    end
+    return false
+end
+
+local hidCount = 0
+local skipped = { forbidden = 0, notplayer = 0, noart = 0 }
+
+local function HidePlateArt(plate, unit, art)
+    -- Suspended counts as off. The sweep is cancelled at the instance door,
+    -- but plates appearing fire an event straight into here, and "world mode
+    -- is on" is still true while it is suspended -- so it has to be asked
+    -- where it is, not just whether it is enabled.
     if not (RPVoxDB and RPVoxDB.world) then return end
+    if IsInInstance() then return end
+    if Untouchable(plate) then skipped.forbidden = skipped.forbidden + 1 return end
+    -- Friendly players only. A mob's plate carries its health, which is
+    -- information you are using, and it is not carrying a bubble.
     if not (unit and UnitIsPlayer and UnitIsPlayer(unit)
             and UnitIsFriend and UnitIsFriend("player", unit)) then
+        skipped.notplayer = skipped.notplayer + 1
         return
     end
-    local art = plate and plate.UnitFrame
-    if art and art.Hide then
+    -- The child that carries the bar and the name.
+    art = art or plate.UnitFrame
+    if not art then skipped.noart = skipped.noart + 1 return end
+    if art and not Untouchable(art) and art.Hide then
+        if art.IsShown and not art:IsShown() then return end   -- already hidden
         pcall(art.Hide, art)
         hiddenArt[plate] = true
+        hidCount = hidCount + 1
     end
 end
 
+-- Hiding once, when the plate appears, is not enough.
+--
+-- Blizzard re-Show()s a plate's frame from their own code whenever they set it
+-- up again -- a pooled frame handed to a new unit, a health change, a target
+-- change. Every one of those undoes a single Hide, which is why the bars kept
+-- coming back after being hidden correctly the first time.
+--
+-- So it is swept instead: five times a second, over the plates actually on
+-- screen, hiding anything that has been shown again. It is a handful of
+-- IsShown checks against a list that is rarely more than a dozen long, and it
+-- only runs while world mode is on.
+local hideTicker
+
+local function SweepPlateArt()
+    if not (RPVoxDB and RPVoxDB.world) then return end
+    if IsInInstance() then return end
+    for _, entry in ipairs(VisiblePlates()) do
+        HidePlateArt(entry.plate, entry.unit, entry.art)
+    end
+end
+
+local function StartHideSweep()
+    if hideTicker then return end
+    hideTicker = C_Timer.NewTicker(0.2, SweepPlateArt)
+end
+
+local function StopHideSweep()
+    if hideTicker then hideTicker:Cancel() hideTicker = nil end
+end
+
+-- Only for undoing what older versions hid. A plate left with its art hidden
+-- by 4.6 or 4.6.1 stays that way until something shows it again.
 local function ShowPlateArt(plate)
-    local art = plate and plate.UnitFrame
-    if art and art.Show then pcall(art.Show, art) end
+    local art = (not Untouchable(plate)) and plate.UnitFrame or nil
+    if art and not Untouchable(art) and art.Show then pcall(art.Show, art) end
     hiddenArt[plate] = nil
 end
 
@@ -778,6 +959,27 @@ local function ApplyWorldCVars()
     local targets, allNames = WorldCVars()
     if not next(targets) then return {}, nil, allNames end
 
+    -- Undo settings earlier versions changed and this one no longer touches.
+    -- 4.6 set nameplateShowSelf and 4.6.2 set nameplateMaxDistance; both are
+    -- still applied on anyone who ran those, and both affect how the client
+    -- lays plates out. Waiting for world mode to be switched off is not good
+    -- enough -- put them back now and forget them.
+    if RPVoxDB.worldPrev then
+        for cvar, prev in pairs(RPVoxDB.worldPrev) do
+            if not targets[cvar] then
+                -- Only forget it once it is verifiably back. Deleting either
+                -- way was the one place in this file that broke that rule,
+                -- and it is the only attempt a legacy entry ever gets: a
+                -- refused restore would lose the original permanently, with
+                -- no retry and nothing said. A CVar this client no longer has
+                -- is dropped, since there is nothing left to restore.
+                if CVarSet(cvar, prev) or CVarGet(cvar) == nil then
+                    RPVoxDB.worldPrev[cvar] = nil
+                end
+            end
+        end
+    end
+
     -- Never overwrite a snapshot that is already there: if the last turn-off
     -- could not restore a value, the true original is still in worldPrev, and
     -- re-reading the CVar now would capture the forced "1" and lose it.
@@ -790,12 +992,15 @@ local function ApplyWorldCVars()
         if not CVarSet(cvar, want) then table.insert(refused, cvar) end
     end
 
-    for _, unit in pairs(plateUnit) do
-        if C_NamePlate and C_NamePlate.GetNamePlateForUnit then
-            local ok, plate = pcall(C_NamePlate.GetNamePlateForUnit, unit)
-            if ok then HidePlateArt(plate, unit) end
-        end
-    end
+    -- No nudging of NamePlateDriverFrame. Calling one of its methods from
+    -- insecure code taints it, and the taint surfaces inside Blizzard's own
+    -- setup path as "calling 'SetHeight' on bad self" the moment the driver
+    -- reaches a forbidden plate. It was added to force a refresh and it caused
+    -- an error in their file instead. If a CVar needs a refresh to take hold,
+    -- the answer is /reload, not reaching into their frames.
+
+    SweepPlateArt()
+    StartHideSweep()
     return refused, targets, allNames
 end
 
@@ -810,15 +1015,76 @@ function Bubble:Mine()
             or "|cff00ff00shown|r."))
 end
 
-function Bubble:Reapply()
+-- Dungeons and raids -------------------------------------------------------
+-- Inside instanced content this client builds friendly player nameplates as
+-- FORBIDDEN frames -- ForbiddenNamePlate1 and kin, named in the very error
+-- dump that started tonight's hunt. Addon code cannot list them, anchor to
+-- them, or hide their art; the API conceals them so thoroughly that every
+-- count reads zero. That is a deliberate boundary in the client, not
+-- something to code around.
+--
+-- So world mode suspends itself in there: the player's own nameplate settings
+-- come back, nothing is swept, and bubbles use the stacked corner exactly as
+-- if world mode were off. Crossing back out, it resumes by itself.
+local pendingZoneApply = false
+
+local function ApplyForZone()
     if not (RPVoxDB and RPVoxDB.world) then return end
-    if InCombatLockdown and InCombatLockdown() then return end
-    local refused = ApplyWorldCVars()
-    if refused and #refused > 0 then
-        table.sort(refused)
-        print("|cffff0000RPVox:|r world mode is on but this client refused: "
-            .. table.concat(refused, ", ") .. " -- lines will stay stacked.")
+
+    if InCombatLockdown and InCombatLockdown() then
+        -- Nameplate CVars are combat-locked, so the settings half waits for
+        -- the REGEN handler. Cancelling a timer is not locked, though, and a
+        -- sweep left running inside an instance is exactly what suspension
+        -- exists to stop -- so that half happens now.
+        if IsInInstance() then StopHideSweep() end
+        pendingZoneApply = true
+        return
     end
+    pendingZoneApply = false
+
+    if IsInInstance() then
+        StopHideSweep()
+
+        -- Friendly player plates go OFF in here, not back to the snapshot.
+        --
+        -- Restoring the snapshot was the obvious reading of "undo what world
+        -- mode did", and it is wrong in the case that matters: anybody who
+        -- ticked Friendly Players by hand before world mode ever ran has that
+        -- in their snapshot, so restoring leaves plates on -- with their bars
+        -- showing, since nothing hides them in here. A dungeon full of health
+        -- bars RPVox cannot hide is the worst of both.
+        --
+        -- World mode owns friendly player plates for as long as it is on: on
+        -- outside, off inside. Anything else it changed is put back untouched.
+        for cvar, prev in pairs(RPVoxDB.worldPrev or {}) do
+            local l = cvar:lower()
+            if l:find("show", 1, true) and l:find("friend", 1, true) then
+                CVarSet(cvar, "0")
+            else
+                CVarSet(cvar, prev)
+            end
+        end
+
+        for _, plate in ipairs(AllPlates()) do ShowPlateArt(plate) end
+        ShowAllPlateArt()
+        Debug("world mode suspended: instanced content, friendly plates off")
+    else
+        local refused = ApplyWorldCVars()
+        if refused and #refused > 0 then
+            table.sort(refused)
+            print("|cffff0000RPVox:|r world mode is on but this client "
+                .. "refused: " .. table.concat(refused, ", ")
+                .. " -- lines will stay stacked.")
+        end
+        Debug("world mode active: open world")
+    end
+end
+
+-- Called at login, and now at every instance boundary. World mode surviving a
+-- reload has to mean the settings it depends on survive it too -- and which
+-- settings those are depends on where the character wakes up.
+function Bubble:Reapply()
+    ApplyForZone()
 end
 
 function Bubble:World(state)
@@ -838,6 +1104,13 @@ function Bubble:World(state)
             print("|cffff0000RPVox:|r cannot change nameplate settings in "
                 .. "combat. Try again once you are out.")
             RPVoxDB.world = false
+            return
+        end
+        if IsInInstance() then
+            print("|cff00ff00RPVox:|r world mode |cff00ff00ON|r -- but RPVox "
+                .. "is off inside dungeons and raids, and Blizzard forbids "
+                .. "addons from using friendly nameplates in there anyway. It "
+                .. "all comes to life the moment you step outside.")
             return
         end
         local refused, targets, allNames = ApplyWorldCVars()
@@ -862,9 +1135,26 @@ function Bubble:World(state)
                 print("  |cffffd100/console " .. cvar .. " 1|r")
             end
         else
-            print("|cff00ff00RPVox:|r lines now float above the character. "
-                .. "Friendly nameplates are on -- and on out of combat -- to "
-                .. "hold them there, with their bars and names hidden.")
+            print("|cff00ff00RPVox:|r world mode |cff00ff00ON|r. Friendly "
+                .. "player nameplates are switched on to hold the bubbles, "
+                .. "and their bars are hidden.")
+            local list = VisiblePlates()
+            local named, noUnit = 0, 0
+            for i = 1, 40 do
+                if _G["NamePlate" .. i] then named = named + 1 end
+            end
+            for _, e in ipairs(list) do
+                if not e.unit then noUnit = noUnit + 1 end
+            end
+            print(("  %d plate(s) in sight, bars hidden on %d.")
+                :format(#list, hidCount))
+            if hidCount == 0 then
+                print(("  |cffff8800Nothing hidden. %d NamePlate frames exist, "
+                    .. "%d shown, %d of those with no unit. Skipped: %d not a "
+                    .. "friendly player, %d forbidden, %d with no frame.|r")
+                    :format(named, #list, noUnit, skipped.notplayer,
+                            skipped.forbidden, skipped.noart))
+            end
             print("  |cffffd100/rpvox bubble world|r again to put it back.")
         end
     else
@@ -894,6 +1184,8 @@ function Bubble:World(state)
         RPVoxDB.worldPrevCVar = nil
         RPVoxDB.worldPrev = next(kept) and kept or nil
 
+        StopHideSweep()
+        for _, plate in ipairs(AllPlates()) do ShowPlateArt(plate) end
         ShowAllPlateArt()
 
         if next(kept) then
@@ -915,7 +1207,8 @@ local function PlateForUnit(unit)
     if not (C_NamePlate and C_NamePlate.GetNamePlateForUnit) then return nil end
     if not (unit and UnitExists(unit)) then return nil end
     local ok, plate = pcall(C_NamePlate.GetNamePlateForUnit, unit)
-    if ok and plate and plate.IsShown and plate:IsShown() then return plate end
+    if not ok or Untouchable(plate) then return nil end
+    if plate.IsShown and plate:IsShown() then return plate end
     return nil
 end
 
@@ -924,7 +1217,8 @@ local function PlateFor(name)
     local unit = UnitFor(name)
     if not unit then return nil end
     local ok, plate = pcall(C_NamePlate.GetNamePlateForUnit, unit)
-    if ok and plate and plate.IsShown and plate:IsShown() then return plate end
+    if not ok or Untouchable(plate) then return nil end
+    if plate.IsShown and plate:IsShown() then return plate end
     return nil
 end
 
@@ -1069,7 +1363,12 @@ local function ShowOn(owner, text, styleOverride, holdFor)
         -- you, round a corner, too far away -- has no nameplate, and putting
         -- their line in the corner of the screen is the exact thing world mode
         -- is for avoiding. The chat frame still has it.
-        if RPVoxDB and RPVoxDB.world and not b.plate then
+        -- Only outside. Real lines are never bubbled inside an instance --
+        -- ShowFrom drops them, since RPVox is off in there -- so this branch
+        -- is only reachable inside via the test command, which should show
+        -- its stacked bubble rather than silently doing nothing.
+        if RPVoxDB and RPVoxDB.world and not b.plate
+           and not IsInInstance() then
             FreeSlot(b)
             frame:Hide()
             Debug("no plate for", owner, "-- world mode, so no bubble")
@@ -1110,6 +1409,10 @@ end
 function Bubble:ShowFrom(name, text)
     if type(name) ~= "string" or name == "" then return end
     if RPVoxDB and RPVoxDB.hideOthers then return end
+    -- RPVox is off inside dungeons and raids: nothing is sent from in there,
+    -- and nothing that arrives is bubbled. A line can only arrive from an
+    -- older version in the same instance; it still lands in the chat frame.
+    if IsInInstance() then return end
     ShowOn(name, text)
 end
 
@@ -1222,6 +1525,56 @@ function Bubble:Client()
     print("  |cff888888count is still 0, nameplates are off entirely (press V).|r")
 end
 
+-- Put every nameplate setting back to the client's own default.
+--
+-- Stronger than turning world mode off, which only restores the values RPVox
+-- happened to record. This asks the client what it shipped with and writes
+-- that, so it recovers even from a snapshot taken after something had already
+-- been changed -- which is the state a few of my own versions left behind.
+--
+-- It cannot repair a nameplate that was mangled by a tainted resize: those
+-- frames live in a pool that survives /reload. Only quitting the client fully
+-- rebuilds them, and the message below says so.
+function Bubble:ResetPlates()
+    if InCombatLockdown and InCombatLockdown() then
+        print("|cffff0000RPVox:|r not in combat -- the client locks nameplate "
+            .. "settings. Try again once you are out.")
+        return
+    end
+    if not GetCVarDefault then
+        print("|cffff0000RPVox:|r this client will not tell me its defaults.")
+        return
+    end
+
+    -- World mode off first, or it writes its two settings straight back.
+    RPVoxDB.world = false
+    RPVoxDB.worldPrev, RPVoxDB.worldPrevCVar = nil, nil
+
+    local done, refused = {}, {}
+    for _, cvar in ipairs(PlateCVarNames()) do
+        local ok, def = pcall(GetCVarDefault, cvar)
+        if ok and def ~= nil then
+            if CVarSet(cvar, def) then
+                table.insert(done, cvar .. "=" .. tostring(def))
+            else
+                table.insert(refused, cvar)
+            end
+        end
+    end
+    table.sort(done)
+
+    print("|cff00ff00RPVox:|r nameplate settings put back to this client's "
+        .. "defaults, and world mode switched off.")
+    for _, line in ipairs(done) do print("  " .. line) end
+    if #refused > 0 then
+        table.sort(refused)
+        print("  |cffff8800refused: " .. table.concat(refused, ", ") .. "|r")
+    end
+    print("  |cffffd100Now quit the game fully and start it again.|r A plate "
+        .. "that was mis-sized earlier lives in a pool that survives /reload; "
+        .. "only a restart rebuilds it.")
+end
+
 -- Every nameplate setting this client actually registers, with its value.
 -- The one diagnostic that ends a naming argument rather than continuing it.
 function Bubble:CVars()
@@ -1236,8 +1589,25 @@ function Bubble:CVars()
     print("|cff00ff00RPVox:|r " .. project .. " " .. tostring(version)
         .. " (interface " .. tostring(toc) .. ")")
     print("  nameplate settings this client registers:")
+    local drifted = {}
     for _, n in ipairs(names) do
-        print(("  |cffffd100%s|r = %s"):format(n, tostring(CVarGet(n))))
+        local now = tostring(CVarGet(n))
+        local def
+        if GetCVarDefault then
+            local ok, d = pcall(GetCVarDefault, n)
+            if ok then def = d end
+        end
+        local off = (def ~= nil and tostring(def) ~= now)
+        if off then table.insert(drifted, n .. ": " .. now .. " (default " .. tostring(def) .. ")") end
+        print(("  |cffffd100%s|r = %s%s"):format(n, now,
+            off and ("  |cffff8800<-- not the default (" .. tostring(def) .. ")|r") or ""))
+    end
+    if #drifted > 0 then
+        print("  |cffff8800" .. #drifted .. " setting(s) away from default. "
+            .. "|cffffd100/rpvox bubble reset|r puts them all back.|r")
+    else
+        print("  |cff00ff00Every one is at its default.|r If plates still look "
+            .. "wrong, it is not a setting -- quit the game fully and restart.")
     end
     local targets = WorldCVars()
     local picked = {}
@@ -1262,20 +1632,47 @@ function Bubble:TestOn(name)
     Bubble:Reapply()
 
     print("|cff00ff00RPVox:|r testing a bubble on |cffffff00" .. name .. "|r")
+
+    -- The commonest reason for no plate, and one the old readout never said.
+    if UnitExists("target") and UnitName("target") == name then
+        local isPlayer = UnitIsPlayer and UnitIsPlayer("target")
+        print("  are they a player .. " .. (isPlayer and "yes"
+            or "|cffff8800NO -- an NPC or a pet. RPVox only anchors to players, "
+               .. "and friendly NPC nameplates are deliberately left off|r"))
+        if UnitIsUnit and UnitIsUnit("target", "player") then
+            print("  |cffff8800That is you. Target somebody else.|r")
+        end
+    end
     print("  world mode ......... " .. ((RPVoxDB and RPVoxDB.world) and "on"
         or "|cffff8800off|r -- run /rpvox bubble world"))
+    if IsInInstance() then
+        print("  |cffff8800You are in a dungeon or raid: RPVox is off in "
+            .. "instanced content, and Blizzard forbids addons from using "
+            .. "friendly nameplates in here anyway. Step outside and test "
+            .. "again.|r")
+    end
     local targets = WorldCVars()
     local shown = {}
-    for cvar in pairs(targets) do
-        table.insert(shown, cvar .. "=" .. tostring(CVarGet(cvar)))
+    for _, cvar in ipairs(PlateCVarNames()) do
+        local set = targets[cvar] and "|cff00ff00*|r" or ""
+        table.insert(shown, cvar .. "=" .. tostring(CVarGet(cvar)) .. set)
     end
-    table.sort(shown)
     print("  plate settings ..... "
         .. (#shown > 0 and table.concat(shown, "  ")
             or "|cffff0000none found on this client|r"))
+    print("  |cff888888* = set by world mode. Everything else is yours.|r")
+    print("  plate driver ....... "
+        .. ((NamePlateDriverFrame and "present") or "|cffff8800absent|r"))
+    print("  world mode ......... "
+        .. ((RPVoxDB and RPVoxDB.world) and "|cff00ff00ON|r"
+            or "|cffff8800OFF -- bars will show, and bubbles will not anchor. "
+               .. "Turn it on with /rpvox bubble world|r"))
+    print("  bars hidden so far . " .. hidCount)
     print("  C_NamePlate ........ " .. ((C_NamePlate and C_NamePlate.GetNamePlateForUnit)
         and "present" or "|cffff0000missing|r"))
-    print("  plates on screen ... " .. #AllPlates())
+    print("  plates on screen ... " .. #AllPlates()
+        .. "   |cff888888(drawn within " .. tostring(CVarGet("nameplateMaxDistance"))
+        .. " yards)|r")
     print("  a plate for you .... " .. (PlateForUnit("player")
         and "|cff00ff00yes -- your own lines can sit on your character|r"
         or "|cffff8800no -- this client draws no nameplate for you, so your "
@@ -1345,7 +1742,19 @@ end
 local plates = CreateFrame("Frame")
 plates:RegisterEvent("NAME_PLATE_UNIT_ADDED")
 plates:RegisterEvent("NAME_PLATE_UNIT_REMOVED")
+plates:RegisterEvent("PLAYER_ENTERING_WORLD")
+plates:RegisterEvent("PLAYER_REGEN_ENABLED")
 plates:SetScript("OnEvent", function(_, event, unit)
+    -- Crossing an instance boundary changes what world mode may touch.
+    if event == "PLAYER_ENTERING_WORLD" then
+        ApplyForZone()
+        return
+    end
+    if event == "PLAYER_REGEN_ENABLED" then
+        if pendingZoneApply then ApplyForZone() end
+        return
+    end
+
     if not unit then return end
     local name = FullName(unit)
     if not name then return end
